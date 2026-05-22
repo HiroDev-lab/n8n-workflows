@@ -1,0 +1,1145 @@
+{
+  "id": "XRgbDvoptwyQteZe",
+  "name": "My workflow 10",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Pega os dados dos nodes Form e Form1\nconst formItems = $items(\"Form\", 0) || [];\nconst form1Items = $items(\"Form1\", 0) || [];\n\n// Junta todos os campos de um node em um único objeto\nfunction juntarDadosNode(nodeItems, prefixo) {\n  const resultado = {};\n\n  for (const item of nodeItems) {\n    if (item.json && typeof item.json === \"object\") {\n      for (const [chave, valor] of Object.entries(item.json)) {\n        resultado[`${prefixo}${chave}`] = valor;\n      }\n    }\n  }\n\n  return resultado;\n}\n\nconst formData = juntarDadosNode(formItems, \"Form_\");\nconst form1Data = juntarDadosNode(form1Items, \"Form1_\");\n\nfunction gerarVariacoes(numero) {\n  let n = String(numero || \"\").replace(/\\D/g, \"\");\n\n  let prefixo = \"\";\n  let ddd = \"\";\n  let local = \"\";\n\n  // Detecta se tem 55 na frente\n  if (n.startsWith(\"55\") && n.length >= 12) {\n    prefixo = \"55\";\n    ddd = n.slice(2, 4);\n    local = n.slice(4);\n  } else {\n    ddd = n.slice(0, 2);\n    local = n.slice(2);\n  }\n\n  let com9 = \"\";\n  let sem9 = \"\";\n\n  // Já tem 9\n  if (local.length === 9 && local.startsWith(\"9\")) {\n    com9 = local;\n    sem9 = local.slice(1);\n  }\n  // Não tem 9\n  else if (local.length === 8) {\n    sem9 = local;\n    com9 = \"9\" + local;\n  }\n  // Caso estranho, tenta normalizar\n  else {\n    local = local.replace(/^9+/, \"9\");\n\n    if (local.startsWith(\"9\")) {\n      com9 = local;\n      sem9 = local.slice(1);\n    } else {\n      sem9 = local;\n      com9 = \"9\" + local;\n    }\n  }\n\n  const resultado = [\n    prefixo + ddd + com9,\n    prefixo + ddd + sem9\n  ];\n\n  return [...new Set(resultado)].filter(Boolean);\n}\n\nconst output = [];\n\nfor (const item of items) {\n  const telefone = item.json[\"TELEFONE\"];\n  const variacoes = gerarVariacoes(telefone);\n\n  for (const num of variacoes) {\n    output.push({\n      json: {\n        ...item.json,\n        ...formData,\n        ...form1Data,\n        TELEFONE: num\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        528
+      ],
+      "id": "ea526816-d789-409c-a82d-0208b2efe4e7",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "formTitle": "Repesca 4.0",
+        "formDescription": "Envio de mensagens em massa via WhatsApp Oficial",
+        "options": {
+          "buttonLabel": "Começar"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -1024,
+        704
+      ],
+      "id": "48bcc702-d918-49f0-bf70-98898c0f25ea",
+      "name": "On form submission"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual a BM de disparo?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Maxx 2449"
+                  },
+                  {
+                    "option": "Maxx 4081"
+                  },
+                  {
+                    "option": "Maxx 7134"
+                  },
+                  {
+                    "option": "Maxx 7239"
+                  },
+                  {
+                    "option": "Maxx 7346"
+                  },
+                  {
+                    "option": "Maxx 7637"
+                  },
+                  {
+                    "option": "Maxx 7655"
+                  },
+                  {
+                    "option": "Maxx 8960"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -784,
+        704
+      ],
+      "id": "682f22ae-0fb5-4f1d-80be-5c0cb955178f",
+      "name": "Form"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Base[0].filename.split('.').pop() }}",
+                    "rightValue": "xlsx",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "271344bd-7880-4446-b6c2-df72e095a7ea"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "xlsx"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8f078cd0-91e5-4e6c-9cc9-68120b66e2e6",
+                    "leftValue": "={{ $json.Base[0].filename.split('.').pop() }}",
+                    "rightValue": "xls",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "xls"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        16,
+        704
+      ],
+      "id": "26fa4be8-9ac0-43bd-add8-6ca24d12bf02",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "Base",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        528
+      ],
+      "id": "6177dcb2-0cd0-43b0-bce8-037df6a26f12",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "xls",
+        "binaryPropertyName": "Base",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        208
+      ],
+      "id": "4cd926d0-961e-4e77-b9c0-83f87a716b63",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Pega os dados dos nodes Form e Form1\nconst formItems = $items(\"Form\", 0) || [];\nconst form1Items = $items(\"Form1\", 0) || [];\n\n// Junta todos os campos de um node em um único objeto\nfunction juntarDadosNode(nodeItems, prefixo) {\n  const resultado = {};\n\n  for (const item of nodeItems) {\n    if (item.json && typeof item.json === \"object\") {\n      for (const [chave, valor] of Object.entries(item.json)) {\n        resultado[`${prefixo}${chave}`] = valor;\n      }\n    }\n  }\n\n  return resultado;\n}\n\nconst formData = juntarDadosNode(formItems, \"Form_\");\nconst form1Data = juntarDadosNode(form1Items, \"Form1_\");\n\nfunction gerarVariacoes(numero) {\n  let n = String(numero || \"\").replace(/\\D/g, \"\");\n\n  let prefixo = \"\";\n  let ddd = \"\";\n  let local = \"\";\n\n  // Detecta se tem 55 na frente\n  if (n.startsWith(\"55\") && n.length >= 12) {\n    prefixo = \"55\";\n    ddd = n.slice(2, 4);\n    local = n.slice(4);\n  } else {\n    ddd = n.slice(0, 2);\n    local = n.slice(2);\n  }\n\n  let com9 = \"\";\n  let sem9 = \"\";\n\n  // Já tem 9\n  if (local.length === 9 && local.startsWith(\"9\")) {\n    com9 = local;\n    sem9 = local.slice(1);\n  }\n  // Não tem 9\n  else if (local.length === 8) {\n    sem9 = local;\n    com9 = \"9\" + local;\n  }\n  // Caso estranho, tenta normalizar\n  else {\n    local = local.replace(/^9+/, \"9\");\n\n    if (local.startsWith(\"9\")) {\n      com9 = local;\n      sem9 = local.slice(1);\n    } else {\n      sem9 = local;\n      com9 = \"9\" + local;\n    }\n  }\n\n  const resultado = [\n    prefixo + ddd + com9,\n    prefixo + ddd + sem9\n  ];\n\n  return [...new Set(resultado)].filter(Boolean);\n}\n\nconst output = [];\n\nfor (const item of items) {\n  const telefone = item.json[\"TELEFONE\"];\n  const variacoes = gerarVariacoes(telefone);\n\n  for (const num of variacoes) {\n    output.push({\n      json: {\n        ...item.json,\n        ...formData,\n        ...form1Data,\n        TELEFONE: num\n      }\n    });\n  }\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        208
+      ],
+      "id": "f8b1d5a1-220a-4e8f-a66f-98e608e2b238",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "resource": "profile-api",
+        "instanceName": "YOUR_PHONE_NUMBER - Iphone",
+        "remoteJid": "={{ $json.TELEFONE }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        384
+      ],
+      "id": "1eb19133-c11d-4460-ae43-80288f76c9eb",
+      "name": "Buscar perfil1",
+      "credentials": {
+        "evolutionApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        848,
+        368
+      ],
+      "id": "689d1440-9012-4813-99e1-c93a46e8226d",
+      "name": "Loop Over Items5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me5",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        384
+      ],
+      "id": "78bd27dd-4323-4e8d-8c1e-36451cb83de1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5ade8de2-4f97-423c-af02-bdace5635f9c",
+              "name": "RAZÃO ",
+              "value": "={{ $('Loop Over Items5').item.json.RAZAO }}",
+              "type": "string"
+            },
+            {
+              "id": "40fce62e-6e6d-4ab1-81c9-84ee86aa91c9",
+              "name": "CNPJ",
+              "value": "={{ $('Loop Over Items5').item.json.CNPJ }}",
+              "type": "number"
+            },
+            {
+              "id": "c1b777ff-284b-4071-9437-9a6307595591",
+              "name": "TELEFONE",
+              "value": "={{ $('Buscar perfil1').item.json.data.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "73ecc1a0-85b6-4ddf-98da-5d0ede7ca74a",
+              "name": "Nome",
+              "value": "={{ $('Loop Over Items5').item.json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "b59bf671-04d7-421c-b1d2-ede335a0c00a",
+              "name": "success",
+              "value": "={{ $('Buscar perfil1').item.json.success }}",
+              "type": "boolean"
+            },
+            {
+              "id": "d31fcc71-92d3-449f-9704-82247ab6d84e",
+              "name": "data.wuid",
+              "value": "={{ $('Buscar perfil1').item.json.data.wuid }}",
+              "type": "string"
+            },
+            {
+              "id": "2afcdfd0-f3f0-4020-846f-518165c8bf2c",
+              "name": "data.numberExists",
+              "value": "={{ $('Buscar perfil1').item.json.data.numberExists }}",
+              "type": "boolean"
+            },
+            {
+              "id": "77d0ff70-9cce-4eab-ae07-2499b53fda36",
+              "name": "data.picture",
+              "value": "={{ $('Buscar perfil1').item.json.data.picture }}",
+              "type": "string"
+            },
+            {
+              "id": "ddabba71-7c4a-4e90-8a67-9333a3648282",
+              "name": "data.status.status",
+              "value": "={{ $('Buscar perfil1').item.json.data.status.status }}",
+              "type": "string"
+            },
+            {
+              "id": "9d5b288c-ab62-486b-abf4-39ee90661de1",
+              "name": "data.status.setAt",
+              "value": "={{ $('Buscar perfil1').item.json.data.status.setAt }}",
+              "type": "string"
+            },
+            {
+              "id": "b5c2b1a4-1f14-44e9-985d-420a07ac32d7",
+              "name": "data.isBusiness",
+              "value": "={{ $('Buscar perfil1').item.json.data.isBusiness }}",
+              "type": "boolean"
+            },
+            {
+              "id": "f903f2bd-6de0-4961-be70-d5056080f9ee",
+              "name": "Qual a BM de disparo?",
+              "value": "={{ $('Loop Over Items5').item.json[\"Form_Qual a BM de disparo?\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0cf00fd0-16d2-4e54-9b12-b369b52df601",
+              "name": "Qual template você quer usar?",
+              "value": "={{ $('Loop Over Items5').item.json[\"Form1_Qual template você quer usar?\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1344,
+        384
+      ],
+      "id": "17579dee-d0fd-4c95-8691-8002680b9761",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "amount": 0.2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1552,
+        384
+      ],
+      "id": "8e5b9644-0917-47ac-9d5b-bc9b2f7cb587",
+      "name": "Wait4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual template você quer usar?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Tempv1"
+                  },
+                  {
+                    "option": "Tempv2"
+                  },
+                  {
+                    "option": "Tempv3"
+                  },
+                  {
+                    "option": "Tempv4"
+                  },
+                  {
+                    "option": "Tempv5"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -528,
+        704
+      ],
+      "id": "40374faa-28c8-4bc3-a20d-2d4aa7344544",
+      "name": "Form1"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Por gentileza, importe a base",
+              "fieldType": "file",
+              "fieldName": "Base",
+              "acceptFileTypes": ".CSV, .XLSX, .XLS",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "={{ '<span style=\"color:#ff6b57; font-weight:bold;\">Ordem das colunas:</span> RAZÃO | CNPJ | TELEFONE | Nome' }}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -224,
+        704
+      ],
+      "id": "4df0aa72-4a9e-4fb0-878d-52bbde1abf46",
+      "name": "Form2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\nconst output = [];\n\nfunction normalizeRazao(value) {\n  return String(value ?? '')\n    .trim()\n    .replace(/\\s+/g, ' ')\n    .toUpperCase();\n}\n\nfunction normalizePhone(value) {\n  const raw = String(value ?? '').trim();\n\n  if (!raw || raw.toLowerCase() === 'null' || raw.toLowerCase() === 'undefined') {\n    return '';\n  }\n\n  return raw.replace(/\\D/g, '');\n}\n\nfunction processRecord(record) {\n  if (!record || typeof record !== 'object' || Array.isArray(record)) return;\n  if (Object.keys(record).length === 0) return;\n  if (record.error || record.errorMessage) return;\n\n  const razao = normalizeRazao(record['RAZÃO ']);\n  const telefone = normalizePhone(record.TELEFONE);\n\n  if (!razao) return;\n  if (!telefone || telefone.length < 10) return;\n\n  if (!seen.has(razao)) {\n    seen.add(razao);\n    output.push({ json: record });\n  }\n}\n\nfor (const item of $input.all()) {\n  try {\n    const data = item?.json;\n\n    if (Array.isArray(data)) {\n      for (const record of data) {\n        processRecord(record);\n      }\n    } else {\n      processRecord(data);\n    }\n  } catch (e) {}\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        192
+      ],
+      "id": "afdd1717-7786-405f-8044-04a79275f105",
+      "name": "Code in JavaScript9"
+    },
+    {
+      "parameters": {
+        "tableId": "Dados repesca",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Razão",
+              "fieldValue": "={{ $json[\"RAZÃO \"] }}"
+            },
+            {
+              "fieldId": "CNPJ",
+              "fieldValue": "={{ $json.CNPJ }}"
+            },
+            {
+              "fieldId": "TELEFONE",
+              "fieldValue": "={{ $json.TELEFONE }}"
+            },
+            {
+              "fieldId": "NOME",
+              "fieldValue": "={{ $json.Nome }}"
+            },
+            {
+              "fieldId": "Status",
+              "fieldValue": "Pendnete"
+            },
+            {
+              "fieldId": "QUAL BM?",
+              "fieldValue": "={{ $json[\"Qual a BM de disparo?\"] }}"
+            },
+            {
+              "fieldId": "QUAL TEMPLATE?",
+              "fieldValue": "={{ $json[\"Qual template você quer usar?\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        192
+      ],
+      "id": "fa0912d0-7f3f-4482-8684-30da728106fd",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/search?q={{ $json.TELEFONE }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1328,
+        -64
+      ],
+      "id": "c9c7828a-a422-4467-87ea-828095873968",
+      "name": "Buscar contato"
+    },
+    {
+      "parameters": {
+        "batchSize": 60,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1088,
+        -80
+      ],
+      "id": "2e8acc46-6647-49e7-b19f-4a9fd8898058",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me4",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        -64
+      ],
+      "id": "8d158045-f3a3-4294-ba4e-7402c7f88520"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.meta.count }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "98de57d9-33b3-424a-b4c3-58720bdc61cf"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cliente existente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aebd15a1-b4eb-4205-9f83-e646c01811a8",
+                    "leftValue": "={{ $json.meta.count }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Novo Cliente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1088,
+        -288
+      ],
+      "id": "d37e8c99-9764-4164-903f-080a4d938143",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json[\"Razão\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.TELEFONE }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.NOME }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        -64
+      ],
+      "id": "d02a6508-0998-469a-885a-6e12224cbd22",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone_number\": \"{{ '+55' + ($json.wuid || '').replace(/\\D/g, '').replace(/^55/, '') }}\",\n  \"name\": \"{{ $json.razao }}\",\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1984,
+        -272
+      ],
+      "id": "257b3eaa-f2bd-4715-8fd3-e597523372ee",
+      "name": "Criar contato1"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1376,
+        -304
+      ],
+      "id": "c13a8426-d853-4237-afb4-2d384b5472ce",
+      "name": "Adiciona os dados1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2304,
+        -272
+      ],
+      "id": "753cf671-a18b-4741-ae06-ca8ab4c39817",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1632,
+        -304
+      ],
+      "id": "320f1d36-4862-41d5-8388-d66141ec2c3b",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2688,
+        -320
+      ],
+      "id": "e56d5568-c147-41c9-92b7-cf3d38dddb86",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        -64
+      ],
+      "id": "113b314c-4f33-42f7-ad1b-b4a195c2b536",
+      "name": "Wait3",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form": {
+      "main": [
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar perfil1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar perfil1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "Replace Me5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form1": {
+      "main": [
+        [
+          {
+            "node": "Form2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar contato": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Adiciona os dados1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar contato1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar contato1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona os dados1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-16T11:54:18.046Z",
+      "createdAt": "2026-03-16T11:54:18.046Z",
+      "role": "workflow:owner",
+      "workflowId": "XRgbDvoptwyQteZe",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
