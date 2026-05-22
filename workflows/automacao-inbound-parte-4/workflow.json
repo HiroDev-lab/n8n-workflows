@@ -1,0 +1,982 @@
+{
+  "id": "rc8cope5dFvbg4Sg",
+  "name": "Automação inbound parte 4",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1728,
+        0
+      ],
+      "id": "19fbbe6f-187c-4172-a7df-d685b0a812ac",
+      "name": "Google Sheets Trigger2",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+              "leftValue": "={{ $json[\"CNPJ associado\"].toLowerCase().replace('ã', 'a') }}",
+              "rightValue": "=sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json.CHATWOOT.toLowerCase() }}",
+              "rightValue": "sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1536,
+        0
+      ],
+      "id": "f32911b2-2c2a-4407-bc1e-8afce0c71b73",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Informações inbound 2.0",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+            },
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        -16
+      ],
+      "id": "8780cbce-81b1-4820-8db4-73631b93fb71",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1104,
+        -16
+      ],
+      "id": "63b5169b-d52a-421a-b6cf-a77023ccf607",
+      "name": "Busca a conversa",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f34d41c-28a0-4ed0-8f35-e363d472a26c",
+              "leftValue": "={{ $('Busca a conversa').item.json.messages[0].conversation.assignee_id }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -400,
+        -32
+      ],
+      "id": "8a75ea3f-3c62-46e4-94be-de2be19d58c0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "assignee_id",
+              "value": "={{ $('Google Sheets Trigger2').item.json.Operadores.match(/\\d+/)[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        384,
+        -64
+      ],
+      "id": "02f24b08-cf78-4f81-868c-1a8009a76a8b",
+      "name": "Reatribui a conversa1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "66c33158-fdb3-48c0-a56b-0bf03d404f9d",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json.Operadores }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -128,
+        -48
+      ],
+      "id": "c8fd652e-41a0-428c-8aa1-d618e0a707da",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.meta.sender.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}\",\n    \"nome_cliente\": \"{{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -624,
+        -32
+      ],
+      "id": "c508c759-5d36-44cf-9349-ca13d44d624f",
+      "name": "Adiciona os dados1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a149f070-1af3-40e4-a124-6fd0a77a839e",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d60ac2ef-10cc-41a0-86cd-7130fc7ca2f1",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -896,
+        -16
+      ],
+      "id": "a2acdd34-2bf0-45eb-a4b8-03dfbf894d7c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Busca a conversa').item.json.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=Razão correta: {{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}\n\nCNPJ correto: {{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            },
+            {
+              "name": "private",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        -64
+      ],
+      "id": "66ab6e22-604d-4b24-a90f-7cc4e3249e00",
+      "name": "Mensagem1",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger2": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Adiciona os dados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona os dados1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Reatribui a conversa1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Google Sheets Trigger2": {
+      "documentId": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+      "sheetId": 323812150,
+      "lastRevision": 167277,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I&revision=167277&exportFormat=xlsx"
+    }
+  },
+  "meta": null,
+  "activeVersionId": "df70803c-dbc2-4be2-bb57-c3f09d82f5a9",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-13T14:15:37.709Z",
+      "createdAt": "2026-03-13T14:15:37.709Z",
+      "role": "workflow:owner",
+      "workflowId": "rc8cope5dFvbg4Sg",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-18T17:16:23.000Z",
+    "createdAt": "2026-03-18T17:16:13.893Z",
+    "versionId": "df70803c-dbc2-4be2-bb57-c3f09d82f5a9",
+    "workflowId": "rc8cope5dFvbg4Sg",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "event": "rowUpdate",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1728,
+          0
+        ],
+        "id": "19fbbe6f-187c-4172-a7df-d685b0a812ac",
+        "name": "Google Sheets Trigger2",
+        "credentials": {
+          "googleSheetsTriggerOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+                "leftValue": "={{ $json[\"CNPJ associado\"].toLowerCase().replace('ã', 'a') }}",
+                "rightValue": "=sim",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json.CHATWOOT.toLowerCase() }}",
+                "rightValue": "sim",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -1536,
+          0
+        ],
+        "id": "f32911b2-2c2a-4407-bc1e-8afce0c71b73",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "Informações inbound 2.0",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+              },
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -1312,
+          -16
+        ],
+        "id": "8780cbce-81b1-4820-8db4-73631b93fb71",
+        "name": "Get many rows1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -1104,
+          -16
+        ],
+        "id": "63b5169b-d52a-421a-b6cf-a77023ccf607",
+        "name": "Busca a conversa",
+        "alwaysOutputData": false,
+        "executeOnce": false,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9f34d41c-28a0-4ed0-8f35-e363d472a26c",
+                "leftValue": "={{ $('Busca a conversa').item.json.messages[0].conversation.assignee_id }}",
+                "rightValue": 1,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -400,
+          -32
+        ],
+        "id": "8a75ea3f-3c62-46e4-94be-de2be19d58c0",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/assignments",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "assignee_id",
+                "value": "={{ $('Google Sheets Trigger2').item.json.Operadores.match(/\\d+/)[0] }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          384,
+          -64
+        ],
+        "id": "02f24b08-cf78-4f81-868c-1a8009a76a8b",
+        "name": "Reatribui a conversa1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "66c33158-fdb3-48c0-a56b-0bf03d404f9d",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json.Operadores }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -128,
+          -48
+        ],
+        "id": "c8fd652e-41a0-428c-8aa1-d618e0a707da",
+        "name": "If4"
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.meta.sender.id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}\",\n    \"nome_cliente\": \"{{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}\"\n  }\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -624,
+          -32
+        ],
+        "id": "c508c759-5d36-44cf-9349-ca13d44d624f",
+        "name": "Adiciona os dados1",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a149f070-1af3-40e4-a124-6fd0a77a839e",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "d60ac2ef-10cc-41a0-86cd-7130fc7ca2f1",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -896,
+          -16
+        ],
+        "id": "a2acdd34-2bf0-45eb-a4b8-03dfbf894d7c",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Busca a conversa').item.json.id }}/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "content",
+                "value": "=Razão correta: {{ $('Google Sheets Trigger2').item.json[\"Razão associada\"] }}\n\nCNPJ correto: {{ $('Google Sheets Trigger2').item.json[\"CNPJ A\"] }}"
+              },
+              {
+                "name": "message_type",
+                "value": "outgoing"
+              },
+              {
+                "name": "private",
+                "value": "true"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          128,
+          -64
+        ],
+        "id": "66ab6e22-604d-4b24-a90f-7cc4e3249e00",
+        "name": "Mensagem1",
+        "onError": "continueRegularOutput"
+      }
+    ],
+    "connections": {
+      "Google Sheets Trigger2": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Get many rows1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          [
+            {
+              "node": "Busca a conversa",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Busca a conversa": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "If4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [
+            {
+              "node": "Mensagem1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Adiciona os dados1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adiciona os dados1": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mensagem1": {
+        "main": [
+          [
+            {
+              "node": "Reatribui a conversa1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version df70803c",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
