@@ -1,0 +1,393 @@
+{
+  "id": "hcs3A6YmMHuLKKsS",
+  "name": "Webhook Rooster",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ada2c5dd-141c-41ad-9217-7ae604d3fcdc",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2614cb60-58dc-495b-a979-c1c65067b3f1",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "81deabf9-0a32-4ca2-a843-4f5e7ab9ab29",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "3f0b5d67-99e5-4794-8297-df6aed9eb725",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Razao",
+              "keyValue": "={{ $json.body.nome }}"
+            },
+            {
+              "keyName": "Telefone",
+              "keyValue": "={{ $json.body.telefone }}"
+            },
+            {
+              "keyName": "CNPJ",
+              "keyValue": "={{ String($json.body.cnpj ?? '').replace(/\\D/g, '') }}"
+            },
+            {
+              "keyName": "Tipo",
+              "keyValue": "={{ $json.body.tipo }}"
+            },
+            {
+              "keyName": "Status",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "525f99bb-dae0-4371-b36b-a4bcbf2c46ec",
+      "name": "Get a row",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "Dados Roster",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Razao",
+              "fieldValue": "={{ $('Webhook').item.json.body.nome }}"
+            },
+            {
+              "fieldId": "Telefone",
+              "fieldValue": "={{ $('Webhook').item.json.body.telefone }}"
+            },
+            {
+              "fieldId": "CNPJ",
+              "fieldValue": "={{ $('Webhook').item.json.body.cnpj }}"
+            },
+            {
+              "fieldId": "Tipo",
+              "fieldValue": "={{ $('Webhook').item.json.body.tipo }}"
+            },
+            {
+              "fieldId": "Status",
+              "fieldValue": "Pendente"
+            },
+            {
+              "fieldId": "Resposta"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "af53e873-c297-40b6-8ebc-040126a2584f",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "e8f619e3-91ad-4066-b23b-a6a36f0893ae",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-13T18:20:13.403Z",
+      "createdAt": "2026-02-13T18:20:13.403Z",
+      "role": "workflow:owner",
+      "workflowId": "hcs3A6YmMHuLKKsS",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-18T13:24:06.000Z",
+    "createdAt": "2026-02-18T13:24:03.898Z",
+    "versionId": "e8f619e3-91ad-4066-b23b-a6a36f0893ae",
+    "workflowId": "hcs3A6YmMHuLKKsS",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ada2c5dd-141c-41ad-9217-7ae604d3fcdc",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "2614cb60-58dc-495b-a979-c1c65067b3f1",
+        "name": "Webhook",
+        "webhookId": "ada2c5dd-141c-41ad-9217-7ae604d3fcdc"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "81deabf9-0a32-4ca2-a843-4f5e7ab9ab29",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "number",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          448,
+          0
+        ],
+        "id": "3f0b5d67-99e5-4794-8297-df6aed9eb725",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Razao",
+                "keyValue": "={{ $json.body.nome }}"
+              },
+              {
+                "keyName": "Telefone",
+                "keyValue": "={{ $json.body.telefone }}"
+              },
+              {
+                "keyName": "CNPJ",
+                "keyValue": "={{ String($json.body.cnpj ?? '').replace(/\\D/g, '') }}"
+              },
+              {
+                "keyName": "Tipo",
+                "keyValue": "={{ $json.body.tipo }}"
+              },
+              {
+                "keyName": "Status",
+                "keyValue": "Pendente"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          224,
+          0
+        ],
+        "id": "525f99bb-dae0-4371-b36b-a4bcbf2c46ec",
+        "name": "Get a row",
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "Dados Roster",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Razao",
+                "fieldValue": "={{ $('Webhook').item.json.body.nome }}"
+              },
+              {
+                "fieldId": "Telefone",
+                "fieldValue": "={{ $('Webhook').item.json.body.telefone }}"
+              },
+              {
+                "fieldId": "CNPJ",
+                "fieldValue": "={{ $('Webhook').item.json.body.cnpj }}"
+              },
+              {
+                "fieldId": "Tipo",
+                "fieldValue": "={{ $('Webhook').item.json.body.tipo }}"
+              },
+              {
+                "fieldId": "Status",
+                "fieldValue": "Pendente"
+              },
+              {
+                "fieldId": "Resposta"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          672,
+          0
+        ],
+        "id": "af53e873-c297-40b6-8ebc-040126a2584f",
+        "name": "Create a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Create a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version e8f619e3",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
