@@ -1,0 +1,1872 @@
+{
+  "id": "FEP1dq8ZUNGNB6Zv",
+  "name": "Kommit - Gatilhos.Planilha",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ !!$json[\"GATILHO - CRIAR CARD\"] }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "b4505852-3d2e-4699-afae-a7ce9102b190"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CARD"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0c80bfcb-6aa8-447b-b0ad-b188c37a5e6e",
+                    "leftValue": "={{ !!$json[\"GATILHO - ENVIAR MENSAGEM\"] }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MENSAGEM"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -912,
+        496
+      ],
+      "id": "a9be1e59-8182-430d-a8c4-4a805ae7c167",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "uMVDpP68bRwEIRmv",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uMVDpP68bRwEIRmv",
+          "cachedResultName": "Kommit - Criar.Card"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $json.TELEFONE }}",
+            "razao": "={{ $json.NOME }}",
+            "cnpj": "={{ $json.CNPJ }}",
+            "id_supabase": "={{ $json[\"ID Banco de Dados\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "razao",
+              "displayName": "razao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "cnpj",
+              "displayName": "cnpj",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_supabase",
+              "displayName": "id_supabase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        336
+      ],
+      "id": "c382d69c-46ee-4b91-b83b-0e5692edd921",
+      "name": "Call 'Kommit - Criar.Card'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Hp7ij4pGc8ZEdT3m",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Hp7ij4pGc8ZEdT3m",
+          "cachedResultName": "Kommit - Enviar.Mensagem"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ $('Get - Config').item.json.bm.inbox_id_chatwoot }}",
+            "telefone": "={{ $json.TELEFONE }}",
+            "socio": "={{ $json.SOCIO || 'Prezado' }}",
+            "razao": "={{ $json.NOME }}",
+            "cnpj": "={{ $json.CNPJ }}",
+            "token": "={{ $('Get - Config').item.json.bm.token }}",
+            "template": "={{ $('Get - Config').item.json.bm.template_padrao }}",
+            "id_numero": "={{ $('Get - Config').item.json.bm.id_numero }}",
+            "id_supabase": "={{ $json[\"ID Banco de Dados\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "socio",
+              "displayName": "socio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "razao",
+              "displayName": "razao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "cnpj",
+              "displayName": "cnpj",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_numero",
+              "displayName": "id_numero",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "template",
+              "displayName": "template",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_supabase",
+              "displayName": "id_supabase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "token",
+              "displayName": "token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        624
+      ],
+      "id": "ae80e002-a974-40e4-85d2-6579e5abc0f6",
+      "name": "Call 'Kommit - Enviar.Mensagem'"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -688,
+        496
+      ],
+      "id": "fa1018c8-bb37-4830-8230-755be2ce7f9d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2b127484-86ea-430a-a320-7c9041a79166",
+              "leftValue": "={{ $json[\"ID Banco de Dados\"] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1280,
+        496
+      ],
+      "id": "4c64fe30-bc0b-43b6-bb97-213823dbaed9",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b2e9b9c5-3905-4c53-b9cc-32c3868b3f64",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 8,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "00cf96be-2d98-4051-9208-31a3a8fc49d9",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -2080,
+        496
+      ],
+      "id": "d950ce7c-1b19-4974-a522-e24fb8f52c65",
+      "name": "Horário Comercial"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH config AS (\n    -- Pegamos o valor da coluna 'bm' que será usado como filtro\n    SELECT \"bm\" as filtro_telefone \n    FROM \"status_automacao\" \n    WHERE \"id\" = 1\n)\nSELECT \n    -- Traz os dados da automação\n    (SELECT row_to_json(s) FROM (SELECT * FROM \"status_automacao\" WHERE \"id\" = 1) s) as status,\n    \n    -- Traz os dados da BM ou um objeto de erro se não encontrar nada\n    COALESCE(\n        (SELECT row_to_json(b) \n         FROM \"BMs\" b \n         WHERE b.\"phone\" = (SELECT filtro_telefone FROM config) \n         LIMIT 1),\n        json_build_object('error', 'BM não localizada', 'phone_tentado', (SELECT filtro_telefone FROM config))\n    ) as bm;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1872,
+        496
+      ],
+      "id": "3655f34f-616d-45c7-96c1-6532cb48134b",
+      "name": "Get - Config",
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "GATILHO - CRIAR CARD",
+              "lookupValue": "true"
+            },
+            {
+              "lookupColumn": "GATILHO - ENVIAR MENSAGEM",
+              "lookupValue": "true"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1664,
+        496
+      ],
+      "id": "65a69a33-a184-4476-9d52-dcafee6780bf",
+      "name": "Get Leads",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1088,
+        496
+      ],
+      "id": "f44474b3-5dad-481e-943e-e1c089ef9d85",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Filter').item.json[\"ID Banco de Dados\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        496
+      ],
+      "id": "b02625de-c684-434d-b80e-bfc08d07a3d6",
+      "name": "Get - Lead",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Filter').item.json.row_number }}",
+            "ATUALIZADO": "={{ $now.setZone('America/Sao_Paulo').format('dd/MM/yyyy HH:mm:ss') }}",
+            "GATILHO - CRIAR CARD": "={{ (['sucesso', 'nao', 'pendente'].includes($json[\"STATUS CARD\"]) || !$json[\"STATUS CARD\"]) ? false : $json[\"GATILHO - CRIAR CARD\"] }}",
+            "GATILHO - ENVIAR MENSAGEM": "={{ (['sucesso', 'nao', 'pendente'].includes($json[\"STATUS MENSAGEM\"]) || !$json[\"STATUS MENSAGEM\"]) ? false : $json[\"GATILHO - ENVIAR MENSAGEM\"] }}",
+            "HORARIO - ULTIMA MENSAGEM": "={{ $json.ultima_mensagem.toDateTime().setZone('America/Sao_Paulo').format('dd/MM/yyyy HH:mm:ss') }}",
+            "STATUS": "={{ $json.status }}",
+            "STATUS CARD": "={{ $json.criar_card }}",
+            "STATUS MENSAGEM": "={{ $json.enviar_mensagem }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "NOME",
+              "displayName": "NOME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SOCIO",
+              "displayName": "SOCIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATA E HORA",
+              "displayName": "DATA E HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GATILHO - CRIAR CARD",
+              "displayName": "GATILHO - CRIAR CARD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "STATUS CARD",
+              "displayName": "STATUS CARD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GATILHO - ENVIAR MENSAGEM",
+              "displayName": "GATILHO - ENVIAR MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STATUS MENSAGEM",
+              "displayName": "STATUS MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CAMPANHA_ID",
+              "displayName": "CAMPANHA_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORARIO - ULTIMA MENSAGEM",
+              "displayName": "HORARIO - ULTIMA MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data criação BD",
+              "displayName": "Data criação BD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID Banco de Dados",
+              "displayName": "ID Banco de Dados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ATUALIZADO",
+              "displayName": "ATUALIZADO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -320,
+        496
+      ],
+      "id": "0bb4dbb3-6f21-406e-afc5-6572d9b38ccb",
+      "name": "Update - Lead",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        496
+      ],
+      "id": "65d3b173-dacf-433a-87a4-e7c4210b494f",
+      "name": "Fim"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "cnpj",
+              "value": "={{ $json.CNPJ }}"
+            },
+            {
+              "key": "telefone",
+              "value": "={{ $json.TELEFONE }}"
+            },
+            {
+              "key": "id_supabase",
+              "value": "={{ $json['ID Banco de Dados'] }}"
+            },
+            {
+              "key": "data",
+              "value": "={{ $now.format('yyyy-MM-dd') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -1472,
+        496
+      ],
+      "id": "8f618291-1054-43db-845f-756e7c3c492a",
+      "name": "Execution Data"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2272,
+        496
+      ],
+      "id": "8ef846b3-ee9b-4614-8ba8-4be02ebee46b",
+      "name": "Schedule Trigger - 3m"
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Call 'Kommit - Criar.Card'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'Kommit - Enviar.Mensagem'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Kommit - Enviar.Mensagem'": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Call 'Kommit - Criar.Card'": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Get - Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Horário Comercial": {
+      "main": [
+        [
+          {
+            "node": "Get - Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Config": {
+      "main": [
+        [
+          {
+            "node": "Get Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Leads": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Lead": {
+      "main": [
+        [
+          {
+            "node": "Update - Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Lead": {
+      "main": [
+        [
+          {
+            "node": "Fim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger - 3m": {
+      "main": [
+        [
+          {
+            "node": "Horário Comercial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger - 1m1": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger - 3m": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "ff104ed1-8741-4ae6-beed-3d7fb71a0fa8",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-13T23:56:59.788Z",
+      "createdAt": "2026-05-13T23:56:59.788Z",
+      "role": "workflow:owner",
+      "workflowId": "FEP1dq8ZUNGNB6Zv",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-14T18:47:07.000Z",
+    "createdAt": "2026-05-14T18:47:04.346Z",
+    "versionId": "ff104ed1-8741-4ae6-beed-3d7fb71a0fa8",
+    "workflowId": "FEP1dq8ZUNGNB6Zv",
+    "nodes": [
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ !!$json[\"GATILHO - CRIAR CARD\"] }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "boolean",
+                        "operation": "true",
+                        "singleValue": true
+                      },
+                      "id": "b4505852-3d2e-4699-afae-a7ce9102b190"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "CARD"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "0c80bfcb-6aa8-447b-b0ad-b188c37a5e6e",
+                      "leftValue": "={{ !!$json[\"GATILHO - ENVIAR MENSAGEM\"] }}",
+                      "rightValue": false,
+                      "operator": {
+                        "type": "boolean",
+                        "operation": "true",
+                        "singleValue": true
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "MENSAGEM"
+              }
+            ]
+          },
+          "options": {
+            "allMatchingOutputs": true
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -912,
+          496
+        ],
+        "id": "a9be1e59-8182-430d-a8c4-4a805ae7c167",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "uMVDpP68bRwEIRmv",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/uMVDpP68bRwEIRmv",
+            "cachedResultName": "Kommit - Criar.Card"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "telefone": "={{ $json.TELEFONE }}",
+              "razao": "={{ $json.NOME }}",
+              "cnpj": "={{ $json.CNPJ }}",
+              "id_supabase": "={{ $json[\"ID Banco de Dados\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "telefone",
+                "displayName": "telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "razao",
+                "displayName": "razao",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "cnpj",
+                "displayName": "cnpj",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "id_supabase",
+                "displayName": "id_supabase",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": true,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -800,
+          336
+        ],
+        "id": "c382d69c-46ee-4b91-b83b-0e5692edd921",
+        "name": "Call 'Kommit - Criar.Card'"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Hp7ij4pGc8ZEdT3m",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/Hp7ij4pGc8ZEdT3m",
+            "cachedResultName": "Kommit - Enviar.Mensagem"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "inbox_id": "={{ $('Get - Config').item.json.bm.inbox_id_chatwoot }}",
+              "telefone": "={{ $json.TELEFONE }}",
+              "socio": "={{ $json.SOCIO || 'Prezado' }}",
+              "razao": "={{ $json.NOME }}",
+              "cnpj": "={{ $json.CNPJ }}",
+              "token": "={{ $('Get - Config').item.json.bm.token }}",
+              "template": "={{ $('Get - Config').item.json.bm.template_padrao }}",
+              "id_numero": "={{ $('Get - Config').item.json.bm.id_numero }}",
+              "id_supabase": "={{ $json[\"ID Banco de Dados\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "telefone",
+                "displayName": "telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "socio",
+                "displayName": "socio",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "razao",
+                "displayName": "razao",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "cnpj",
+                "displayName": "cnpj",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "id_numero",
+                "displayName": "id_numero",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "template",
+                "displayName": "template",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "id_supabase",
+                "displayName": "id_supabase",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "token",
+                "displayName": "token",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "inbox_id",
+                "displayName": "inbox_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "number",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": true,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -800,
+          624
+        ],
+        "id": "ae80e002-a974-40e4-85d2-6579e5abc0f6",
+        "name": "Call 'Kommit - Enviar.Mensagem'"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -688,
+          496
+        ],
+        "id": "fa1018c8-bb37-4830-8230-755be2ce7f9d",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "2b127484-86ea-430a-a320-7c9041a79166",
+                "leftValue": "={{ $json[\"ID Banco de Dados\"] }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -1280,
+          496
+        ],
+        "id": "4c64fe30-bc0b-43b6-bb97-213823dbaed9",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b2e9b9c5-3905-4c53-b9cc-32c3868b3f64",
+                "leftValue": "={{ $json.Hour }}",
+                "rightValue": 8,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              },
+              {
+                "id": "00cf96be-2d98-4051-9208-31a3a8fc49d9",
+                "leftValue": "={{ $json.Hour }}",
+                "rightValue": 18,
+                "operator": {
+                  "type": "number",
+                  "operation": "lte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -2080,
+          496
+        ],
+        "id": "d950ce7c-1b19-4974-a522-e24fb8f52c65",
+        "name": "Horário Comercial"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "WITH config AS (\n    -- Pegamos o valor da coluna 'bm' que será usado como filtro\n    SELECT \"bm\" as filtro_telefone \n    FROM \"status_automacao\" \n    WHERE \"id\" = 1\n)\nSELECT \n    -- Traz os dados da automação\n    (SELECT row_to_json(s) FROM (SELECT * FROM \"status_automacao\" WHERE \"id\" = 1) s) as status,\n    \n    -- Traz os dados da BM ou um objeto de erro se não encontrar nada\n    COALESCE(\n        (SELECT row_to_json(b) \n         FROM \"BMs\" b \n         WHERE b.\"phone\" = (SELECT filtro_telefone FROM config) \n         LIMIT 1),\n        json_build_object('error', 'BM não localizada', 'phone_tentado', (SELECT filtro_telefone FROM config))\n    ) as bm;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -1872,
+          496
+        ],
+        "id": "3655f34f-616d-45c7-96c1-6532cb48134b",
+        "name": "Get - Config",
+        "retryOnFail": true,
+        "credentials": {
+          "postgres": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+            "mode": "list",
+            "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Página1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "GATILHO - CRIAR CARD",
+                "lookupValue": "true"
+              },
+              {
+                "lookupColumn": "GATILHO - ENVIAR MENSAGEM",
+                "lookupValue": "true"
+              }
+            ]
+          },
+          "combineFilters": "OR",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -1664,
+          496
+        ],
+        "id": "65a69a33-a184-4476-9d52-dcafee6780bf",
+        "name": "Get Leads",
+        "retryOnFail": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "maxItems": 10
+        },
+        "type": "n8n-nodes-base.limit",
+        "typeVersion": 1,
+        "position": [
+          -1088,
+          496
+        ],
+        "id": "f44474b3-5dad-481e-943e-e1c089ef9d85",
+        "name": "Limit"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "={{ $('Filter').item.json[\"ID Banco de Dados\"] }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -512,
+          496
+        ],
+        "id": "b02625de-c684-434d-b80e-bfc08d07a3d6",
+        "name": "Get - Lead",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+            "mode": "list",
+            "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Página1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $('Filter').item.json.row_number }}",
+              "ATUALIZADO": "={{ $now.setZone('America/Sao_Paulo').format('dd/MM/yyyy HH:mm:ss') }}",
+              "GATILHO - CRIAR CARD": "={{ (['sucesso', 'nao', 'pendente'].includes($json[\"STATUS CARD\"]) || !$json[\"STATUS CARD\"]) ? false : $json[\"GATILHO - CRIAR CARD\"] }}",
+              "GATILHO - ENVIAR MENSAGEM": "={{ (['sucesso', 'nao', 'pendente'].includes($json[\"STATUS MENSAGEM\"]) || !$json[\"STATUS MENSAGEM\"]) ? false : $json[\"GATILHO - ENVIAR MENSAGEM\"] }}",
+              "HORARIO - ULTIMA MENSAGEM": "={{ $json.ultima_mensagem.toDateTime().setZone('America/Sao_Paulo').format('dd/MM/yyyy HH:mm:ss') }}",
+              "STATUS": "={{ $json.status }}",
+              "STATUS CARD": "={{ $json.criar_card }}",
+              "STATUS MENSAGEM": "={{ $json.enviar_mensagem }}"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": [
+              {
+                "id": "NOME",
+                "displayName": "NOME",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ",
+                "displayName": "CNPJ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "TELEFONE",
+                "displayName": "TELEFONE",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "SOCIO",
+                "displayName": "SOCIO",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "DATA E HORA",
+                "displayName": "DATA E HORA",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "STATUS",
+                "displayName": "STATUS",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "GATILHO - CRIAR CARD",
+                "displayName": "GATILHO - CRIAR CARD",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "STATUS CARD",
+                "displayName": "STATUS CARD",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "GATILHO - ENVIAR MENSAGEM",
+                "displayName": "GATILHO - ENVIAR MENSAGEM",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "STATUS MENSAGEM",
+                "displayName": "STATUS MENSAGEM",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "CAMPANHA_ID",
+                "displayName": "CAMPANHA_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "HORARIO - ULTIMA MENSAGEM",
+                "displayName": "HORARIO - ULTIMA MENSAGEM",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Data criação BD",
+                "displayName": "Data criação BD",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ID Banco de Dados",
+                "displayName": "ID Banco de Dados",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ATUALIZADO",
+                "displayName": "ATUALIZADO",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -320,
+          496
+        ],
+        "id": "0bb4dbb3-6f21-406e-afc5-6572d9b38ccb",
+        "name": "Update - Lead",
+        "retryOnFail": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -128,
+          496
+        ],
+        "id": "65d3b173-dacf-433a-87a4-e7c4210b494f",
+        "name": "Fim"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "cnpj",
+                "value": "={{ $json.CNPJ }}"
+              },
+              {
+                "key": "telefone",
+                "value": "={{ $json.TELEFONE }}"
+              },
+              {
+                "key": "id_supabase",
+                "value": "={{ $json['ID Banco de Dados'] }}"
+              },
+              {
+                "key": "data",
+                "value": "={{ $now.format('yyyy-MM-dd') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -1472,
+          496
+        ],
+        "id": "8f618291-1054-43db-845f-756e7c3c492a",
+        "name": "Execution Data"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 3
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -2272,
+          496
+        ],
+        "id": "8ef846b3-ee9b-4614-8ba8-4be02ebee46b",
+        "name": "Schedule Trigger - 3m"
+      }
+    ],
+    "connections": {
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Call 'Kommit - Criar.Card'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call 'Kommit - Enviar.Mensagem'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Kommit - Enviar.Mensagem'": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Call 'Kommit - Criar.Card'": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Get - Lead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Limit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Horário Comercial": {
+        "main": [
+          [
+            {
+              "node": "Get - Config",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Config": {
+        "main": [
+          [
+            {
+              "node": "Get Leads",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Leads": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Limit": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Lead": {
+        "main": [
+          [
+            {
+              "node": "Update - Lead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Lead": {
+        "main": [
+          [
+            {
+              "node": "Fim",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger - 3m": {
+        "main": [
+          [
+            {
+              "node": "Horário Comercial",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Kommit Automação",
+    "name": "Version ff104ed1",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    }
+  ]
+}
