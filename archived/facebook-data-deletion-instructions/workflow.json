@@ -1,0 +1,73 @@
+{
+  "id": "xQzSLPaXYjw2ymsh",
+  "name": "Facebook - Data Deletion Instructions",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "data-deletion",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        300
+      ],
+      "id": "del-0001-cafe-babe-0001-000000000001",
+      "name": "Webhook Data Deletion"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<!DOCTYPE html><html lang=\"pt-BR\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"><title>Aviso de Privacidade e Exclusao de Dados - MAXX Telecom</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:#f8f9fa;color:#222;line-height:1.75}header{background:#1a73e8;color:#fff;padding:40px 20px;text-align:center}header h1{font-size:2rem;font-weight:700;margin-bottom:8px}header p{font-size:1rem;opacity:.85}nav{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 20px;position:sticky;top:0;z-index:100;text-align:center}nav a{color:#1a73e8;text-decoration:none;font-size:.85rem;margin:0 10px;font-weight:500}nav a:hover{text-decoration:underline}.container{max-width:860px;margin:0 auto;padding:40px 20px 80px}section{background:#fff;border-radius:8px;padding:32px 36px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.06)}h2{font-size:1.2rem;font-weight:700;color:#1a73e8;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f0fe}h3{font-size:1rem;font-weight:600;color:#333;margin:20px 0 8px}p{margin-bottom:12px;font-size:.95rem}ul,ol{padding-left:22px;margin-bottom:12px}li{font-size:.95rem;margin-bottom:6px}.badge{display:inline-block;background:#e8f0fe;color:#1a73e8;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:16px}.highlight{background:#f0f7ff;border-left:4px solid #1a73e8;padding:16px 20px;border-radius:0 6px 6px 0;margin:16px 0}.highlight p{margin:0;font-size:.92rem}.table-wrap{overflow-x:auto}.data-table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:8px}.data-table th{background:#e8f0fe;color:#1a73e8;padding:10px 14px;text-align:left;font-weight:600}.data-table td{padding:10px 14px;border-bottom:1px solid #f0f0f0;vertical-align:top}.data-table tr:last-child td{border-bottom:none}.data-table tr:hover td{background:#fafafa}.contact-box{background:#1a73e8;color:#fff;border-radius:8px;padding:24px 28px;margin-top:8px}.contact-box a{color:#fff;font-weight:600}.tag{display:inline-block;background:#e8f4e8;color:#2d7a2d;font-size:.78rem;padding:2px 8px;border-radius:4px;margin-right:4px}footer{text-align:center;padding:30px 20px;font-size:.82rem;color:#999;background:#fff;border-top:1px solid #eee}</style></head><body><header><h1>Aviso de Privacidade</h1><p>MAXX Telecom &mdash; Escritorio Autorizado C6 Bank &mdash; Atualizado em 04/05/2025</p></header><nav><a href=\"#controlador\">Controlador</a><a href=\"#dados\">Dados Coletados</a><a href=\"#finalidade\">Finalidade</a><a href=\"#base-legal\">Base Legal</a><a href=\"#compartilhamento\">Compartilhamento</a><a href=\"#retencao\">Retencao</a><a href=\"#direitos\">Seus Direitos</a><a href=\"#exclusao\">Exclusao</a><a href=\"#contato\">Contato</a></nav><div class=\"container\"><section id=\"intro\"><div class=\"badge\">LGPD &bull; Lei 13.709/2018</div><p>Este Aviso de Privacidade descreve como a <strong>MAXX Telecom</strong>, escritorio autorizado do C6 Bank, coleta, usa, armazena e protege os dados pessoais de clientes e usuarios que interagem com nossos canais de atendimento, incluindo o assistente virtual integrado ao Facebook Messenger e ao WhatsApp.</p><p>Ao interagir conosco por qualquer canal digital, voce concorda com as praticas descritas neste documento. Recomendamos a leitura completa.</p></section><section id=\"controlador\"><h2>1. Identificacao do Controlador</h2><div class=\"table-wrap\"><table class=\"data-table\"><tr><th>Campo</th><th>Informacao</th></tr><tr><td>Razao Social</td><td>MAXX Telecom Servicos de Telecomunicacoes Ltda</td></tr><tr><td>Nome Fantasia</td><td>MAXX Telecom</td></tr><tr><td>Atividade</td><td>Escritorio Autorizado C6 Bank &mdash; Abertura de Contas PJ</td></tr><tr><td>E-mail do Controlador</td><td>contato@maxxitele.com.br</td></tr><tr><td>Encarregado (DPO)</td><td>contato@maxxitele.com.br</td></tr></table></div></section><section id=\"dados\"><h2>2. Dados Pessoais Coletados</h2><p>Coletamos apenas os dados necessarios para prestar nosso servico de atendimento e orientacao sobre abertura de contas PJ no C6 Bank:</p><div class=\"table-wrap\"><table class=\"data-table\"><tr><th>Categoria</th><th>Dados</th><th>Canal</th></tr><tr><td>Identificacao</td><td>Nome completo, numero de telefone</td><td>WhatsApp, Facebook Messenger</td></tr><tr><td>Identificadores digitais</td><td>ID do Facebook, numero de telefone vinculado ao WhatsApp</td><td>Facebook, WhatsApp</td></tr><tr><td>Dados de comunicacao</td><td>Conteudo das mensagens trocadas com o assistente virtual</td><td>Todos os canais</td></tr><tr><td>Dados empresariais</td><td>CNPJ, razao social (quando fornecidos voluntariamente)</td><td>WhatsApp, Facebook Messenger</td></tr><tr><td>Dados tecnicos</td><td>Registros de data, hora e status das conversas</td><td>Interno (Chatwoot)</td></tr></table></div><div class=\"highlight\"><p><strong>Importante:</strong> Nao coletamos senhas, dados de cartao de credito, dados bancarios completos nem documentos de identidade. O cadastro bancario e realizado diretamente pelo cliente no aplicativo C6 Bank, fora do nosso ambiente.</p></div></section><section id=\"finalidade\"><h2>3. Finalidade do Tratamento</h2><h3>3.1 Atendimento e Orientacao</h3><p>Utilizamos seus dados para prestar atendimento personalizado, orientar sobre os produtos C6 Bank para pessoa juridica e acompanhar o processo de abertura de conta.</p><h3>3.2 Melhoria do Servico</h3><p>O historico de conversas pode ser analisado de forma agregada para aprimorar a qualidade do atendimento e treinar nosso assistente virtual.</p><h3>3.3 Comunicacao</h3><p>Podemos entrar em contato para dar seguimento ao atendimento iniciado, informar sobre o status da conta ou apresentar novidades relevantes dos produtos C6 Bank.</p><h3>3.4 Cumprimento Legal</h3><p>Dados podem ser mantidos para cumprir obrigacoes legais, regulatorias ou responder a demandas judiciais.</p></section><section id=\"base-legal\"><h2>4. Base Legal (LGPD)</h2><p>O tratamento dos seus dados esta fundamentado nas seguintes bases legais previstas na Lei 13.709/2018:</p><ul><li><strong>Execucao de contrato ou diligencias pre-contratuais</strong> (Art. 7, V): para prestar o servico de atendimento solicitado pelo titular.</li><li><strong>Consentimento</strong> (Art. 7, I): para envio de comunicacoes sobre produtos e servicos.</li><li><strong>Interesse legitimo</strong> (Art. 7, IX): para melhoria continua dos servicos e prevencao de fraudes.</li><li><strong>Cumprimento de obrigacao legal</strong> (Art. 7, II): para atender exigencias regulatorias do setor financeiro.</li></ul></section><section id=\"compartilhamento\"><h2>5. Compartilhamento de Dados</h2><p>Seus dados podem ser compartilhados com os seguintes parceiros e prestadores de servico, sempre com garantias contratuais de protecao:</p><div class=\"table-wrap\"><table class=\"data-table\"><tr><th>Parceiro</th><th>Finalidade</th><th>Localizacao</th></tr><tr><td>C6 Bank (Banco C6 S.A.)</td><td>Abertura e gestao da conta PJ</td><td>Brasil</td></tr><tr><td>Meta Platforms (Facebook/WhatsApp)</td><td>Canal de comunicacao e atendimento</td><td>EUA (adequacao LGPD)</td></tr><tr><td>Chatwoot (plataforma de atendimento)</td><td>Gerenciamento das conversas</td><td>Servidores proprios</td></tr><tr><td>Google (Gemini AI)</td><td>Processamento de linguagem natural para o assistente virtual</td><td>EUA (adequacao LGPD)</td></tr><tr><td>Hostinger (infraestrutura)</td><td>Hospedagem dos sistemas de automacao</td><td>Brasil / UE</td></tr></table></div><div class=\"highlight\"><p>Nao vendemos, alugamos nem cedemos seus dados a terceiros para fins comerciais proprios desses terceiros.</p></div></section><section id=\"retencao\"><h2>6. Retencao e Exclusao de Dados</h2><p>Mantemos seus dados pelo tempo necessario para cumprir as finalidades descritas neste aviso:</p><ul><li><strong>Historico de conversas:</strong> ate 24 meses apos o encerramento do atendimento.</li><li><strong>Dados de contato:</strong> ate 5 anos, para fins de relacionamento e cumprimento de obrigacoes legais do setor financeiro.</li><li><strong>Logs tecnicos:</strong> ate 6 meses.</li></ul><p>Apos esses prazos, os dados sao excluidos ou anonimizados de forma irreversivel.</p></section><section id=\"direitos\"><h2>7. Seus Direitos como Titular</h2><p>A LGPD garante a voce os seguintes direitos, que podem ser exercidos a qualquer momento:</p><ul><li><span class=\"tag\">Acesso</span> Solicitar a confirmacao da existencia e acesso aos seus dados.</li><li><span class=\"tag\">Correcao</span> Pedir a correcao de dados incompletos, inexatos ou desatualizados.</li><li><span class=\"tag\">Exclusao</span> Solicitar a eliminacao dos dados tratados com base no consentimento.</li><li><span class=\"tag\">Portabilidade</span> Receber seus dados em formato estruturado e interoperavel.</li><li><span class=\"tag\">Oposicao</span> Opor-se ao tratamento realizado com base em interesse legitimo.</li><li><span class=\"tag\">Revogacao</span> Retirar o consentimento a qualquer momento, sem prejuizo da licitude dos tratamentos anteriores.</li><li><span class=\"tag\">Informacao</span> Ser informado sobre com quem compartilhamos seus dados.</li></ul></section><section id=\"exclusao\"><h2>8. Como Solicitar a Exclusao dos Seus Dados</h2><p>Para solicitar a exclusao dos dados coletados pelo nosso assistente virtual via Facebook ou WhatsApp, siga os passos abaixo:</p><ol><li>Envie um e-mail para <strong>contato@maxxitele.com.br</strong></li><li>Use o assunto: <strong>Solicitacao de Exclusao de Dados Pessoais</strong></li><li>Informe: nome completo, numero de telefone ou ID do Facebook vinculado ao atendimento</li><li>Aguarde a confirmacao de recebimento (em ate 2 dias uteis)</li></ol><div class=\"highlight\"><p><strong>Prazo de atendimento:</strong> Processaremos sua solicitacao em ate <strong>15 dias uteis</strong> a partir da confirmacao da sua identidade. Voce receberá uma notificacao por e-mail quando a exclusao for concluida.</p></div></section><section id=\"seguranca\"><h2>9. Seguranca dos Dados</h2><p>Adotamos medidas tecnicas e organizacionais para proteger seus dados contra acesso nao autorizado, perda, destruicao ou divulgacao indevida:</p><ul><li>Comunicacao criptografada (HTTPS/TLS) em todos os canais</li><li>Acesso restrito aos dados apenas a colaboradores autorizados</li><li>Monitoramento continuo dos sistemas de atendimento</li><li>Revisao periodica das politicas de seguranca</li></ul><p>Em caso de incidente de seguranca que possa afetar seus direitos, notificaremos a ANPD e os titulares afetados nos prazos previstos pela LGPD.</p></section><section id=\"atualizacoes\"><h2>10. Atualizacoes deste Aviso</h2><p>Este Aviso de Privacidade pode ser atualizado periodicamente para refletir mudancas nas nossas praticas, nos servicos oferecidos ou na legislacao aplicavel. A versao mais recente estara sempre disponivel nesta pagina, com a data da ultima atualizacao indicada no cabecalho.</p><p>Mudancas substanciais serao comunicadas aos usuarios pelos canais de atendimento.</p></section><section id=\"contato\"><h2>11. Contato e Encarregado de Dados (DPO)</h2><div class=\"contact-box\"><p style=\"margin-bottom:12px\">Para exercer seus direitos, esclarecer duvidas ou registrar uma reclamacao relacionada ao tratamento dos seus dados pessoais, entre em contato com nosso Encarregado de Dados:</p><p><strong>E-mail:</strong> <a href=\"mailto:contato@maxxitele.com.br\">contato@maxxitele.com.br</a></p><p style=\"margin-top:8px\">Caso nao receba resposta satisfatoria, voce pode acionar a <strong>Autoridade Nacional de Protecao de Dados (ANPD)</strong> em <a href=\"https://www.gov.br/anpd\" style=\"color:#fff\">www.gov.br/anpd</a>.</p></div></section></div><footer><p>&#169; 2025 MAXX Telecom &mdash; Escritorio Autorizado C6 Bank &mdash; Todos os direitos reservados</p><p style=\"margin-top:6px\">Este documento esta em conformidade com a Lei Geral de Protecao de Dados (LGPD &mdash; Lei 13.709/2018) e as Politicas de Plataforma da Meta.</p></footer></body></html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        300
+      ],
+      "id": "del-0002-cafe-babe-0002-000000000002",
+      "name": "Retornar Pagina HTML"
+    }
+  ],
+  "connections": {
+    "Webhook Data Deletion": {
+      "main": [
+        [
+          {
+            "node": "Retornar Pagina HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": null,
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-04T17:51:10.873Z",
+      "createdAt": "2026-05-04T17:51:10.873Z",
+      "role": "workflow:owner",
+      "workflowId": "xQzSLPaXYjw2ymsh",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
