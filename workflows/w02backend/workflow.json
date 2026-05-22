@@ -1,0 +1,1374 @@
+{
+  "id": "q8IZJXkqPzvtZN9C",
+  "name": "W.02.Backend",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "p02/relatorios/chatwoot/backend",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -720,
+        192
+      ],
+      "id": "cece16b5-0f7c-4a62-8f54-c186c0a4c5c4",
+      "name": "Webhook1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "query.caixas_entrada",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        208
+      ],
+      "id": "94a1d67d-a5a2-4c36-9e9c-35fa52ed8e0f",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1120,
+        32
+      ],
+      "id": "1b5ba542-dda8-4332-82df-705400d74835",
+      "name": "Respond to Webhook1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        240,
+        208
+      ],
+      "id": "817c7426-7bc9-49ac-b220-4ab44fec2e6f",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me2",
+      "typeVersion": 1,
+      "position": [
+        944,
+        352
+      ],
+      "id": "fc403e8c-077e-45b5-be94-76760f51b9eb"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "Data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        352,
+        32
+      ],
+      "id": "3e8bffb5-73eb-49c3-83a8-ac951c81bbfe",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3f9f073e-6a71-4bf1-9f35-e214ac186e17",
+              "leftValue": "={{ $json.body.is_todas_caixas_selecionado }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -480,
+        192
+      ],
+      "id": "1e0dc174-8fa9-4dea-9803-ced86bf308f8",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://relatorio.maxxitele.com.br/relatorio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"account_id\": 1,\n  \"tags_incluir\": [],\n  \"tags_excluir\": [],\n  \"data_inicial\": \"{{ $('Webhook1').first().json.body.data_inicio }}\",\n  \"data_final\": \"{{ $('Webhook1').first().json.body.data_fim }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -368,
+        32
+      ],
+      "id": "7dcfb232-499e-4a46-9a24-7e75b13d0012",
+      "name": "Get - Hertzner",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Pega o conteúdo bruto da chave \"data\"\nconst rawData = $input.first().json.data;\n\nif (!rawData) return [];\n\n// 2. Separa por linhas e limpa linhas vazias\nconst lines = rawData.trim().split('\\n');\n\n// 3. Pega os cabeçalhos da primeira linha\nconst headers = lines[0].split(',').map(h => h.trim());\n\n// 4. Converte as linhas de dados em Objetos\nconst results = lines.slice(1).map(line => {\n    const values = [];\n    let current = '';\n    let inQuotes = false;\n\n    // Lógica para separar por vírgula sem quebrar o que está entre aspas\n    for (let char of line) {\n        if (char === '\"') {\n            inQuotes = !inQuotes;\n        } else if (char === ',' && !inQuotes) {\n            values.push(current.trim());\n            current = '';\n        } else {\n            current += char;\n        }\n    }\n    values.push(current.trim());\n\n    // Monta o objeto final baseando-se nos headers\n    let obj = {};\n    headers.forEach((header, index) => {\n        let val = values[index] || \"\";\n        \n        // Remove aspas, limpa espaços e verifica se está vazio\n        let cleanedVal = val.replace(/^\"|\"$/g, '').trim();\n        \n        // Se estiver vazio, coloca \"null\", caso contrário mantém o valor\n        obj[header] = cleanedVal === \"\" ? \"null\" : cleanedVal;\n    });\n    \n    return obj;\n});\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        32
+      ],
+      "id": "1ddb58c2-e603-4351-bd6c-b7262f8df086",
+      "name": "Padronização",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Pegamos as configurações do nó Webhook\nconst webhookBody = $(\"Webhook1\").first().json.body;\n\nconst tagsParaExcluir = (webhookBody.etiquetas_excluir || []).map(t => t.toLowerCase().trim());\nconst tagsParaManter = (webhookBody.etiquetas_busca || []).map(t => t.toLowerCase().trim());\nconst manterTodasFlag = webhookBody.is_todas_etiquetas_selecionado;\n\n// --- OTIMIZAÇÃO DE DATA ---\n// Convertemos as datas do webhook para timestamp uma única vez\n// Adicionamos \"T00:00:00\" para garantir que a comparação seja no fuso local\nconst timestampInicio = new Date(webhookBody.data_inicio + 'T00:00:00').getTime();\nconst timestampFim = new Date(webhookBody.data_fim + 'T23:59:59').getTime();\n\n// 2. Filtramos a lista de itens\nreturn $input.all().filter(item => {\n  const lead = item.json;\n\n  // --- REGRA 1: EXCLUSÃO (PRIORIDADE MÁXIMA) ---\n  const rawEtiquetas = lead.Etiquetas || \"\";\n  const etiquetasDoLead = rawEtiquetas.split(',')\n    .map(tag => tag.trim().toLowerCase())\n    .filter(tag => tag !== \"\");\n\n  const possuiProibida = etiquetasDoLead.some(tag => tagsParaExcluir.includes(tag));\n  if (possuiProibida) return false;\n\n  // --- NOVA REGRA: FILTRO DE DATA ---\n  // Formato do Lead: \"22/04/2026\" -> [22, 04, 2026]\n  const partes = (lead.Data || \"\").split('/');\n  if (partes.length === 3) {\n    // Criamos a data do lead: ano, mês (0-11), dia\n    const dataLead = new Date(partes[2], partes[1] - 1, partes[0]).getTime();\n    \n    // Se a data do lead estiver fora do intervalo, descarta\n    if (dataLead < timestampInicio || dataLead > timestampFim) {\n      return false;\n    }\n  }\n\n  // --- REGRA 2: MANTER TODAS ---\n  if (manterTodasFlag === true) return true;\n\n  // --- REGRA 3: PERMANÊNCIA (LISTA DE BUSCA) ---\n  const possuiTagDeBusca = etiquetasDoLead.some(tag => tagsParaManter.includes(tag));\n  return possuiTagDeBusca;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        32
+      ],
+      "id": "144c85eb-2062-4f23-9197-34a7aee41251",
+      "name": "Filtro de etiquetas e datas",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee10acfa-14fb-47f7-8690-2816ed643aae",
+              "name": "query.caixas_entrada",
+              "value": "={{ typeof $json.body.caixas_entrada === 'object' && !Array.isArray($json.body.caixas_entrada) ? Object.values($json.body.caixas_entrada) : (Array.isArray($json.body.caixas_entrada) ? $json.body.caixas_entrada : [$json.body.caixas_entrada]) }}",
+              "type": "array"
+            },
+            {
+              "id": "7f7e15fa-456d-443c-bbfc-2d77e1a60e72",
+              "name": "query.etiquetas_busca",
+              "value": "={{ typeof $json.body.etiquetas_busca === 'object' && !Array.isArray($json.body.etiquetas_busca) ? Object.values($json.body.etiquetas_busca) : (Array.isArray($json.body.etiquetas_busca) ? $json.body.etiquetas_busca : [$json.body.etiquetas_busca]) }}",
+              "type": "array"
+            },
+            {
+              "id": "b55c416a-626f-47bd-a084-ce1558506899",
+              "name": "query.data_inicio",
+              "value": "={{ $json.body.data_inicio }}",
+              "type": "string"
+            },
+            {
+              "id": "21061653-92dd-4dc2-8f4b-bf8087bac174",
+              "name": "query.data_fim",
+              "value": "={{ $json.body.data_fim }}",
+              "type": "string"
+            },
+            {
+              "id": "405dc927-bb81-44db-a22c-9b2223a248db",
+              "name": "query.etiquetas_excluir",
+              "value": "={{ $json.body.etiquetas_excluir }}",
+              "type": "string"
+            },
+            {
+              "id": "ac407792-9611-4b78-8d9c-f63f36bfabb7",
+              "name": "query.is_todas_caixas_selecionado",
+              "value": "={{ $json.body.is_todas_caixas_selecionado }}",
+              "type": "string"
+            },
+            {
+              "id": "af79967a-a768-4937-81d3-8c336875a11d",
+              "name": "query.is_todas_etiquetas_selecionado",
+              "value": "={{ $json.body.is_todas_etiquetas_selecionado }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        208
+      ],
+      "id": "9503f95b-4880-46ff-b3e8-41514b088413",
+      "name": "Correção dos formatos"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://relatorio.maxxitele.com.br/relatorio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"account_id\": 1,\n  \"inbox_id\": {{ $json[\"query.caixas_entrada\"] }},\n  \"tags_incluir\": [],\n  \"tags_excluir\": [],\n  \"data_inicial\": \"{{ $('Webhook1').first().json.body.data_inicio }}\",\n  \"data_final\": \"{{ $('Webhook1').first().json.body.data_fim }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        352,
+        352
+      ],
+      "id": "43895d50-6171-440e-99dd-1c61c1cd5561",
+      "name": "Get - Hertzner 2",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Pega o conteúdo bruto da chave \"data\"\nconst rawData = $input.first().json.data;\n\nif (!rawData) return [];\n\n// 2. Separa por linhas e limpa linhas vazias\nconst lines = rawData.trim().split('\\n');\n\n// 3. Pega os cabeçalhos da primeira linha\nconst headers = lines[0].split(',').map(h => h.trim());\n\n// 4. Converte as linhas de dados em Objetos\nconst results = lines.slice(1).map(line => {\n    const values = [];\n    let current = '';\n    let inQuotes = false;\n\n    // Lógica para separar por vírgula sem quebrar o que está entre aspas\n    for (let char of line) {\n        if (char === '\"') {\n            inQuotes = !inQuotes;\n        } else if (char === ',' && !inQuotes) {\n            values.push(current.trim());\n            current = '';\n        } else {\n            current += char;\n        }\n    }\n    values.push(current.trim());\n\n    // Monta o objeto final baseando-se nos headers\n    let obj = {};\n    headers.forEach((header, index) => {\n        let val = values[index] || \"\";\n        \n        // Remove aspas, limpa espaços e verifica se está vazio\n        let cleanedVal = val.replace(/^\"|\"$/g, '').trim();\n        \n        // Se estiver vazio, coloca \"null\", caso contrário mantém o valor\n        obj[header] = cleanedVal === \"\" ? \"null\" : cleanedVal;\n    });\n    \n    return obj;\n});\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        352
+      ],
+      "id": "64e9c70b-e16c-4ab8-bb42-294cfce5a82f",
+      "name": "Padronização 2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Pegamos as configurações do nó Webhook\nconst webhookBody = $(\"Webhook1\").first().json.body;\n\nconst tagsParaExcluir = (webhookBody.etiquetas_excluir || []).map(t => t.toLowerCase().trim());\nconst tagsParaManter = (webhookBody.etiquetas_busca || []).map(t => t.toLowerCase().trim());\nconst manterTodasFlag = webhookBody.is_todas_etiquetas_selecionado;\n\n// --- OTIMIZAÇÃO DE DATA ---\n// Convertemos as datas do webhook para timestamp uma única vez\n// Adicionamos \"T00:00:00\" para garantir que a comparação seja no fuso local\nconst timestampInicio = new Date(webhookBody.data_inicio + 'T00:00:00').getTime();\nconst timestampFim = new Date(webhookBody.data_fim + 'T23:59:59').getTime();\n\n// 2. Filtramos a lista de itens\nreturn $input.all().filter(item => {\n  const lead = item.json;\n\n  // --- REGRA 1: EXCLUSÃO (PRIORIDADE MÁXIMA) ---\n  const rawEtiquetas = lead.Etiquetas || \"\";\n  const etiquetasDoLead = rawEtiquetas.split(',')\n    .map(tag => tag.trim().toLowerCase())\n    .filter(tag => tag !== \"\");\n\n  const possuiProibida = etiquetasDoLead.some(tag => tagsParaExcluir.includes(tag));\n  if (possuiProibida) return false;\n\n  // --- NOVA REGRA: FILTRO DE DATA ---\n  // Formato do Lead: \"22/04/2026\" -> [22, 04, 2026]\n  const partes = (lead.Data || \"\").split('/');\n  if (partes.length === 3) {\n    // Criamos a data do lead: ano, mês (0-11), dia\n    const dataLead = new Date(partes[2], partes[1] - 1, partes[0]).getTime();\n    \n    // Se a data do lead estiver fora do intervalo, descarta\n    if (dataLead < timestampInicio || dataLead > timestampFim) {\n      return false;\n    }\n  }\n\n  // --- REGRA 2: MANTER TODAS ---\n  if (manterTodasFlag === true) return true;\n\n  // --- REGRA 3: PERMANÊNCIA (LISTA DE BUSCA) ---\n  const possuiTagDeBusca = etiquetasDoLead.some(tag => tagsParaManter.includes(tag));\n  return possuiTagDeBusca;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        352
+      ],
+      "id": "0cc27a07-4e00-425f-931d-ad464617c525",
+      "name": "Filtro de etiquetas e datas 2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "xls",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        32
+      ],
+      "id": "a27eb206-88c9-4b18-8cc2-1b2f3cdc43a0",
+      "name": "Convert to File XLS"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3426b200-4fd7-4000-8d9b-080b58ce8151",
+              "name": "ID",
+              "value": "={{ $json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "f3e93fc0-15e1-47fc-9d64-ef68310656c8",
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "f661bcf0-9db6-49f0-9ef8-aec16c36ffbb",
+              "name": "Data",
+              "value": "={{ $json.Data }}",
+              "type": "string"
+            },
+            {
+              "id": "7646af7c-d144-47fe-9e59-98986a034818",
+              "name": "Consultor",
+              "value": "={{ $json.Consultor }}",
+              "type": "string"
+            },
+            {
+              "id": "243e1529-aeb1-4517-b3b7-1de463cd7570",
+              "name": "Razao",
+              "value": "={{ $json.Razao }}",
+              "type": "string"
+            },
+            {
+              "id": "1c087a6e-7dae-4109-a007-6729ba817ffc",
+              "name": "Nome Cliente",
+              "value": "={{ $json['Nome Cliente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4a37adba-c433-4842-81c9-04f9626023a9",
+              "name": "CNPJ",
+              "value": "={{ ($json.CNPJ && $json.CNPJ !== \"null\") ? $json.CNPJ.toString().padStart(14, '0') : 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "7b6e636e-59e9-4ad4-904a-222415debdf9",
+              "name": "Etiquetas",
+              "value": "={{ $json.Etiquetas }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        736,
+        32
+      ],
+      "id": "c8d7f463-3189-43ca-9705-74dd8b0a7f6e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a33f99cf-32f5-4710-86b0-6b269b353290",
+              "leftValue": "={{ $json.CNPJ }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        656
+      ],
+      "id": "bd53885d-7d7d-4797-accd-6ed2de0b6ad9",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "xls",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        640
+      ],
+      "id": "e7781f88-d4d9-4767-9c57-5a3f3f6b3d42",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "59badc70-676b-4d47-a748-8f080d3b01d8",
+              "leftValue": "={{ $json.Consultor }}",
+              "rightValue": "YAN",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        656
+      ],
+      "id": "ca1e4eaf-5190-4ccf-8ef8-0c147236fa53",
+      "name": "Filter1"
+    }
+  ],
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get - Hertzner 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Get - Hertzner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Correção dos formatos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Hertzner": {
+      "main": [
+        [
+          {
+            "node": "Padronização",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Padronização": {
+      "main": [
+        [
+          {
+            "node": "Filtro de etiquetas e datas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de etiquetas e datas": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Correção dos formatos": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Hertzner 2": {
+      "main": [
+        [
+          {
+            "node": "Padronização 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Padronização 2": {
+      "main": [
+        [
+          {
+            "node": "Filtro de etiquetas e datas 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de etiquetas e datas 2": {
+      "main": [
+        [
+          {
+            "node": "Replace Me2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File XLS": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Convert to File XLS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Ko33aHk6TjFU7YMa",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "7248dcf0-c193-41d0-bff9-02de3a3f4695",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-04-23T01:24:27.232Z",
+      "createdAt": "2026-04-23T01:24:27.232Z",
+      "role": "workflow:owner",
+      "workflowId": "q8IZJXkqPzvtZN9C",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-12T16:31:31.000Z",
+    "createdAt": "2026-05-12T16:31:28.532Z",
+    "versionId": "7248dcf0-c193-41d0-bff9-02de3a3f4695",
+    "workflowId": "q8IZJXkqPzvtZN9C",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "p02/relatorios/chatwoot/backend",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -720,
+          192
+        ],
+        "id": "cece16b5-0f7c-4a62-8f54-c186c0a4c5c4",
+        "name": "Webhook1",
+        "webhookId": "6c5ebbc4-f7e5-43f4-baf0-329331a64a36"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "query.caixas_entrada",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          0,
+          208
+        ],
+        "id": "94a1d67d-a5a2-4c36-9e9c-35fa52ed8e0f",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "respondWith": "binary",
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1120,
+          32
+        ],
+        "id": "1b5ba542-dda8-4332-82df-705400d74835",
+        "name": "Respond to Webhook1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          240,
+          208
+        ],
+        "id": "817c7426-7bc9-49ac-b220-4ab44fec2e6f",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me2",
+        "typeVersion": 1,
+        "position": [
+          944,
+          352
+        ],
+        "id": "fc403e8c-077e-45b5-be94-76760f51b9eb"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "Data"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          352,
+          32
+        ],
+        "id": "3e8bffb5-73eb-49c3-83a8-ac951c81bbfe",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3f9f073e-6a71-4bf1-9f35-e214ac186e17",
+                "leftValue": "={{ $json.body.is_todas_caixas_selecionado }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -480,
+          192
+        ],
+        "id": "1e0dc174-8fa9-4dea-9803-ced86bf308f8",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://relatorio.maxxitele.com.br/relatorio",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"account_id\": 1,\n  \"tags_incluir\": [],\n  \"tags_excluir\": [],\n  \"data_inicial\": \"{{ $('Webhook1').first().json.body.data_inicio }}\",\n  \"data_final\": \"{{ $('Webhook1').first().json.body.data_fim }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -368,
+          32
+        ],
+        "id": "7dcfb232-499e-4a46-9a24-7e75b13d0012",
+        "name": "Get - Hertzner",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Pega o conteúdo bruto da chave \"data\"\nconst rawData = $input.first().json.data;\n\nif (!rawData) return [];\n\n// 2. Separa por linhas e limpa linhas vazias\nconst lines = rawData.trim().split('\\n');\n\n// 3. Pega os cabeçalhos da primeira linha\nconst headers = lines[0].split(',').map(h => h.trim());\n\n// 4. Converte as linhas de dados em Objetos\nconst results = lines.slice(1).map(line => {\n    const values = [];\n    let current = '';\n    let inQuotes = false;\n\n    // Lógica para separar por vírgula sem quebrar o que está entre aspas\n    for (let char of line) {\n        if (char === '\"') {\n            inQuotes = !inQuotes;\n        } else if (char === ',' && !inQuotes) {\n            values.push(current.trim());\n            current = '';\n        } else {\n            current += char;\n        }\n    }\n    values.push(current.trim());\n\n    // Monta o objeto final baseando-se nos headers\n    let obj = {};\n    headers.forEach((header, index) => {\n        let val = values[index] || \"\";\n        \n        // Remove aspas, limpa espaços e verifica se está vazio\n        let cleanedVal = val.replace(/^\"|\"$/g, '').trim();\n        \n        // Se estiver vazio, coloca \"null\", caso contrário mantém o valor\n        obj[header] = cleanedVal === \"\" ? \"null\" : cleanedVal;\n    });\n    \n    return obj;\n});\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -176,
+          32
+        ],
+        "id": "1ddb58c2-e603-4351-bd6c-b7262f8df086",
+        "name": "Padronização",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Pegamos as configurações do nó Webhook\nconst webhookBody = $(\"Webhook1\").first().json.body;\n\nconst tagsParaExcluir = (webhookBody.etiquetas_excluir || []).map(t => t.toLowerCase().trim());\nconst tagsParaManter = (webhookBody.etiquetas_busca || []).map(t => t.toLowerCase().trim());\nconst manterTodasFlag = webhookBody.is_todas_etiquetas_selecionado;\n\n// --- OTIMIZAÇÃO DE DATA ---\n// Convertemos as datas do webhook para timestamp uma única vez\n// Adicionamos \"T00:00:00\" para garantir que a comparação seja no fuso local\nconst timestampInicio = new Date(webhookBody.data_inicio + 'T00:00:00').getTime();\nconst timestampFim = new Date(webhookBody.data_fim + 'T23:59:59').getTime();\n\n// 2. Filtramos a lista de itens\nreturn $input.all().filter(item => {\n  const lead = item.json;\n\n  // --- REGRA 1: EXCLUSÃO (PRIORIDADE MÁXIMA) ---\n  const rawEtiquetas = lead.Etiquetas || \"\";\n  const etiquetasDoLead = rawEtiquetas.split(',')\n    .map(tag => tag.trim().toLowerCase())\n    .filter(tag => tag !== \"\");\n\n  const possuiProibida = etiquetasDoLead.some(tag => tagsParaExcluir.includes(tag));\n  if (possuiProibida) return false;\n\n  // --- NOVA REGRA: FILTRO DE DATA ---\n  // Formato do Lead: \"22/04/2026\" -> [22, 04, 2026]\n  const partes = (lead.Data || \"\").split('/');\n  if (partes.length === 3) {\n    // Criamos a data do lead: ano, mês (0-11), dia\n    const dataLead = new Date(partes[2], partes[1] - 1, partes[0]).getTime();\n    \n    // Se a data do lead estiver fora do intervalo, descarta\n    if (dataLead < timestampInicio || dataLead > timestampFim) {\n      return false;\n    }\n  }\n\n  // --- REGRA 2: MANTER TODAS ---\n  if (manterTodasFlag === true) return true;\n\n  // --- REGRA 3: PERMANÊNCIA (LISTA DE BUSCA) ---\n  const possuiTagDeBusca = etiquetasDoLead.some(tag => tagsParaManter.includes(tag));\n  return possuiTagDeBusca;\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          0,
+          32
+        ],
+        "id": "144c85eb-2062-4f23-9197-34a7aee41251",
+        "name": "Filtro de etiquetas e datas",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "ee10acfa-14fb-47f7-8690-2816ed643aae",
+                "name": "query.caixas_entrada",
+                "value": "={{ typeof $json.body.caixas_entrada === 'object' && !Array.isArray($json.body.caixas_entrada) ? Object.values($json.body.caixas_entrada) : (Array.isArray($json.body.caixas_entrada) ? $json.body.caixas_entrada : [$json.body.caixas_entrada]) }}",
+                "type": "array"
+              },
+              {
+                "id": "7f7e15fa-456d-443c-bbfc-2d77e1a60e72",
+                "name": "query.etiquetas_busca",
+                "value": "={{ typeof $json.body.etiquetas_busca === 'object' && !Array.isArray($json.body.etiquetas_busca) ? Object.values($json.body.etiquetas_busca) : (Array.isArray($json.body.etiquetas_busca) ? $json.body.etiquetas_busca : [$json.body.etiquetas_busca]) }}",
+                "type": "array"
+              },
+              {
+                "id": "b55c416a-626f-47bd-a084-ce1558506899",
+                "name": "query.data_inicio",
+                "value": "={{ $json.body.data_inicio }}",
+                "type": "string"
+              },
+              {
+                "id": "21061653-92dd-4dc2-8f4b-bf8087bac174",
+                "name": "query.data_fim",
+                "value": "={{ $json.body.data_fim }}",
+                "type": "string"
+              },
+              {
+                "id": "405dc927-bb81-44db-a22c-9b2223a248db",
+                "name": "query.etiquetas_excluir",
+                "value": "={{ $json.body.etiquetas_excluir }}",
+                "type": "string"
+              },
+              {
+                "id": "ac407792-9611-4b78-8d9c-f63f36bfabb7",
+                "name": "query.is_todas_caixas_selecionado",
+                "value": "={{ $json.body.is_todas_caixas_selecionado }}",
+                "type": "string"
+              },
+              {
+                "id": "af79967a-a768-4937-81d3-8c336875a11d",
+                "name": "query.is_todas_etiquetas_selecionado",
+                "value": "={{ $json.body.is_todas_etiquetas_selecionado }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -176,
+          208
+        ],
+        "id": "9503f95b-4880-46ff-b3e8-41514b088413",
+        "name": "Correção dos formatos"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://relatorio.maxxitele.com.br/relatorio",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "User-Agent",
+                "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"account_id\": 1,\n  \"inbox_id\": {{ $json[\"query.caixas_entrada\"] }},\n  \"tags_incluir\": [],\n  \"tags_excluir\": [],\n  \"data_inicial\": \"{{ $('Webhook1').first().json.body.data_inicio }}\",\n  \"data_final\": \"{{ $('Webhook1').first().json.body.data_fim }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          352,
+          352
+        ],
+        "id": "43895d50-6171-440e-99dd-1c61c1cd5561",
+        "name": "Get - Hertzner 2",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Pega o conteúdo bruto da chave \"data\"\nconst rawData = $input.first().json.data;\n\nif (!rawData) return [];\n\n// 2. Separa por linhas e limpa linhas vazias\nconst lines = rawData.trim().split('\\n');\n\n// 3. Pega os cabeçalhos da primeira linha\nconst headers = lines[0].split(',').map(h => h.trim());\n\n// 4. Converte as linhas de dados em Objetos\nconst results = lines.slice(1).map(line => {\n    const values = [];\n    let current = '';\n    let inQuotes = false;\n\n    // Lógica para separar por vírgula sem quebrar o que está entre aspas\n    for (let char of line) {\n        if (char === '\"') {\n            inQuotes = !inQuotes;\n        } else if (char === ',' && !inQuotes) {\n            values.push(current.trim());\n            current = '';\n        } else {\n            current += char;\n        }\n    }\n    values.push(current.trim());\n\n    // Monta o objeto final baseando-se nos headers\n    let obj = {};\n    headers.forEach((header, index) => {\n        let val = values[index] || \"\";\n        \n        // Remove aspas, limpa espaços e verifica se está vazio\n        let cleanedVal = val.replace(/^\"|\"$/g, '').trim();\n        \n        // Se estiver vazio, coloca \"null\", caso contrário mantém o valor\n        obj[header] = cleanedVal === \"\" ? \"null\" : cleanedVal;\n    });\n    \n    return obj;\n});\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          544,
+          352
+        ],
+        "id": "64e9c70b-e16c-4ab8-bb42-294cfce5a82f",
+        "name": "Padronização 2",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Pegamos as configurações do nó Webhook\nconst webhookBody = $(\"Webhook1\").first().json.body;\n\nconst tagsParaExcluir = (webhookBody.etiquetas_excluir || []).map(t => t.toLowerCase().trim());\nconst tagsParaManter = (webhookBody.etiquetas_busca || []).map(t => t.toLowerCase().trim());\nconst manterTodasFlag = webhookBody.is_todas_etiquetas_selecionado;\n\n// --- OTIMIZAÇÃO DE DATA ---\n// Convertemos as datas do webhook para timestamp uma única vez\n// Adicionamos \"T00:00:00\" para garantir que a comparação seja no fuso local\nconst timestampInicio = new Date(webhookBody.data_inicio + 'T00:00:00').getTime();\nconst timestampFim = new Date(webhookBody.data_fim + 'T23:59:59').getTime();\n\n// 2. Filtramos a lista de itens\nreturn $input.all().filter(item => {\n  const lead = item.json;\n\n  // --- REGRA 1: EXCLUSÃO (PRIORIDADE MÁXIMA) ---\n  const rawEtiquetas = lead.Etiquetas || \"\";\n  const etiquetasDoLead = rawEtiquetas.split(',')\n    .map(tag => tag.trim().toLowerCase())\n    .filter(tag => tag !== \"\");\n\n  const possuiProibida = etiquetasDoLead.some(tag => tagsParaExcluir.includes(tag));\n  if (possuiProibida) return false;\n\n  // --- NOVA REGRA: FILTRO DE DATA ---\n  // Formato do Lead: \"22/04/2026\" -> [22, 04, 2026]\n  const partes = (lead.Data || \"\").split('/');\n  if (partes.length === 3) {\n    // Criamos a data do lead: ano, mês (0-11), dia\n    const dataLead = new Date(partes[2], partes[1] - 1, partes[0]).getTime();\n    \n    // Se a data do lead estiver fora do intervalo, descarta\n    if (dataLead < timestampInicio || dataLead > timestampFim) {\n      return false;\n    }\n  }\n\n  // --- REGRA 2: MANTER TODAS ---\n  if (manterTodasFlag === true) return true;\n\n  // --- REGRA 3: PERMANÊNCIA (LISTA DE BUSCA) ---\n  const possuiTagDeBusca = etiquetasDoLead.some(tag => tagsParaManter.includes(tag));\n  return possuiTagDeBusca;\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          736,
+          352
+        ],
+        "id": "0cc27a07-4e00-425f-931d-ad464617c525",
+        "name": "Filtro de etiquetas e datas 2",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "xls",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          944,
+          32
+        ],
+        "id": "a27eb206-88c9-4b18-8cc2-1b2f3cdc43a0",
+        "name": "Convert to File XLS"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3426b200-4fd7-4000-8d9b-080b58ce8151",
+                "name": "ID",
+                "value": "={{ $json.ID }}",
+                "type": "string"
+              },
+              {
+                "id": "f3e93fc0-15e1-47fc-9d64-ef68310656c8",
+                "name": "Telefone",
+                "value": "={{ $json.Telefone }}",
+                "type": "string"
+              },
+              {
+                "id": "f661bcf0-9db6-49f0-9ef8-aec16c36ffbb",
+                "name": "Data",
+                "value": "={{ $json.Data }}",
+                "type": "string"
+              },
+              {
+                "id": "7646af7c-d144-47fe-9e59-98986a034818",
+                "name": "Consultor",
+                "value": "={{ $json.Consultor }}",
+                "type": "string"
+              },
+              {
+                "id": "243e1529-aeb1-4517-b3b7-1de463cd7570",
+                "name": "Razao",
+                "value": "={{ $json.Razao }}",
+                "type": "string"
+              },
+              {
+                "id": "1c087a6e-7dae-4109-a007-6729ba817ffc",
+                "name": "Nome Cliente",
+                "value": "={{ $json['Nome Cliente'] }}",
+                "type": "string"
+              },
+              {
+                "id": "4a37adba-c433-4842-81c9-04f9626023a9",
+                "name": "CNPJ",
+                "value": "={{ ($json.CNPJ && $json.CNPJ !== \"null\") ? $json.CNPJ.toString().padStart(14, '0') : 0 }}",
+                "type": "number"
+              },
+              {
+                "id": "7b6e636e-59e9-4ad4-904a-222415debdf9",
+                "name": "Etiquetas",
+                "value": "={{ $json.Etiquetas }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          736,
+          32
+        ],
+        "id": "c8d7f463-3189-43ca-9705-74dd8b0a7f6e",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a33f99cf-32f5-4710-86b0-6b269b353290",
+                "leftValue": "={{ $json.CNPJ }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          432,
+          656
+        ],
+        "id": "bd53885d-7d7d-4797-accd-6ed2de0b6ad9",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "operation": "xls",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          240,
+          640
+        ],
+        "id": "e7781f88-d4d9-4767-9c57-5a3f3f6b3d42",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "59badc70-676b-4d47-a748-8f080d3b01d8",
+                "leftValue": "={{ $json.Consultor }}",
+                "rightValue": "YAN",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          656,
+          656
+        ],
+        "id": "ca1e4eaf-5190-4ccf-8ef8-0c147236fa53",
+        "name": "Filter1"
+      }
+    ],
+    "connections": {
+      "Webhook1": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get - Hertzner 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me2": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Get - Hertzner",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Correção dos formatos",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Hertzner": {
+        "main": [
+          [
+            {
+              "node": "Padronização",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Padronização": {
+        "main": [
+          [
+            {
+              "node": "Filtro de etiquetas e datas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtro de etiquetas e datas": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Correção dos formatos": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Hertzner 2": {
+        "main": [
+          [
+            {
+              "node": "Padronização 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Padronização 2": {
+        "main": [
+          [
+            {
+              "node": "Filtro de etiquetas e datas 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtro de etiquetas e datas 2": {
+        "main": [
+          [
+            {
+              "node": "Replace Me2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File XLS": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Convert to File XLS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          []
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 7248dcf0",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-01-03T18:38:39.532Z",
+      "createdAt": "2026-01-03T18:38:39.532Z",
+      "id": "9cHymv3czR62smRu",
+      "name": "p02"
+    }
+  ]
+}
