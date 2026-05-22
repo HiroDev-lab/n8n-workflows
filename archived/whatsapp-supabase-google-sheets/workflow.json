@@ -1,0 +1,30 @@
+{
+  "id": "ZwSRlvun4XBOoEEI",
+  "name": "WhatsApp - Supabase + Google Sheets",
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-23T17:33:29.276Z",
+      "createdAt": "2026-03-23T17:33:29.276Z",
+      "role": "workflow:owner",
+      "workflowId": "ZwSRlvun4XBOoEEI",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
