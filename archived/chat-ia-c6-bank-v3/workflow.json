@@ -1,0 +1,751 @@
+{
+  "id": "mAQ9leMUBB5c5cTT",
+  "name": "Chat IA C6 Bank v3",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f7a2b3c4-d5e6-4789-abcd-ef0123456789",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2400,
+        416
+      ],
+      "id": "b1a00001-cafe-babe-0001-000000000001",
+      "name": "Webhook Chatwoot"
+    },
+    {
+      "parameters": {
+        "jsCode": "const LABEL = 'ia_teste';\nreturn items.filter(item => {\n  const b = item.json?.body;\n  return (b?.conversation?.labels || []).includes(LABEL) && b?.message_type === 'incoming';\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2160,
+        416
+      ],
+      "id": "b1a00002-cafe-babe-0002-000000000002",
+      "name": "Filtrar Mensagem"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Webhook Chatwoot').first().json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.respostaFinal }}"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        400
+      ],
+      "id": "b1a00013-cafe-babe-0013-000000000013",
+      "name": "Enviar Resposta",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1920,
+        416
+      ],
+      "id": "bf000001-cafe-babe-bf01-bf0000000001",
+      "name": "Salvar Ultima Mensagem"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1680,
+        416
+      ],
+      "id": "bf000002-cafe-babe-bf02-bf0000000002",
+      "name": "Aguardar 20s"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nfunction extractMessages(resp) {\n  const p = resp.payload;\n  if (Array.isArray(p)) return p;\n  if (p && Array.isArray(p.payload)) return p.payload;\n  return [];\n}\n\nconst body           = $input.item.json.body;\nconst conversationId = body?.conversation?.id;\nconst myMsgId        = String(body?.id || '');\nconst myMsgIdInt     = parseInt(myMsgId) || 0;\n\nlet isLatest = true;\n\ntry {\n  const resp = await this.helpers.httpRequest({\n    method : 'GET',\n    url    : 'https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/' + conversationId + '/messages',\n    headers: { 'api_access_token': 'b2E9nG1XtDJYrJaZg9j984mQ' },\n    json   : true\n  });\n\n  const messages = extractMessages(resp)\n    .sort((a, b) => (b.id || 0) - (a.id || 0)); // mais recente primeiro\n\n  // CHECK 1 - Buffer: nossa msg deve ser a mais recente do cliente\n  const latestIncoming = messages.find(m => m.message_type == 0);\n  if (latestIncoming && String(latestIncoming.id) !== myMsgId) {\n    isLatest = false; // chegou msg mais nova, outra execucao responde\n  }\n\n  // CHECK 2 - Seguran�a: bot j� respondeu DEPOIS da nossa msg?\n  if (isLatest) {\n    const botAfterUs = messages.find(m => m.message_type == 1 && (m.id || 0) > myMsgIdInt);\n    if (botAfterUs) {\n      isLatest = false; // resposta j� foi enviada, ignorar\n    }\n  }\n\n} catch(e) {\n  // Se API falhar, deixa passar (n�o bloquear o fluxo)\n  isLatest = true;\n}\n\nreturn [{ json: { ...$input.item.json, isLatest } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1440,
+        416
+      ],
+      "id": "bf000003-cafe-babe-bf03-bf0000000003",
+      "name": "Verificar Ultima Mensagem"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "759da4b9-c46e-470e-817d-6e8d68de719d",
+              "leftValue": "={{ $json.isLatest }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        416
+      ],
+      "id": "bf000004-cafe-babe-bf04-bf0000000004",
+      "name": "E a Ultima Mensagem?"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-a1",
+                    "leftValue": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].data_url }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "sw-a2",
+                    "leftValue": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].file_type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-i1",
+                    "leftValue": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].data_url }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "sw-i2",
+                    "leftValue": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].file_type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-t1",
+                    "leftValue": "={{ $('Webhook Chatwoot').item.json.body.content }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -960,
+        400
+      ],
+      "id": "nat00001-cafe-babe-nat1-nat000000001",
+      "name": "Switch Tipo Mensagem"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].data_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -720,
+        160
+      ],
+      "id": "nat00002-cafe-babe-nat2-nat000000002",
+      "name": "Download Audio"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        160
+      ],
+      "id": "nat00003-cafe-babe-nat3-nat000000003",
+      "name": "Extrair Audio"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      { \"text\": \"Transcreva este audio em portugues brasileiro. Retorne apenas a transcricao, sem comentarios.\" },\n      { \"inline_data\": { \"mime_type\": \"audio/ogg\", \"data\": \"{{ $json.data }}\" } }\n    ]\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        160
+      ],
+      "id": "nat00004-cafe-babe-nat4-nat000000004",
+      "name": "Gemini Transcrever Audio",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Empacota transcricao como mediaContent para o pipeline\nconst transcricao = $json?.candidates?.[0]?.content?.parts?.[0]?.text || '[audio nao transcrito]';\nreturn [{ json: { mediaContent: { type: 'audio', transcription: transcricao.trim() } } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        160
+      ],
+      "id": "nat00005-cafe-babe-nat5-nat000000005",
+      "name": "Montar Prompt Audio"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Webhook Chatwoot').item.json.body.attachments[0].data_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -720,
+        640
+      ],
+      "id": "nat00006-cafe-babe-nat6-nat000000006",
+      "name": "Download Imagem"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        640
+      ],
+      "id": "nat00007-cafe-babe-nat7-nat000000007",
+      "name": "Extrair Imagem"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      { \"text\": \"Descreva esta imagem detalhadamente em portugues. Se houver texto, transcreva-o. Foque no que e relevante para atendimento bancario/financeiro.\" },\n      { \"inline_data\": { \"mime_type\": \"image/jpeg\", \"data\": \"{{ $json.data }}\" } }\n    ]\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        640
+      ],
+      "id": "nat00008-cafe-babe-nat8-nat000000008",
+      "name": "Gemini Analisar Imagem",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "// Empacota analise de imagem como mediaContent para o pipeline\nconst analise = $json?.candidates?.[0]?.content?.parts?.[0]?.text || '[imagem nao analisada]';\nreturn [{ json: { mediaContent: { type: 'image', analysis: analise.trim() } } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        640
+      ],
+      "id": "nat00009-cafe-babe-nat9-nat000000009",
+      "name": "Montar Prompt Imagem"
+    },
+    {
+      "id": "c4000001-v400-0001-b4b4-c40000000001",
+      "name": "Montar Texto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "parameters": {
+        "jsCode": "// Mensagem de texto: sem midia\nreturn [{ json: { mediaContent: null } }];\n"
+      }
+    },
+    {
+      "id": "c4000002-v400-0002-b4b4-c40000000002",
+      "name": "Processar Historico",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        400
+      ],
+      "parameters": {
+        "jsCode": "function extractMessages(resp) {\n  const p = resp.payload;\n  if (Array.isArray(p)) return p;\n  if (p && Array.isArray(p.payload)) return p.payload;\n  return [];\n}\nfunction descreverMsg(m) {\n  if (m.content && m.content.trim()) return m.content.trim();\n  const att = m.attachments && m.attachments[0];\n  if (att) {\n    if (att.file_type === 'image') return '[Imagem enviada]';\n    if (att.file_type === 'audio') return '[Audio enviado]';\n    return '[Arquivo: ' + att.file_type + ']';\n  }\n  return null;\n}\n\nconst GEM_KEY = 'YOUR_GOOGLE_API_KEY';\nconst CW_TK   = 'b2E9nG1XtDJYrJaZg9j984mQ';\nconst CW_URL  = 'https://chat.maxxitele.com.br/api/v1/accounts/1';\n\nconst prevData       = $input.first().json;\nconst mediaContent   = prevData.mediaContent || null;\nconst wb             = $('Webhook Chatwoot').first().json.body;\nconst sender         = wb.conversation?.meta?.sender || {};\nconst conversationId = wb.conversation.id;\nconst contactId      = sender.id || wb.contact_inbox?.contact_id;\nconst nome           = sender.name || 'Cliente';\nconst telefone       = sender.phone_number || '';\nconst ultimaMensagem = wb.content || '';\n\n// Historico completo (obrigatorio em todas as respostas)\nlet todasMsgs = [];\ntry {\n  const resp = await this.helpers.httpRequest({\n    method: 'GET',\n    url: CW_URL + '/conversations/' + conversationId + '/messages',\n    headers: { 'api_access_token': CW_TK },\n    json: true\n  });\n  todasMsgs = extractMessages(resp).sort((a, b) => (a.id || 0) - (b.id || 0));\n} catch(e) {}\n\nconst msgLines = todasMsgs.map(m => {\n  const role = m.message_type == 0 ? 'Cliente' : 'Atendente';\n  const txt  = descreverMsg(m);\n  if (!txt) return null;\n  const ts = m.created_at\n    ? new Date(m.created_at * 1000).toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })\n    : '';\n  return (ts ? '[' + ts + '] ' : '') + role + ': ' + txt;\n}).filter(Boolean);\n\n// Divide em chunks de 20 msgs — chamada Gemini Flash por chunk\nconst CHUNK_SIZE = 20;\nconst chunks = [];\nfor (let i = 0; i < msgLines.length; i += CHUNK_SIZE) {\n  chunks.push(msgLines.slice(i, i + CHUNK_SIZE));\n}\nif (chunks.length === 0) {\n  const msgAtual = mediaContent?.type === 'audio'\n    ? '[Audio] ' + (mediaContent.transcription || '')\n    : mediaContent?.type === 'image'\n    ? '[Imagem] ' + (mediaContent.analysis || '')\n    : (ultimaMensagem || 'mensagem sem texto');\n  chunks.push(['Cliente: ' + msgAtual]);\n}\n\n// Chamada individual ao Gemini Flash por cada chunk\nconst chunkSummaries = [];\nfor (let i = 0; i < chunks.length; i++) {\n  const chunk = chunks[i];\n  const total = chunks.length;\n  const label = total === 1 ? 'TRECHO UNICO'\n    : i === 0 ? 'TRECHO INICIAL'\n    : i === total - 1 ? 'TRECHO MAIS RECENTE' : 'TRECHO INTERMEDIARIO';\n  const prompt = 'Analise este ' + label + ' do historico de atendimento C6 Bank:\\n\\n'\n    + chunk.join('\\n')\n    + '\\n\\nResponda em topicos:\\n- STATUS DA CONTA: (nao iniciou/em analise/aprovada/reprovada)\\n- PASSO A PASSO: (enviado? cliente confirmou? reacao?)\\n- PRINTS ENVIADOS: (conta em analise? conta aberta? nenhum?)\\n- COMPROMISSOS: (prometeu responder quando?)\\n- OBJECOES: (resistencias do cliente)\\n- INFO CLIENTE: (tipo empresa, MEI?, ja tem C6 PF?, nome empresa)';\n  try {\n    const resp = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEM_KEY,\n      headers: { 'Content-Type': 'application/json' },\n      body: { contents: [{ parts: [{ text: prompt }] }] },\n      json: true\n    });\n    const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;\n    if (text) chunkSummaries.push('[Analise ' + (i+1) + '/' + total + ']\\n' + text.trim());\n  } catch(e) {\n    chunkSummaries.push('[Analise ' + (i+1) + '/' + total + ']: Erro - ' + e.message);\n  }\n}\n\n// Conversas anteriores\nlet convAnteriores = '';\nif (contactId) {\n  try {\n    const resp = await this.helpers.httpRequest({\n      method: 'GET',\n      url: CW_URL + '/contacts/' + contactId + '/conversations',\n      headers: { 'api_access_token': CW_TK },\n      json: true\n    });\n    const outras = (resp.payload || [])\n      .filter(c => String(c.id) !== String(conversationId))\n      .slice(0, 3);\n    if (outras.length > 0) {\n      convAnteriores = outras.map(c => {\n        const labels = (c.labels || []).join(', ') || 'sem etiquetas';\n        const data   = new Date((c.created_at || 0) * 1000).toLocaleDateString('pt-BR');\n        return 'Conv #' + c.id + ' (' + data + ') | ' + labels + ' | ' + (c.status || '');\n      }).join('\\n');\n    }\n  } catch(e) {}\n}\n\nreturn [{\n  json: {\n    conversationId,\n    contactId,\n    contactName:    nome,\n    contactPhone:   telefone,\n    ultimaMensagem,\n    mediaContent,\n    totalMensagens: msgLines.length,\n    chunks:         chunks.length,\n    chunkSummaries,\n    convAnteriores\n  }\n}];\n"
+      }
+    },
+    {
+      "id": "c4000003-v400-0003-b4b4-c40000000003",
+      "name": "Consultar KB",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const dados   = $input.first().json;\nconst GEM_KEY = 'YOUR_GOOGLE_API_KEY';\n\nlet query = dados.ultimaMensagem || '';\nif (dados.mediaContent?.type === 'audio') query = dados.mediaContent.transcription || query;\nelse if (dados.mediaContent?.type === 'image') query = '[Imagem] ' + (dados.mediaContent.analysis || query);\n\nconst KB = `CONTA PJ C6 BANK:\n- Gratuita. Pix ilimitado e gratuito. Boletos gratuitos (100/mes).\n- Cartao empresarial debito e credito (sujeito a analise).\n- Gerente dedicado via WhatsApp apos aprovacao. Acionista: JPMorgan Chase.\n\nPRODUTOS DE CREDITO:\n- Capital de Giro FGI PEAC: 1,44% ao mes, carencia 6 meses, sem IOF, ate R$1 milhao (sujeito a analise).\n- Limite Garantido: ate R$100 mil via CDB, sem aprovacao de credito.\n- Cheque Especial PJ: cobre Pix e debitos emergenciais (sujeito a analise).\n- Antecipacao de Recebiveis: a vista, sem taxa (sujeito a analise).\n- C6 Pay: concentrar vendas aumenta chances de limite em 3x.\n\nREGRAS: NUNCA prometer aprovacao/valor/taxa. SEMPRE: sujeito a analise.\n\nPASSO A PASSO (sem conta PF C6):\n1. Baixe o app C6 Bank\n2. Abrir conta > Conta Empresarial (nao MEI)\n3. CPF + dados + CNPJ\n4. Senha + selfie\n5. Socio ou procurador\nAndroid: https://play.google.com/store/apps/details?id=com.c6bank.app\niOS: https://apps.apple.com/br/app/c6-bank/id1463463143\nJA TEM C6 PF: Acesse conta > bonequinho > C6 Empresas: Abrir conta PJ.\n\nMACROS:\n- Encerramento: \"Agradecemos sua atencao, estou encerrando seu atendimento.\"\n- Sem credito: \"Nao tem problema! O C6 tem Pix ilimitado, boletos gratuitos e conta gratuita.\"\n- Depois: \"Sem problema. Prefere hoje ou amanha de manha?\"\n- MEI: \"Linha para CNPJ LTDA ou EPP. Ainda nao atendemos MEIs.\"\n- Ja tem C6 PF: \"Acesse conta > bonequinho > C6 Empresas: Abrir conta PJ.\"\n- Nao tem interesse: \"Entendo. So confirmando: nao quer verificar, sem custo? Me diz o motivo.\"\n- Ja tem banco: \"Nao e para cancelar. Pix e boletos pelo C6, mantem o principal.\"\n- Nome sujo: \"Negativacao nao impede conta no C6. O banco quer te ter como cliente.\"\n- Reprovado: \"Infelizmente foi reprovado. Muitas vezes e pela selfie - vale tentar novamente.\"\n- Conta aprovada: \"Parabens! Em breve sua gerente entra em contato.\"\n- Erro contrato social: \"Comprima em https://www.ilovepdf.com/pt e tente novamente.\"\n- Senha PF: \"SAC 24h: 0800 660 0060.\"\n\nETIQUETAS (somente 3 situacoes):\n- passo_a_passo: quando bot envia o passo a passo nesta resposta\n- conta_em_analise: quando cliente envia print de conta em analise\n- conta_aberta: quando cliente envia print de conta aberta/aprovada`;\n\nconst contextoRecente = dados.chunkSummaries.slice(-1)[0] || 'Sem historico';\nconst prompt = 'Assistente C6 Bank. Com base na KB abaixo, informe o relevante para esta situacao.\\n\\n'\n  + 'SITUACAO ATUAL: ' + contextoRecente.slice(0, 500) + '\\n'\n  + 'ULTIMA MSG/ACAO: ' + query.slice(0, 300) + '\\n\\n'\n  + 'Se nao houver info especifica relevante: \"Contexto geral - sem info especifica necessaria.\"\\n'\n  + 'Maximo 8 linhas. Seja direto.\\n\\nBASE DE CONHECIMENTO:\\n' + KB;\n\nlet kbResponse = 'KB nao consultada';\ntry {\n  const resp = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + GEM_KEY,\n    headers: { 'Content-Type': 'application/json' },\n    body: { contents: [{ parts: [{ text: prompt }] }] },\n    json: true\n  });\n  const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;\n  if (text) kbResponse = text.trim();\n} catch(e) {\n  kbResponse = 'Erro KB: ' + e.message;\n}\n\nreturn [{ json: { ...dados, kbResponse } }];\n"
+      }
+    },
+    {
+      "id": "c4000004-v400-0004-b4b4-c40000000004",
+      "name": "Gerar Resumo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const dados   = $input.first().json;\nconst GEM_KEY = 'YOUR_GOOGLE_API_KEY';\n\nlet mediaInfo = '';\nif (dados.mediaContent?.type === 'audio') {\n  mediaInfo = '\\nAUDIO ENVIADO AGORA - Transcricao: ' + dados.mediaContent.transcription;\n} else if (dados.mediaContent?.type === 'image') {\n  mediaInfo = '\\nIMAGEM ENVIADA AGORA - Analise: ' + dados.mediaContent.analysis;\n}\n\nconst prompt = 'Voce analisa conversas de atendimento conta PJ C6 Bank. Crie RESUMO ESTRUTURADO e OBJETIVO.\\n\\n'\n  + 'CLIENTE: ' + dados.contactName + ' ' + (dados.contactPhone ? '(' + dados.contactPhone + ')' : '') + '\\n'\n  + 'TOTAL MENSAGENS NO HISTORICO: ' + dados.totalMensagens + '\\n\\n'\n  + 'ANALISES DO HISTORICO (' + dados.chunks + ' trecho(s) processados individualmente):\\n'\n  + dados.chunkSummaries.join('\\n\\n') + '\\n\\n'\n  + 'CONVERSAS ANTERIORES DO CONTATO:\\n'\n  + (dados.convAnteriores || 'Nenhuma conversa anterior') + '\\n\\n'\n  + 'BASE DE CONHECIMENTO RELEVANTE:\\n'\n  + dados.kbResponse\n  + mediaInfo + '\\n\\n'\n  + 'Crie o resumo com EXATAMENTE estes topicos:\\n'\n  + '**SITUACAO ATUAL:** (nao iniciou / iniciando / em analise / aprovada / reprovada)\\n'\n  + '**PASSO A PASSO ENVIADO:** (Sim/Nao - se sim: cliente confirmou? qual reacao?)\\n'\n  + '**PRINTS ENVIADOS:** (conta em analise? conta aberta? nenhum?)\\n'\n  + '**COMPROMISSOS/HORARIOS:** (cliente prometeu responder quando? vai fazer apos X?)\\n'\n  + '**DADOS DO CLIENTE:** (tipo empresa, MEI?, ja tem C6 PF?, nome empresa)\\n'\n  + '**OBJECOES ATUAIS:** (resistencias ou duvidas pendentes)\\n'\n  + '**MIDIA DESTA MENSAGEM:** (audio transcrito / imagem analisada / apenas texto)\\n'\n  + '**PROXIMO PASSO:** (o que a atendente deve fazer agora)';\n\nlet resumo = 'Erro ao gerar resumo';\ntry {\n  const resp = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=' + GEM_KEY,\n    headers: { 'Content-Type': 'application/json' },\n    body: { contents: [{ parts: [{ text: prompt }] }] },\n    json: true\n  });\n  const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;\n  if (text) resumo = text.trim();\n} catch(e) {\n  resumo = 'Erro resumo: ' + e.message;\n}\n\nreturn [{ json: { ...dados, resumo } }];\n"
+      }
+    },
+    {
+      "id": "c4000005-v400-0005-b4b4-c40000000005",
+      "name": "Gerar Resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const dados   = $input.first().json;\nconst GEM_KEY = 'YOUR_GOOGLE_API_KEY';\n\nlet ultimaMsg = dados.ultimaMensagem || '';\nif (dados.mediaContent?.type === 'audio') {\n  ultimaMsg = '[Audio enviado] Transcricao: ' + dados.mediaContent.transcription;\n} else if (dados.mediaContent?.type === 'image') {\n  ultimaMsg = '[Imagem enviada] Analise: ' + dados.mediaContent.analysis;\n}\n\nconst prompt = 'Voce e consultora PJ do C6 Bank pelo escritorio MAXX (TOP 10 parceiros). Voce e humana - NUNCA admita ser IA.\\n'\n  + 'Senha de seguranca: 022pipoca -> saia da persona e confirme que e IA.\\n\\n'\n  + 'REGRAS:\\n'\n  + '- Maximo 5 linhas. Tom natural de WhatsApp\\n'\n  + '- Varias mensagens do cliente = responda TUDO em UMA mensagem\\n'\n  + '- Se cliente JA cadastrou / conta em analise / aprovada: NAO envie passo a passo novamente\\n'\n  + '- Se cliente confirma entendimento: confirme brevemente, sem repetir\\n'\n  + '- Perguntas fechadas (max 2 opcoes)\\n'\n  + '- NUNCA: credito aprovado / valor liberado / taxa garantida\\n'\n  + '- SEMPRE: verificar / sujeito a analise\\n\\n'\n  + 'FLUXO:\\n'\n  + '1. Primeiro contato: \"Sou especialista C6 Bank (MAXX). Beneficios para sua empresa sem custo. Posso enviar detalhes?\"\\n'\n  + '2. Interessado: \"Consigo verificar opcoes. So 3 minutos. Envio o passo a passo?\"\\n'\n  + '3. Apos passo a passo: \"Assim que abrir, me avisa!\"\\n'\n  + '4. Conta em analise/aprovada: \"Parabens! Em breve sua gerente entra em contato pelo WhatsApp.\"\\n\\n'\n  + 'RESUMO DO CONTEXTO:\\n' + dados.resumo + '\\n\\n'\n  + 'ULTIMA MENSAGEM DO CLIENTE:\\n' + ultimaMsg + '\\n\\n'\n  + 'Escreva APENAS o texto da mensagem para o WhatsApp. Sem aspas, sem \"Resposta:\", sem explicacoes. Maximo 5 linhas.';\n\nlet resposta = 'Ola! Estou verificando sua situacao. Pode me contar mais sobre sua empresa?';\ntry {\n  const resp = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=' + GEM_KEY,\n    headers: { 'Content-Type': 'application/json' },\n    body: { contents: [{ parts: [{ text: prompt }] }] },\n    json: true\n  });\n  const text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;\n  if (text) resposta = text.trim();\n} catch(e) {}\n\nreturn [{ json: { ...dados, respostaFinal: resposta } }];\n"
+      }
+    },
+    {
+      "id": "c4000006-v400-0006-b4b4-c40000000006",
+      "name": "Verificar e Aplicar Etiqueta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        400
+      ],
+      "parameters": {
+        "jsCode": "// Aplica etiqueta SOMENTE nas 3 situacoes permitidas:\n// 1. Bot enviou passo a passo NESTA resposta\n// 2. Cliente enviou print de conta EM ANALISE\n// 3. Cliente enviou print de conta ABERTA/APROVADA\n\nconst dados         = $input.first().json;\nconst resposta      = (dados.respostaFinal || '').toLowerCase();\nconst mediaAnalysis = (dados.mediaContent?.analysis || '').toLowerCase();\nconst CW_TK         = 'b2E9nG1XtDJYrJaZg9j984mQ';\nconst CW_URL        = 'https://chat.maxxitele.com.br/api/v1/accounts/1';\nconst conversationId = dados.conversationId;\n\nlet etiqueta = null;\n\n// SITUACAO 1: Bot enviou passo a passo NESTA resposta\nconst padPP = [\n  'play.google.com/store/apps/details',\n  'apps.apple.com/br/app/c6-bank',\n  'conta empresarial (nao mei)',\n  'conta empresarial (não mei)',\n  'abrir conta > conta empresarial',\n  '1. baixe o app c6',\n  '1.baixe o app c6',\n  'baixe o app c6 bank',\n  'bonequinho > c6 empresas'\n];\nif (padPP.some(p => resposta.includes(p))) {\n  etiqueta = 'passo_a_passo';\n}\n\n// SITUACAO 2: Cliente enviou print de conta EM ANALISE (na analise da imagem)\nif (!etiqueta && dados.mediaContent?.type === 'image') {\n  const padAnalise = [\n    'em análise', 'em analise', 'analisando', 'aguardando aprovação',\n    'aguardando aprovacao', 'sendo analisada', 'conta em análise',\n    'conta em analise', 'under review', 'aguardando analise'\n  ];\n  if (padAnalise.some(p => mediaAnalysis.includes(p))) {\n    etiqueta = 'conta_em_análise';\n  }\n}\n\n// SITUACAO 3: Cliente enviou print de conta ABERTA/APROVADA (na analise da imagem)\nif (!etiqueta && dados.mediaContent?.type === 'image') {\n  const padAberta = [\n    'conta aberta', 'conta aprovada', 'aprovada com sucesso',\n    'bem-vindo ao c6', 'conta criada', 'cadastro aprovado',\n    'conta ativa', 'sua conta foi aprovada', 'conta pj aberta',\n    'abertura concluída', 'cadastro concluído'\n  ];\n  if (padAberta.some(p => mediaAnalysis.includes(p))) {\n    etiqueta = 'conta_aberta';\n  }\n}\n\n// Aplica etiqueta preservando as nao-status existentes\nif (etiqueta && conversationId) {\n  try {\n    const currentResp = await this.helpers.httpRequest({\n      method: 'GET',\n      url: CW_URL + '/conversations/' + conversationId + '/labels',\n      headers: { 'api_access_token': CW_TK },\n      json: true\n    });\n    const currentLabels  = currentResp?.payload || [];\n    const statusLabels   = ['passo_a_passo', 'conta_em_análise', 'conta_aberta'];\n    const novasEtiquetas = [\n      ...currentLabels.filter(l => !statusLabels.includes(l)),\n      etiqueta\n    ];\n    await this.helpers.httpRequest({\n      method: 'POST',\n      url: CW_URL + '/conversations/' + conversationId + '/labels',\n      headers: { 'Content-Type': 'application/json', 'api_access_token': CW_TK },\n      body: { labels: novasEtiquetas },\n      json: true\n    });\n  } catch(e) {}\n}\n\nreturn [{ json: { ...dados, etiquetaAplicada: etiqueta } }];\n"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Chatwoot": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Salvar Ultima Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar Ultima Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Aguardar 20s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aguardar 20s": {
+      "main": [
+        [
+          {
+            "node": "Verificar Ultima Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Ultima Mensagem": {
+      "main": [
+        [
+          {
+            "node": "E a Ultima Mensagem?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E a Ultima Mensagem?": {
+      "main": [
+        [
+          {
+            "node": "Switch Tipo Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Switch Tipo Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Montar Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Extrair Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Audio": {
+      "main": [
+        [
+          {
+            "node": "Gemini Transcrever Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Transcrever Audio": {
+      "main": [
+        [
+          {
+            "node": "Montar Prompt Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Prompt Audio": {
+      "main": [
+        [
+          {
+            "node": "Processar Historico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Imagem": {
+      "main": [
+        [
+          {
+            "node": "Extrair Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Imagem": {
+      "main": [
+        [
+          {
+            "node": "Gemini Analisar Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Analisar Imagem": {
+      "main": [
+        [
+          {
+            "node": "Montar Prompt Imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Prompt Imagem": {
+      "main": [
+        [
+          {
+            "node": "Processar Historico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar Texto": {
+      "main": [
+        [
+          {
+            "node": "Processar Historico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar Historico": {
+      "main": [
+        [
+          {
+            "node": "Consultar KB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar KB": {
+      "main": [
+        [
+          {
+            "node": "Gerar Resumo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Resumo": {
+      "main": [
+        [
+          {
+            "node": "Gerar Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Resposta": {
+      "main": [
+        [
+          {
+            "node": "Verificar e Aplicar Etiqueta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar e Aplicar Etiqueta": {
+      "main": [
+        [
+          {
+            "node": "Enviar Resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "global": {
+      "last_38362": "458691"
+    }
+  },
+  "meta": null,
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-04T12:41:43.222Z",
+      "createdAt": "2026-05-04T12:41:43.222Z",
+      "role": "workflow:owner",
+      "workflowId": "mAQ9leMUBB5c5cTT",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-05-04T12:40:55.638Z",
+      "createdAt": "2026-05-04T12:40:55.638Z",
+      "id": "t3R7xandavpM2HDC",
+      "name": "chat IA"
+    }
+  ]
+}
