@@ -1,0 +1,278 @@
+{
+  "id": "Ko33aHk6TjFU7YMa",
+  "name": "Error Trigger",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fb31e1d1-3739-42fa-b082-78087a7daadc",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "name",
+              "value": "={{ $json.workflow.name }}"
+            },
+            {
+              "key": "id",
+              "value": "={{ $json.workflow.id }}"
+            },
+            {
+              "key": "date",
+              "value": "={{ $now.format('yyyy-MM-dd') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1867bce6-1e3a-4762-9d9c-0b5f4e7d6577",
+      "name": "Execution Data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "15d79937-e13f-4101-a706-6f7a0a00bc02",
+      "name": "Fim"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.srv991153.hstgr.cloud/webhook/error/trigger/all",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "CLI-5"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "67813ecf-4522-41d5-bf20-654c63f8baf9",
+      "name": "Post - Registro",
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Post - Registro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post - Registro": {
+      "main": [
+        [
+          {
+            "node": "Fim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "activeVersionId": "ea267379-bd0a-4802-be4b-6f8f01814447",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-23T01:15:57.198Z",
+      "createdAt": "2026-04-23T01:15:57.198Z",
+      "role": "workflow:owner",
+      "workflowId": "Ko33aHk6TjFU7YMa",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-23T01:54:02.000Z",
+    "createdAt": "2026-04-23T01:53:57.770Z",
+    "versionId": "ea267379-bd0a-4802-be4b-6f8f01814447",
+    "workflowId": "Ko33aHk6TjFU7YMa",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "fb31e1d1-3739-42fa-b082-78087a7daadc",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "name",
+                "value": "={{ $json.workflow.name }}"
+              },
+              {
+                "key": "id",
+                "value": "={{ $json.workflow.id }}"
+              },
+              {
+                "key": "date",
+                "value": "={{ $now.format('yyyy-MM-dd') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          208,
+          0
+        ],
+        "id": "1867bce6-1e3a-4762-9d9c-0b5f4e7d6577",
+        "name": "Execution Data"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          624,
+          0
+        ],
+        "id": "15d79937-e13f-4101-a706-6f7a0a00bc02",
+        "name": "Fim"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://n8n.srv991153.hstgr.cloud/webhook/error/trigger/all",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "id",
+                "value": "CLI-5"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          416,
+          0
+        ],
+        "id": "67813ecf-4522-41d5-bf20-654c63f8baf9",
+        "name": "Post - Registro",
+        "retryOnFail": true
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Post - Registro",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Post - Registro": {
+        "main": [
+          [
+            {
+              "node": "Fim",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version ea267379",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    }
+  ]
+}
