@@ -1,0 +1,3389 @@
+{
+  "id": "Jm6L3d68uqcH4slB",
+  "name": "My workflow 12",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87169a18-9b8e-46c5-9ed7-9347b4278400",
+              "leftValue": "={{ $json.messages[0].message_status }}",
+              "rightValue": "accepted",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        176
+      ],
+      "id": "929afba4-f4e5-49e2-841a-841179506c55",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Status": "Concluido"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "DATA",
+              "displayName": "DATA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORÁRIO",
+              "displayName": "HORÁRIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAZAO SOCIAL",
+              "displayName": "RAZAO SOCIAL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "QUEM?",
+              "displayName": "QUEM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Número correto",
+              "displayName": "Número correto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RETORNO",
+              "displayName": "RETORNO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bf0b17c9-3691-41c3-9593-088dd216c43f",
+      "name": "Update - Sucesso",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "status": "Falha",
+            "Hora": "={{ $now.setZone('America/Sao_Paulo').toFormat('dd/MM/yyyy HH:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "razao",
+              "displayName": "razao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cnpj",
+              "displayName": "cnpj",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "observacao",
+              "displayName": "observacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Número corrigido",
+              "displayName": "Número corrigido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        448
+      ],
+      "id": "76a3f8db-9cdb-4535-8775-e2996fff1661",
+      "name": "Update - Falha",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -4880,
+        1968
+      ],
+      "id": "18f720d3-41d9-4be5-87ec-b5df001fcfe6",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1526755443,
+          "mode": "list",
+          "cachedResultName": "Painel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=1526755443"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "START",
+              "lookupValue": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4704,
+        1968
+      ],
+      "id": "df83195f-07c6-4202-9eeb-8489a0a955ff",
+      "name": "Get - Botão1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1526755443,
+          "mode": "list",
+          "cachedResultName": "Painel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=1526755443"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "START": "=false"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "START",
+              "displayName": "START",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "MASCULINA",
+              "displayName": "MASCULINA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "FEMININA",
+              "displayName": "FEMININA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID DA CAIXA",
+              "displayName": "ID DA CAIXA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4384,
+        1968
+      ],
+      "id": "0ca342b2-26e4-4916-976d-8831a7a4db38",
+      "name": "Update - Botão1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4208,
+        1968
+      ],
+      "id": "3dc25c3f-a1c9-4147-b217-e2a86d13cdc8",
+      "name": "Get - Leads1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "execution",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -4544,
+        1968
+      ],
+      "id": "897157ea-acf7-4458-8218-95bd2473a283",
+      "name": "Execution Data1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const leads = $items(\"Get - Leads1\", 0).map(i => i.json);\nconst configs = $items(\"Get row(s) in sheet1\", 0).map(i => i.json);\n\nfunction onlyDigits(value) {\n  return String(value || \"\").replace(/\\D/g, \"\");\n}\n\nfunction generatePhoneVariants(phone) {\n  const digits = onlyDigits(phone);\n  const variants = [digits];\n\n  if (digits.startsWith(\"55\") && digits.length === 13 && digits[4] === \"9\") {\n    const withoutNine = digits.slice(0, 4) + digits.slice(5);\n    if (!variants.includes(withoutNine)) {\n      variants.push(withoutNine);\n    }\n  } else if (digits.startsWith(\"55\") && digits.length === 12) {\n    const withNine = digits.slice(0, 4) + \"9\" + digits.slice(4);\n    if (!variants.includes(withNine)) {\n      variants.push(withNine);\n    }\n  }\n\n  return variants;\n}\n\n// pega só a primeira config\nconst config = configs[0] || {};\n\nconst tiposAtivos = [];\nif (config[\"MASCULINA\"] === true) tiposAtivos.push(\"MASCULINA\");\nif (config[\"FEMININA\"] === true) tiposAtivos.push(\"FEMININA\");\n\nconst result = [];\n\nfor (const lead of leads) {\n  const phoneVariants = generatePhoneVariants(lead[\"TELEFONE\"]);\n\n  for (const tipo of tiposAtivos) {\n    for (const telefone of phoneVariants) {\n      result.push({\n        json: {\n          ...lead,\n          \"TELEFONE\": telefone,\n          \"TIPO\": tipo,\n          \"ID DA CAIXA\": config[\"ID DA CAIXA\"]\n        }\n      });\n    }\n  }\n}\n\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3424,
+        1968
+      ],
+      "id": "016a31ba-06d4-4bbe-9884-ba5a0aa2a0d8",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "resource": "profile-api",
+        "instanceName": "YOUR_PHONE_NUMBER - Iphone",
+        "remoteJid": "={{ $json.TELEFONE }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -2736,
+        1984
+      ],
+      "id": "d4939754-85ca-4249-91e8-fc3b155ee65a",
+      "name": "Buscar perfil",
+      "credentials": {
+        "evolutionApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2976,
+        1968
+      ],
+      "id": "f89646f5-d2b3-422e-bd5f-cc216fd18c4e",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me3",
+      "typeVersion": 1,
+      "position": [
+        -2112,
+        1984
+      ],
+      "id": "4a1224fb-7922-4438-b28f-2bf6e842b79c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\n\nfunction normalizePhone(value) {\n  let id = String(value || \"\")\n    .replace(\"@s.whatsapp.net\", \"\")\n    .replace(\"@c.us\", \"\")\n    .replace(/\\D/g, \"\");\n\n  // remove o 9 extra (BR) para deduplicação\n  if (id.startsWith(\"55\") && id.length === 13 && id[4] === \"9\") {\n    id = id.slice(0, 4) + id.slice(5);\n  }\n\n  return id;\n}\n\nreturn $items()\n  .map(i => i.json)\n  .filter(i => i && i.data && i.data.wuid)\n  .filter(i => {\n    const id = normalizePhone(i.data.wuid);\n\n    if (seen.has(id)) return false;\n    seen.add(id);\n    return true;\n  })\n  .map(i => {\n    const data = i.data || {};\n\n    const wuid = data.wuid ?? null;\n    const numberExists = data.numberExists ?? null;\n\n    const originalRaw = i.original_phone ?? null;\n    const original_phone =\n      originalRaw === null || originalRaw === undefined || String(originalRaw).trim() === \"\"\n        ? null\n        : String(originalRaw).replace(/\\D/g, \"\");\n\n    const rowRaw = i.row_number ?? null;\n    const row_number =\n      rowRaw === null || rowRaw === undefined || String(rowRaw).trim() === \"\"\n        ? null\n        : Number(rowRaw);\n\n    const razao = i.razao ?? \"\";\n    const cnpj = i.cnpj ?? \"\";\n    const observacao = i.observacao ?? \"\";\n    const tipo = i.TIPO ?? i.Tipo ?? i.tipo ?? null;\n    const idDaCaixa = i[\"ID DA CAIXA\"] ?? i.id_da_caixa ?? i.idDaCaixa ?? null;\n\n    const quemRaw = i[\"QUEM?\"] ?? i.QUEM ?? i.Quem ?? null;\n    const quem =\n      quemRaw === null || quemRaw === undefined || String(quemRaw).trim() === \"\"\n        ? null\n        : String(quemRaw).replace(/\\D/g, \"\");\n\n    return {\n      json: {\n        ...(wuid ? { wuid } : {}),\n        ...(numberExists !== null ? { numberExists } : {}),\n        ...(row_number !== null && !Number.isNaN(row_number) ? { row_number } : {}),\n        ...(original_phone ? { original_phone } : {}),\n        razao,\n        cnpj: String(cnpj),\n        observacao,\n        ...(tipo !== null ? { TIPO: tipo } : {}),\n        ...(idDaCaixa !== null ? { \"ID DA CAIXA\": idDaCaixa } : {}),\n        ...(quem ? { \"QUEM\": quem } : {})\n      }\n    };\n  });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2976,
+        1808
+      ],
+      "id": "3fc3b777-d4a6-452a-9a38-9d2edf68e727",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "741e12f0-9ad3-44ea-8489-e00cad2ec1f4",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "4ae4bfed-c018-4d22-9f75-308fedb79d4f",
+              "name": "TELEFONE",
+              "value": "={{ $json.TELEFONE }}",
+              "type": "string"
+            },
+            {
+              "id": "d29ab51b-d3cf-4d9f-b3d2-574c7a941f99",
+              "name": "CNPJ",
+              "value": "={{ $json.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "c300f344-cd9a-400f-b5e4-0759f070c3f9",
+              "name": "RAZAO SOCIAL",
+              "value": "={{ $json[\"RAZAO SOCIAL\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "e32ea4a7-af2b-4791-aed1-a58721a8b8c3",
+              "name": "TIPO",
+              "value": "={{ $json.TIPO }}",
+              "type": "string"
+            },
+            {
+              "id": "00129e48-14f4-421e-95f0-57a8fe1eea6b",
+              "name": "ID DA CAIXA",
+              "value": "={{ $json[\"ID DA CAIXA\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "3f5722f0-b91b-4815-a699-923828a6ac61",
+              "name": "QUEM?",
+              "value": "={{ $json[\"QUEM?\"].replace(/\\D/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3200,
+        1968
+      ],
+      "id": "8651d1f7-920c-4123-9971-6afa10355cbe",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a08b5fd9-0a09-4ff2-96d6-c57f5ff39723",
+              "name": "data.wuid",
+              "value": "={{ $json.data.wuid }}",
+              "type": "string"
+            },
+            {
+              "id": "87e4e2cd-4b12-4cad-bbaa-600a826d1619",
+              "name": "data.numberExists",
+              "value": "={{ $json.data.numberExists }}",
+              "type": "boolean"
+            },
+            {
+              "id": "6649caf7-6e92-4881-bde0-00253b3ca586",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items3').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "c5c4d143-0c9b-4872-bd5e-ab3f355fe705",
+              "name": "original_phone",
+              "value": "={{ $('Loop Over Items3').item.json.TELEFONE }}",
+              "type": "string"
+            },
+            {
+              "id": "5124d574-8617-4a9f-9d5e-9e9f980f017d",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items3').item.json[\"RAZAO SOCIAL\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "bb6588cb-45ee-4876-a9ec-ab8ed192180d",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items3').item.json.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "23c954fd-6a65-4ec5-a3f5-1c8bc29640cf",
+              "name": "observacao",
+              "value": "=Prezado(a)",
+              "type": "string"
+            },
+            {
+              "id": "061bfc30-322e-4228-b2b5-ed5cf5f024fb",
+              "name": "TIPO",
+              "value": "={{ $('Loop Over Items3').item.json.TIPO }}",
+              "type": "string"
+            },
+            {
+              "id": "21880de6-65b5-4afa-aecc-5a0b8872597a",
+              "name": "ID DA CAIXA",
+              "value": "={{ $('Loop Over Items3').item.json[\"ID DA CAIXA\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "81d480fa-0e91-4381-8102-78a5275056f9",
+              "name": "QUEM?",
+              "value": "={{ $('Loop Over Items3').item.json[\"QUEM?\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2528,
+        1984
+      ],
+      "id": "685734c0-8442-448d-8143-7913ac0e5bfa",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "amount": 0.2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2320,
+        1984
+      ],
+      "id": "d0e9d0b3-a266-4965-8cd0-f2297ba4367f",
+      "name": "Wait2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/search?q={{ $json.wuid.replace(/\\D/g, '') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2336,
+        1632
+      ],
+      "id": "5e5fbf17-38f2-460f-90a3-0a4b3459bfbf",
+      "name": "Buscar contato"
+    },
+    {
+      "parameters": {
+        "batchSize": 60,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2736,
+        1616
+      ],
+      "id": "fe8c44d6-b285-4ed4-ae7d-0c9160b112c2",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me4",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        1632
+      ],
+      "id": "65e6f97d-e0b9-4cc4-9e89-0bb1cf0ce1ab"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1888,
+        1632
+      ],
+      "id": "9ced175b-63f4-45a0-9e25-bf8e25f03503",
+      "name": "Wait3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.meta.count }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "98de57d9-33b3-424a-b4c3-58720bdc61cf"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cliente existente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aebd15a1-b4eb-4205-9f83-e646c01811a8",
+                    "leftValue": "={{ $json.meta.count }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Novo Cliente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -2768,
+        1408
+      ],
+      "id": "b3a8fae7-fe85-4464-9fac-469a4c1a46ec",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            },
+            {
+              "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "041f72c0-5475-427f-9490-d5892136d61f",
+              "name": "Tipo",
+              "value": "={{ $('Loop Over Items4').item.json.TIPO }}",
+              "type": "string"
+            },
+            {
+              "id": "293d2901-8f32-4668-90a3-c5941be6ac5a",
+              "name": "ID DA CAIXA",
+              "value": "={{ $('Loop Over Items4').item.json[\"ID DA CAIXA\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "fa066fd0-f3bf-48c1-a72c-01e81ced5185",
+              "name": "QUEM",
+              "value": "={{ $('Loop Over Items4').item.json.QUEM }}",
+              "type": "string"
+            },
+            {
+              "id": "d742d0b8-6195-4e01-ab28-39c4333eeca0",
+              "name": "meta.count",
+              "value": "={{ $json.meta.count }}",
+              "type": "number"
+            },
+            {
+              "id": "dc1a342a-8959-48f6-843d-62bdce5fcb36",
+              "name": "payload[0].id",
+              "value": "={{ $json.payload[0].id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2112,
+        1632
+      ],
+      "id": "018dd22b-453c-4ef1-afff-5267d8140446",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone_number\": \"{{ '+55' + ($json.wuid || '').replace(/\\D/g, '').replace(/^55/, '') }}\",\n  \"name\": \"{{ $json.razao }}\",\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2528,
+        1104
+      ],
+      "id": "f61b91a8-a343-4df5-ba5b-8df44d9f4ad8",
+      "name": "Criar contato1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $json.cnpj }}\",\n    \"nome_cliente\": \"{{ $json.razao }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2272,
+        1408
+      ],
+      "id": "e9cf2d6b-5237-4218-9328-06791591bcc1",
+      "name": "Adiciona os dados1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -832,
+        160
+      ],
+      "id": "eb183686-68c3-4478-8c89-cf2c6568a2f8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        560,
+        176
+      ],
+      "id": "8065cbfb-2c5c-4891-8665-dd1240ee5da7"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -384,
+        176
+      ],
+      "id": "ab4b083b-cf6f-44d0-b23f-2b2020c4db68",
+      "name": "Wait"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            },
+            {
+              "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "0e136ef5-59fb-47c9-95fc-9ab3030f0f0c",
+              "name": "Tipo",
+              "value": "={{ $('Loop Over Items1').item.json.Tipo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1664,
+        912
+      ],
+      "id": "7a4ab468-5194-43d1-911b-a77fe47fabd5",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            },
+            {
+              "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        176
+      ],
+      "id": "77ec680d-1f57-4b32-9cbd-e6a84885b467",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            },
+            {
+              "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "c459f08b-fae8-4815-8a91-282a74a26b11",
+              "name": "Tipo",
+              "value": "={{ $('Loop Over Items2').item.json.Tipo }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        1408
+      ],
+      "id": "36dfb8ac-3fef-4bfb-8578-c671dc35aba8",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1392,
+        928
+      ],
+      "id": "bb881403-ec26-427a-acdc-f86cdcbe1eb5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "YOUR_WHATSAPP_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $json.wuid }}",
+        "template": "tempv5_maxx_ut|pt_BR",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $json.observacao }}"
+                  },
+                  {
+                    "text": "={{ $json.razao }}"
+                  },
+                  {
+                    "text": "={{ $json.cnpj }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -576,
+        176
+      ],
+      "id": "bb5e41e3-7777-43e3-9413-bd6ee7183931",
+      "name": "Send template1",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source_id\": \"{{ $json.payload.contact.phone_number.replace(/\\D/g, '') }}\",\n  \"inbox_id\": {{ $('Loop Over Items4').item.json[\"ID DA CAIXA\"] }},\n  \"contact_id\": \"{{ $json.payload.contact.id }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2368,
+        1104
+      ],
+      "id": "472be80e-6a6e-4e25-9f7a-11827c1f5ccd",
+      "name": "Criar Conversa1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"source_id\": \"{{ $json.payload.phone_number.replace(/\\D/g, '') }}\"\n,\n  \"inbox_id\": {{ $('Loop Over Items2').item.json[\"ID DA CAIXA\"] }},\n  \"contact_id\": {{ $json.payload.id }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1984,
+        1408
+      ],
+      "id": "31f08882-442e-4760-bce6-aab9532af5c0",
+      "name": "Criar Conversa"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Criar Conversa').item.json.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=Olá, {{ $('Criar Conversa').item.json.meta.sender.name }}\n\nReferente à empresa: \n{{ $('Criar Conversa').item.json.meta.sender.custom_attributes.nome_cliente }}\n \nCNPJ:\n{{ $('Criar Conversa').item.json.meta.sender.custom_attributes.cnpj }}\n\nEstamos aguardando sua confirmação para continuar o atendimento anterior referente à *ANÁLISE DE CRÉDITO* e *CAPITAL DE GIRO*.\n\nClique abaixo e retomamos com a indicação anterior:"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            },
+            {
+              "name": "private",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1264,
+        1408
+      ],
+      "id": "759e64b0-c482-482f-9bc8-11de30b399fb",
+      "name": "Mensagem",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Criar Conversa1').item.json.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=Olá, {{ $('Criar Conversa1').item.json.meta.sender.name }}\n\nReferente à empresa: \n{{ $('Criar Conversa1').item.json.meta.sender.custom_attributes.nome_cliente }}\n \nCNPJ:\n{{ $('Criar Conversa1').item.json.meta.sender.custom_attributes.cnpj }}\n\nEstamos aguardando sua confirmação para continuar o atendimento anterior referente à *ANÁLISE DE CRÉDITO* e *CAPITAL DE GIRO*.\n\nClique abaixo e retomamos com a indicação anterior:"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            },
+            {
+              "name": "private",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2064,
+        912
+      ],
+      "id": "b63080c3-6223-48d3-9cb7-651738bea72a",
+      "name": "Mensagem1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json[\"Id conversa\"] }}/toggle_status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"status\": \"snoozed\",\n  \"snoozed_until\": null\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2368,
+        912
+      ],
+      "id": "e0db2159-0ee2-4d04-ab00-3ac80b52c56a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Criar Conversa').item.json.id }}/toggle_status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"status\": \"snoozed\",\n  \"snoozed_until\": null\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1536,
+        1408
+      ],
+      "id": "6ebac2b2-6f25-4e3a-a8a5-ba19535cfac4",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2688,
+        1088
+      ],
+      "id": "8d267d6e-e42e-429b-bdd1-1c2a2e4e78f9",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        1104
+      ],
+      "id": "a65996bc-858a-48cb-9fbf-d4e51df4825a"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2528,
+        1392
+      ],
+      "id": "22ba9733-74a7-494e-85c6-df1c86215122",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me2",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        1408
+      ],
+      "id": "f453ad35-fba2-4867-a178-5b27d8964ab3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -832,
+        1408
+      ],
+      "id": "71db47c0-ca01-4879-af08-67f2ded1adf2",
+      "name": "Wait1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1552,
+        1104
+      ],
+      "id": "2e33d0a0-07ea-43a7-bd41-42680903ed4d",
+      "name": "Wait4"
+    },
+    {
+      "parameters": {
+        "tableId": "Disparos inbound",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Id conversa",
+              "fieldValue": "={{ $('Criar Conversa1').item.json.id }}"
+            },
+            {
+              "fieldId": "Razão",
+              "fieldValue": "={{ $('Loop Over Items1').item.json.razao }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        1104
+      ],
+      "id": "b15db4e7-ecc8-4df4-a4cd-0d3761abdada",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Disparos inbound",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Id conversa",
+              "keyValue": "={{ $json.id }}"
+            },
+            {
+              "keyName": "status",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2688,
+        912
+      ],
+      "id": "f455b959-92e5-47da-b1ff-f50e25e9f174",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Disparos inbound",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Razão",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items').item.json.razao }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Feito"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        304,
+        176
+      ],
+      "id": "14ee8b8d-5b6d-455e-801e-d9c14ae6cf79",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Número correto": "={{ $('Code in JavaScript6').item.json.wuid.replace(/\\D/g, '') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "DATA",
+              "displayName": "DATA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORÁRIO",
+              "displayName": "HORÁRIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAZAO SOCIAL",
+              "displayName": "RAZAO SOCIAL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "QUEM?",
+              "displayName": "QUEM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Número correto",
+              "displayName": "Número correto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "RETORNO",
+              "displayName": "RETORNO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2992,
+        1600
+      ],
+      "id": "86917b0b-e4f6-42d6-bd85-ec3d12a1cc0d",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1526755443,
+          "mode": "list",
+          "cachedResultName": "Painel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=1526755443"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "MASCULINA",
+              "lookupValue": "true"
+            },
+            {
+              "lookupColumn": "FEMININA",
+              "lookupValue": "true"
+            },
+            {
+              "lookupColumn": "ID DA CAIXA"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3872,
+        1968
+      ],
+      "id": "2e811b65-e58d-483c-b7d4-0c7503ec0426",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1526755443,
+          "mode": "list",
+          "cachedResultName": "Painel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=1526755443"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "MASCULINA": "false",
+            "FEMININA": "false"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "START",
+              "displayName": "START",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "MASCULINA",
+              "displayName": "MASCULINA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "FEMININA",
+              "displayName": "FEMININA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID DA CAIXA",
+              "displayName": "ID DA CAIXA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3664,
+        1968
+      ],
+      "id": "318b6b69-fc5f-49b2-8879-50586553ba25",
+      "name": "Update - Botão",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -4048,
+        1968
+      ],
+      "id": "2b3c0cac-51a5-46ed-bb47-eee5bc9adb80",
+      "name": "Wait5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "MASCULINA",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "566f6e20-6ddf-4d43-9a2a-407e45665389"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Masculina"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "602510be-ee1a-4504-82d6-c6401b5f273c",
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "FEMININA",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "FEMININA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1184,
+        928
+      ],
+      "id": "e88d2525-4bd8-4cbc-90ed-bb13a5b8ad5e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87169a18-9b8e-46c5-9ed7-9347b4278400",
+              "leftValue": "={{ $json.messages[0].message_status }}",
+              "rightValue": "accepted",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        960
+      ],
+      "id": "bad564e9-7ca0-4b49-88cd-5e9e1f081fcb",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Status": "Concluido"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "DATA",
+              "displayName": "DATA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORÁRIO",
+              "displayName": "HORÁRIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RAZAO SOCIAL",
+              "displayName": "RAZAO SOCIAL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "QUEM?",
+              "displayName": "QUEM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Número correto",
+              "displayName": "Número correto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "RETORNO",
+              "displayName": "RETORNO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        784
+      ],
+      "id": "662543b7-841b-40e2-9ea3-14a63d4e42a5",
+      "name": "Update - Sucesso1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk",
+          "mode": "list",
+          "cachedResultName": "INBOUND",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 101004162,
+          "mode": "list",
+          "cachedResultName": "DISPARO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm47rMWx43RYd5_551_IhO7FQxj-IQhcc4MdYbblQxk/edit#gid=101004162"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "status": "Falha"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "razao",
+              "displayName": "razao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cnpj",
+              "displayName": "cnpj",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "observacao",
+              "displayName": "observacao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Número corrigido",
+              "displayName": "Número corrigido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        1232
+      ],
+      "id": "66b0f18d-fd96-424d-b31c-661f6876977e",
+      "name": "Update - Falha1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -832,
+        944
+      ],
+      "id": "2334c331-9bd5-459f-b885-aa856943a8e3",
+      "name": "Loop Over Items5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me5",
+      "typeVersion": 1,
+      "position": [
+        560,
+        960
+      ],
+      "id": "a6f4f581-b1b5-4513-b91f-121319dacb48"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -384,
+        960
+      ],
+      "id": "3823109a-aa11-4140-bc9f-58a4fee447bb",
+      "name": "Wait6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cda79448-1cd8-46dc-b9d5-7cf49c2c969b",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items4').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "e2da284d-f83e-40a5-be38-39ed040ad732",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items4').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "54696577-91ce-4dff-a0a5-875ca76ee5ce",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items4').item.json.wuid.replace(/\\D/g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "6f3cd391-49e6-4b8a-b8a2-de27272c842e",
+              "name": "observacao",
+              "value": "={{ $('Loop Over Items4').item.json.observacao }}",
+              "type": "string"
+            },
+            {
+              "id": "519e5c21-8eef-4a3e-9c90-0fba0f6db8b9",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        960
+      ],
+      "id": "7a379056-49c0-4645-a878-4d8634727479",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "YOUR_WHATSAPP_PHONE_NUMBER_ID",
+        "recipientPhoneNumber": "={{ $json.wuid }}",
+        "template": "tempv5_maxx_ut|pt_BR",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $json.observacao }}"
+                  },
+                  {
+                    "text": "={{ $json.razao }}"
+                  },
+                  {
+                    "text": "={{ $json.cnpj }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        -576,
+        960
+      ],
+      "id": "691bf693-a60f-4910-a5fa-590f9d859df6",
+      "name": "Send template",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Disparos inbound",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Razão",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items5').item.json.razao }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Feito"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        304,
+        960
+      ],
+      "id": "951b00d0-fe93-49dd-954d-ce7403b2148e",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a9feb15-a18e-468c-96c4-b7148dce8aba",
+              "name": "Tipo",
+              "value": "={{ $('Loop Over Items1').item.json.Tipo }}",
+              "type": "string"
+            },
+            {
+              "id": "89c017c8-43fc-4327-84b0-0d898056c572",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items1').item.json.razao }}",
+              "type": "string"
+            },
+            {
+              "id": "48097d12-0920-4e23-89a6-3b793ec8b9ec",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items1').item.json.cnpj }}",
+              "type": "string"
+            },
+            {
+              "id": "a6dc46ed-4f32-4f28-ac96-87ea9c430328",
+              "name": "wuid",
+              "value": "={{ $('Loop Over Items1').item.json.wuid }}",
+              "type": "string"
+            },
+            {
+              "id": "f23e5e96-e263-4468-9233-797cbcd34cef",
+              "name": "id",
+              "value": "={{ $('Criar Conversa1').item.json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "8fe75600-c34d-44a5-957f-f9279ef48385",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items4').item.json.row_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1760,
+        1104
+      ],
+      "id": "fd2e893f-e98f-4592-a9e4-b4d450a25aba",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "assignee_id",
+              "value": "={{ $('Loop Over Items2').item.json.QUEM }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1760,
+        1408
+      ],
+      "id": "c40c34db-4d60-4cb8-8f23-6c66b2998df2",
+      "name": "Reatribui a conversa1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "assignee_id",
+              "value": "={{ $('Loop Over Items1').item.json.QUEM }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2176,
+        1104
+      ],
+      "id": "b0ba9aa6-fe57-4a48-9703-018615f9fb55",
+      "name": "Reatribui a conversa"
+    }
+  ],
+  "connections": {
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update - Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - Falha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Sucesso": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Falha": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get - Botão1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Botão1": {
+      "main": [
+        [
+          {
+            "node": "Execution Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Botão1": {
+      "main": [
+        [
+          {
+            "node": "Get - Leads1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Leads1": {
+      "main": [
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data1": {
+      "main": [
+        [
+          {
+            "node": "Update - Botão1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar perfil": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar perfil",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Replace Me3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar contato": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar contato1": {
+      "main": [
+        [
+          {
+            "node": "Criar Conversa1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona os dados1": {
+      "main": [
+        [
+          {
+            "node": "Criar Conversa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send template1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Conversa1": {
+      "main": [
+        [
+          {
+            "node": "Reatribui a conversa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Conversa": {
+      "main": [
+        [
+          {
+            "node": "Reatribui a conversa1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Mensagem1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar contato1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Adiciona os dados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update - Botão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Botão": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update - Sucesso1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - Falha1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Sucesso1": {
+      "main": [
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Falha1": {
+      "main": [
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items5": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template": {
+      "main": [
+        [
+          {
+            "node": "Wait6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reatribui a conversa1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reatribui a conversa": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-27T16:28:22.500Z",
+      "createdAt": "2026-03-27T16:28:22.500Z",
+      "role": "workflow:owner",
+      "workflowId": "Jm6L3d68uqcH4slB",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
