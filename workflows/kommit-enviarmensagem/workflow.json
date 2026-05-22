@@ -1,0 +1,1057 @@
+{
+  "id": "Hp7ij4pGc8ZEdT3m",
+  "name": "Kommit - Enviar.Mensagem",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/{{ $json.id_numero }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.telefone }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"{{ $json.template }}\",\n    \"language\": {\n      \"code\": \"pt_BR\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.socio ?? \"Prezado\" }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.razao}}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.cnpj}}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -640,
+        -16
+      ],
+      "id": "b7c0a123-11d1-480e-b2b7-e653af285bfd",
+      "name": "Facebook - Send Template",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n    \"cnpj\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        -192
+      ],
+      "id": "045bbb6e-5665-49a8-a608-7fae0ffa1062",
+      "name": "Chatwoot - Update Cliente",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br//api/v1/accounts/1/contacts/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('When Executed by Another Workflow').item.json.telefone }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "77204140-8bb8-4ef8-aee7-e58b80caf2ab",
+      "name": "Chatwoot - Get Cliente",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "769fa416-f197-4d96-ace1-09709a2c7499",
+              "leftValue": "={{ $json.meta.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -32,
+        -32
+      ],
+      "id": "a20157d5-b2f3-4d86-b0cd-d685b53570e8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "False"
+            },
+            {
+              "fieldId": "ultima_mensagem",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            },
+            {
+              "fieldId": "enviar_mensagem",
+              "fieldValue": "={{ $json.messages[0].message_status === 'accepted' ? 'sucesso' : 'erro' }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -160
+      ],
+      "id": "92ececd6-04cf-43a9-9818-64a4ae0749f6",
+      "name": "Update - Status Mensagem",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "telefone"
+            },
+            {
+              "name": "socio"
+            },
+            {
+              "name": "razao"
+            },
+            {
+              "name": "cnpj"
+            },
+            {
+              "name": "id_numero"
+            },
+            {
+              "name": "template"
+            },
+            {
+              "name": "id_supabase"
+            },
+            {
+              "name": "token"
+            },
+            {
+              "name": "inbox_id",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1072,
+        -16
+      ],
+      "id": "016e34e5-356b-448e-8797-cdff5da703f2",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -32
+      ],
+      "id": "958c4fcf-48b0-4cab-824c-045f59eafb95",
+      "name": "END"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inbox_id\": \"{{ $('When Executed by Another Workflow').item.json.inbox_id }}\",\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n  \"email\": \"email@email.com\",\n  \"phone_number\": \"+{{ $('When Executed by Another Workflow').item.json.telefone.replace(/\\D/g, '')}}\",\n  \"identifier\": \"{{ $('When Executed by Another Workflow').item.json.telefone }}\",\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n    \"cnpj\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        112
+      ],
+      "id": "2c5f95db-e424-43cb-858f-3d5debeedc2f",
+      "name": "Chatwoot - Create Cliente",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "False"
+            },
+            {
+              "fieldId": "enviar_mensagem",
+              "fieldValue": "={{ $json.messages[0].message_status === 'accepted' ? 'sucesso' : 'erro' }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        128
+      ],
+      "id": "70d93e43-7fdd-47b8-9728-562241683c9a",
+      "name": "Update - Status Mensagem erro",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "cnpj",
+              "value": "={{ $json.cnpj }}"
+            },
+            {
+              "key": "telefone",
+              "value": "={{ $json.telefone }}"
+            },
+            {
+              "key": "id_supabase",
+              "value": "={{ $json.id_supabase }}"
+            },
+            {
+              "key": "id_numero_meta",
+              "value": "={{ $json.id_numero }}"
+            },
+            {
+              "key": "inbox_id",
+              "value": "={{ $json.inbox_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -864,
+        -16
+      ],
+      "id": "904ae722-3bd6-4507-963d-ec2528a8b5c0",
+      "name": "Execution Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d4cfcc2e-493d-4e7b-ad72-522d8666a3ae",
+              "leftValue": "={{ $json.messages[0].message_status }}",
+              "rightValue": "accepted",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        -16
+      ],
+      "id": "0fc3670f-2092-4462-9776-aa771c90a4c8",
+      "name": "If2"
+    }
+  ],
+  "connections": {
+    "Facebook - Send Template": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Cliente": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Update Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chatwoot - Create Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Update Cliente": {
+      "main": [
+        [
+          {
+            "node": "END",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Create Cliente": {
+      "main": [
+        [
+          {
+            "node": "END",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Mensagem erro": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Facebook - Send Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - Status Mensagem erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "b7f3d497-84e6-40a3-8489-a0efae50c6b0",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-13T18:24:18.513Z",
+      "createdAt": "2026-05-13T18:24:18.513Z",
+      "role": "workflow:owner",
+      "workflowId": "Hp7ij4pGc8ZEdT3m",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-14T02:24:14.000Z",
+    "createdAt": "2026-05-14T02:24:13.907Z",
+    "versionId": "b7f3d497-84e6-40a3-8489-a0efae50c6b0",
+    "workflowId": "Hp7ij4pGc8ZEdT3m",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.facebook.com/v20.0/{{ $json.id_numero }}/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $json.token }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.telefone }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"{{ $json.template }}\",\n    \"language\": {\n      \"code\": \"pt_BR\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.socio ?? \"Prezado\" }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.razao}}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.cnpj}}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -640,
+          -16
+        ],
+        "id": "b7c0a123-11d1-480e-b2b7-e653af285bfd",
+        "name": "Facebook - Send Template",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n    \"cnpj\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          80,
+          -192
+        ],
+        "id": "045bbb6e-5665-49a8-a608-7fae0ffa1062",
+        "name": "Chatwoot - Update Cliente",
+        "retryOnFail": true,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br//api/v1/accounts/1/contacts/search",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "q",
+                "value": "={{ $('When Executed by Another Workflow').item.json.telefone }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -224,
+          -32
+        ],
+        "id": "77204140-8bb8-4ef8-aee7-e58b80caf2ab",
+        "name": "Chatwoot - Get Cliente",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "769fa416-f197-4d96-ace1-09709a2c7499",
+                "leftValue": "={{ $json.meta.count }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -32,
+          -32
+        ],
+        "id": "a20157d5-b2f3-4d86-b0cd-d685b53570e8",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+              },
+              {
+                "fieldId": "transferido",
+                "fieldValue": "False"
+              },
+              {
+                "fieldId": "ultima_mensagem",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+              },
+              {
+                "fieldId": "enviar_mensagem",
+                "fieldValue": "={{ $json.messages[0].message_status === 'accepted' ? 'sucesso' : 'erro' }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          -160
+        ],
+        "id": "92ececd6-04cf-43a9-9818-64a4ae0749f6",
+        "name": "Update - Status Mensagem",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "telefone"
+              },
+              {
+                "name": "socio"
+              },
+              {
+                "name": "razao"
+              },
+              {
+                "name": "cnpj"
+              },
+              {
+                "name": "id_numero"
+              },
+              {
+                "name": "template"
+              },
+              {
+                "name": "id_supabase"
+              },
+              {
+                "name": "token"
+              },
+              {
+                "name": "inbox_id",
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1072,
+          -16
+        ],
+        "id": "016e34e5-356b-448e-8797-cdff5da703f2",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          192,
+          -32
+        ],
+        "id": "958c4fcf-48b0-4cab-824c-045f59eafb95",
+        "name": "END"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"inbox_id\": \"{{ $('When Executed by Another Workflow').item.json.inbox_id }}\",\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n  \"email\": \"email@email.com\",\n  \"phone_number\": \"+{{ $('When Executed by Another Workflow').item.json.telefone.replace(/\\D/g, '')}}\",\n  \"identifier\": \"{{ $('When Executed by Another Workflow').item.json.telefone }}\",\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('When Executed by Another Workflow').item.json.socio }}\",\n    \"cnpj\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          80,
+          112
+        ],
+        "id": "2c5f95db-e424-43cb-858f-3d5debeedc2f",
+        "name": "Chatwoot - Create Cliente",
+        "retryOnFail": true,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+              },
+              {
+                "fieldId": "transferido",
+                "fieldValue": "False"
+              },
+              {
+                "fieldId": "enviar_mensagem",
+                "fieldValue": "={{ $json.messages[0].message_status === 'accepted' ? 'sucesso' : 'erro' }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          128
+        ],
+        "id": "70d93e43-7fdd-47b8-9728-562241683c9a",
+        "name": "Update - Status Mensagem erro",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "cnpj",
+                "value": "={{ $json.cnpj }}"
+              },
+              {
+                "key": "telefone",
+                "value": "={{ $json.telefone }}"
+              },
+              {
+                "key": "id_supabase",
+                "value": "={{ $json.id_supabase }}"
+              },
+              {
+                "key": "id_numero_meta",
+                "value": "={{ $json.id_numero }}"
+              },
+              {
+                "key": "inbox_id",
+                "value": "={{ $json.inbox_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -864,
+          -16
+        ],
+        "id": "904ae722-3bd6-4507-963d-ec2528a8b5c0",
+        "name": "Execution Data"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d4cfcc2e-493d-4e7b-ad72-522d8666a3ae",
+                "leftValue": "={{ $json.messages[0].message_status }}",
+                "rightValue": "accepted",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -448,
+          -16
+        ],
+        "id": "0fc3670f-2092-4462-9776-aa771c90a4c8",
+        "name": "If2"
+      }
+    ],
+    "connections": {
+      "Facebook - Send Template": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Chatwoot - Get Cliente": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Chatwoot - Update Cliente",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Chatwoot - Create Cliente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Status Mensagem": {
+        "main": [
+          [
+            {
+              "node": "Chatwoot - Get Cliente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Chatwoot - Update Cliente": {
+        "main": [
+          [
+            {
+              "node": "END",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Chatwoot - Create Cliente": {
+        "main": [
+          [
+            {
+              "node": "END",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Status Mensagem erro": {
+        "main": [
+          [
+            {
+              "node": "Chatwoot - Get Cliente",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Facebook - Send Template",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Update - Status Mensagem",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update - Status Mensagem erro",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Kommit Automação",
+    "name": "Version b7f3d497",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    }
+  ]
+}
