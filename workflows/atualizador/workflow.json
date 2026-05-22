@@ -1,0 +1,2160 @@
+{
+  "id": "RMek51eEuN7HPaJB",
+  "name": "Atualizador",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Qual BM?": "={{ $('Loop Over Items').item.json.Qual_BM }}",
+            "Telefone": "={{ $json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Razão",
+              "displayName": "Razão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Viabilidade",
+              "displayName": "Viabilidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CHATWOOT",
+              "displayName": "CHATWOOT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORA",
+              "displayName": "HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Operadores",
+              "displayName": "Operadores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atribuição",
+              "displayName": "Atribuição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROW_ID",
+              "displayName": "ROW_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Start",
+              "displayName": "Start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Criado",
+              "displayName": "Criado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atualizado",
+              "displayName": "Atualizado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Qual BM?",
+              "displayName": "Qual BM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Demanda",
+              "displayName": "Demanda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Id da conversa",
+              "displayName": "Id da conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 1",
+              "displayName": "Coluna 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1104,
+        -32
+      ],
+      "id": "8c33706f-504f-4cea-9062-624866083480",
+      "name": "Update row in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -624,
+        0
+      ],
+      "id": "d45f3284-39bb-47b1-9a8f-660248ce14bf",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Informações inbound 2.0",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Qual_BM",
+              "condition": "ilike",
+              "keyValue": "%Mascul%"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        0
+      ],
+      "id": "befff433-2742-4618-9b18-41889dee46a1",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        624,
+        -16
+      ],
+      "id": "6b991fa9-b5d2-418a-8308-1d0a270efd03",
+      "name": "Get row(s) in sheet",
+      "executeOnce": false,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Informações inbound 2.0",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Qual_BM",
+              "condition": "ilike",
+              "keyValue": "%Fem%"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        288
+      ],
+      "id": "215a6d55-3c1b-4ba1-92fd-811c637934d5",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Qual BM?": "={{ $('Get many rows1').item.json.Qual_BM }}",
+            "Telefone": "={{ $json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "Razão",
+              "displayName": "Razão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Viabilidade",
+              "displayName": "Viabilidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CHATWOOT",
+              "displayName": "CHATWOOT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORA",
+              "displayName": "HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Operadores",
+              "displayName": "Operadores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atribuição",
+              "displayName": "Atribuição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROW_ID",
+              "displayName": "ROW_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Start",
+              "displayName": "Start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Criado",
+              "displayName": "Criado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atualizado",
+              "displayName": "Atualizado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Qual BM?",
+              "displayName": "Qual BM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Demanda",
+              "displayName": "Demanda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Id da conversa",
+              "displayName": "Id da conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 1",
+              "displayName": "Coluna 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        320
+      ],
+      "id": "abc82e06-59be-4be8-8b61-9476804cac4e",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Informações inbound 2.0",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows1').item.json.Telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        304,
+        320
+      ],
+      "id": "513ce60b-676d-4135-b5cf-f32de5a4bd71",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Informações inbound 2.0",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.Telefone }}"
+            },
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ String($json.Telefone).length === 13   ? String($json.Telefone).replace(/^(\\d{4})9/, '$1')   : String($json.Telefone).replace(/^(\\d{4})/, '$19') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        336
+      ],
+      "id": "1cc7b3ed-4f8a-401e-a32e-2c85894abe7a",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Informações inbound 2.0",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        -32
+      ],
+      "id": "9e67fef7-8a68-497d-b5f8-383c636c050d",
+      "name": "Update a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8ce8658a-eb90-4876-93c0-2e4d9c5c38f4",
+              "leftValue": "={{ $json.Telefone !== null && $json.Telefone !== '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "010a62ca-23f3-4456-9bcc-c12553e2625f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "3c46c6cf-586f-4cb2-9414-ac16fd8b563d",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        -32
+      ],
+      "id": "788f07a4-67cb-4e43-b66e-8ae35a5edb0e"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1808,
+        -32
+      ],
+      "id": "f65a71ee-1e53-4914-b2ef-dd9c711e6f91",
+      "name": "Wait",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Telefone }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "1be17c86-8c78-45aa-8d70-b48891b7d4ca"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1344,
+        -32
+      ],
+      "id": "97abf9d8-58f6-4089-87c6-59a5d2a245b1",
+      "name": "Switch",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfunction gerarVariacao(numero) {\n  let n = String(numero).replace(/\\D/g, \"\");\n\n  // padrão Brasil: 55 + DDD + número\n  if (n.startsWith(\"55\")) {\n    const pais = n.slice(0, 2);\n    const ddd = n.slice(2, 4);\n    let resto = n.slice(4);\n\n    // se tiver 9 na frente remove\n    if (resto.startsWith(\"9\")) {\n      resto = resto.slice(1);\n    } else {\n      // se não tiver adiciona\n      resto = \"9\" + resto;\n    }\n\n    return pais + ddd + resto;\n  }\n\n  return n;\n}\n\nconst resultado = [];\n\nfor (const item of items) {\n  const original = item.json.Telefone;\n  const variacao = gerarVariacao(original);\n\n  // item original\n  resultado.push({\n    json: {\n      ...item.json,\n      Telefone: String(original)\n    }\n  });\n\n  // item duplicado com variação\n  resultado.push({\n    json: {\n      ...item.json,\n      Telefone: variacao\n    }\n  });\n}\n\nreturn resultado;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "02d4c3de-183c-43dc-a855-50a639d7fe18",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Telefone }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "7c66ab56-74a6-4486-ab89-ca38251e7250"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        864,
+        -16
+      ],
+      "id": "ab676bce-2641-460f-8d11-22653356c48d",
+      "name": "Switch1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        864,
+        240
+      ],
+      "id": "4f774200-2545-49bc-8623-493ada2f877b",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        []
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Update a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "59170405-e12b-4fd1-9f92-2065d07cdfc6",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-12T13:04:39.251Z",
+      "createdAt": "2026-03-12T13:04:39.251Z",
+      "role": "workflow:owner",
+      "workflowId": "RMek51eEuN7HPaJB",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-13T16:41:14.000Z",
+    "createdAt": "2026-03-13T16:40:15.514Z",
+    "versionId": "59170405-e12b-4fd1-9f92-2065d07cdfc6",
+    "workflowId": "RMek51eEuN7HPaJB",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Qual BM?": "={{ $('Loop Over Items').item.json.Qual_BM }}",
+              "Telefone": "={{ $json.Telefone }}"
+            },
+            "matchingColumns": [
+              "Telefone"
+            ],
+            "schema": [
+              {
+                "id": "Razão",
+                "displayName": "Razão",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Viabilidade",
+                "displayName": "Viabilidade",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Telefone",
+                "displayName": "Telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "CNPJ",
+                "displayName": "CNPJ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "STATUS",
+                "displayName": "STATUS",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CHATWOOT",
+                "displayName": "CHATWOOT",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "HORA",
+                "displayName": "HORA",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Operadores",
+                "displayName": "Operadores",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atribuição",
+                "displayName": "Atribuição",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ROW_ID",
+                "displayName": "ROW_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Start",
+                "displayName": "Start",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Criado",
+                "displayName": "Criado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atualizado",
+                "displayName": "Atualizado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Qual BM?",
+                "displayName": "Qual BM?",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Demanda",
+                "displayName": "Demanda",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Id da conversa",
+                "displayName": "Id da conversa",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 1",
+                "displayName": "Coluna 1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1104,
+          -32
+        ],
+        "id": "8c33706f-504f-4cea-9062-624866083480",
+        "name": "Update row in sheet",
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 1
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -624,
+          0
+        ],
+        "id": "d45f3284-39bb-47b1-9a8f-660248ce14bf",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "Informações inbound 2.0",
+          "returnAll": true,
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Qual_BM",
+                "condition": "ilike",
+                "keyValue": "%Mascul%"
+              },
+              {
+                "keyName": "status",
+                "condition": "eq",
+                "keyValue": "Pendente"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -432,
+          0
+        ],
+        "id": "befff433-2742-4618-9b18-41889dee46a1",
+        "name": "Get many rows",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Telefone",
+                "lookupValue": "={{ $json.Telefone }}"
+              }
+            ]
+          },
+          "combineFilters": "OR",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          624,
+          -16
+        ],
+        "id": "6b991fa9-b5d2-418a-8308-1d0a270efd03",
+        "name": "Get row(s) in sheet",
+        "executeOnce": false,
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "Informações inbound 2.0",
+          "returnAll": true,
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Qual_BM",
+                "condition": "ilike",
+                "keyValue": "%Fem%"
+              },
+              {
+                "keyName": "status",
+                "condition": "eq",
+                "keyValue": "Pendente"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -720,
+          288
+        ],
+        "id": "215a6d55-3c1b-4ba1-92fd-811c637934d5",
+        "name": "Get many rows1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Qual BM?": "={{ $('Get many rows1').item.json.Qual_BM }}",
+              "Telefone": "={{ $json.Telefone }}"
+            },
+            "matchingColumns": [
+              "Telefone"
+            ],
+            "schema": [
+              {
+                "id": "Razão",
+                "displayName": "Razão",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Viabilidade",
+                "displayName": "Viabilidade",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Telefone",
+                "displayName": "Telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "CNPJ",
+                "displayName": "CNPJ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "STATUS",
+                "displayName": "STATUS",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CHATWOOT",
+                "displayName": "CHATWOOT",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "HORA",
+                "displayName": "HORA",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Operadores",
+                "displayName": "Operadores",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atribuição",
+                "displayName": "Atribuição",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ROW_ID",
+                "displayName": "ROW_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Start",
+                "displayName": "Start",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Criado",
+                "displayName": "Criado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atualizado",
+                "displayName": "Atualizado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Qual BM?",
+                "displayName": "Qual BM?",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Demanda",
+                "displayName": "Demanda",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Id da conversa",
+                "displayName": "Id da conversa",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 1",
+                "displayName": "Coluna 1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          80,
+          320
+        ],
+        "id": "abc82e06-59be-4be8-8b61-9476804cac4e",
+        "name": "Update row in sheet1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Informações inbound 2.0",
+          "matchType": "allFilters",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ $('Get many rows1').item.json.Telefone }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "Concluído"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          304,
+          320
+        ],
+        "id": "513ce60b-676d-4135-b5cf-f32de5a4bd71",
+        "name": "Update a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Informações inbound 2.0",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ $json.Telefone }}"
+              },
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ String($json.Telefone).length === 13   ? String($json.Telefone).replace(/^(\\d{4})9/, '$1')   : String($json.Telefone).replace(/^(\\d{4})/, '$19') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -304,
+          336
+        ],
+        "id": "1cc7b3ed-4f8a-401e-a32e-2c85894abe7a",
+        "name": "Update a row1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Informações inbound 2.0",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ $json.Telefone }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "Concluído"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1600,
+          -32
+        ],
+        "id": "9e67fef7-8a68-497d-b5f8-383c636c050d",
+        "name": "Update a row2",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "8ce8658a-eb90-4876-93c0-2e4d9c5c38f4",
+                "leftValue": "={{ $json.Telefone !== null && $json.Telefone !== '' }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -224,
+          0
+        ],
+        "id": "010a62ca-23f3-4456-9bcc-c12553e2625f",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          400,
+          -32
+        ],
+        "id": "3c46c6cf-586f-4cb2-9414-ac16fd8b563d",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me",
+        "typeVersion": 1,
+        "position": [
+          2048,
+          -32
+        ],
+        "id": "788f07a4-67cb-4e43-b66e-8ae35a5edb0e"
+      },
+      {
+        "parameters": {
+          "amount": 10
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1808,
+          -32
+        ],
+        "id": "f65a71ee-1e53-4914-b2ef-dd9c711e6f91",
+        "name": "Wait",
+        "webhookId": "422e62d1-c0ae-4c7a-9256-f0e812a71fa5",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.Telefone }}",
+                      "rightValue": 0,
+                      "operator": {
+                        "type": "number",
+                        "operation": "notEmpty",
+                        "singleValue": true
+                      },
+                      "id": "1be17c86-8c78-45aa-8d70-b48891b7d4ca"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1344,
+          -32
+        ],
+        "id": "97abf9d8-58f6-4089-87c6-59a5d2a245b1",
+        "name": "Switch",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nfunction gerarVariacao(numero) {\n  let n = String(numero).replace(/\\D/g, \"\");\n\n  // padrão Brasil: 55 + DDD + número\n  if (n.startsWith(\"55\")) {\n    const pais = n.slice(0, 2);\n    const ddd = n.slice(2, 4);\n    let resto = n.slice(4);\n\n    // se tiver 9 na frente remove\n    if (resto.startsWith(\"9\")) {\n      resto = resto.slice(1);\n    } else {\n      // se não tiver adiciona\n      resto = \"9\" + resto;\n    }\n\n    return pais + ddd + resto;\n  }\n\n  return n;\n}\n\nconst resultado = [];\n\nfor (const item of items) {\n  const original = item.json.Telefone;\n  const variacao = gerarVariacao(original);\n\n  // item original\n  resultado.push({\n    json: {\n      ...item.json,\n      Telefone: String(original)\n    }\n  });\n\n  // item duplicado com variação\n  resultado.push({\n    json: {\n      ...item.json,\n      Telefone: variacao\n    }\n  });\n}\n\nreturn resultado;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          64,
+          -16
+        ],
+        "id": "02d4c3de-183c-43dc-a855-50a639d7fe18",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.Telefone }}",
+                      "rightValue": 0,
+                      "operator": {
+                        "type": "number",
+                        "operation": "exists",
+                        "singleValue": true
+                      },
+                      "id": "7c66ab56-74a6-4486-ab89-ca38251e7250"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          864,
+          -16
+        ],
+        "id": "ab676bce-2641-460f-8d11-22653356c48d",
+        "name": "Switch1",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          864,
+          240
+        ],
+        "id": "4f774200-2545-49bc-8623-493ada2f877b",
+        "name": "Edit Fields"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          []
+        ]
+      },
+      "Update row in sheet1": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Get row(s) in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a row2": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Update a row2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Update row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 59170405",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
