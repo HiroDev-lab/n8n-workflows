@@ -1,0 +1,899 @@
+{
+  "id": "uMVDpP68bRwEIRmv",
+  "name": "Kommit - Criar.Card.Bitrix",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.list",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"filter\": {\n    \"PHONE\": \"{{ $json.telefone }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -224,
+        272
+      ],
+      "id": "709a5e18-01ba-4b56-b097-9f4022f7d3e8",
+      "name": "Procurar Contato",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c2ee86b-3565-4cc9-b857-2fb44d52ce16",
+              "leftValue": "={{ $json.total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -32,
+        272
+      ],
+      "id": "03900bf6-80d1-40fa-b75f-82676a008a97",
+      "name": "If - Validar Existência"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fields\": {\n    \"NAME\": \"{{ $('When Executed by Another Workflow').item.json.razao }} - {{ $('When Executed by Another Workflow').item.json.cnpj }}\",\n    \"PHONE\": [\n      {\n        \"VALUE\": \"{{ $('When Executed by Another Workflow').item.json.telefone }}\",\n        \"VALUE_TYPE\": \"MOBILE\"\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        464
+      ],
+      "id": "5aec872f-ec6a-4388-a9c9-0c0448c35de7",
+      "name": "Criar Contato",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "25e0c53a-e5a2-4c1f-8800-3d0ee1714a5f",
+              "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            },
+            {
+              "id": "d076b0aa-083f-4797-ba55-078f60a91f0c",
+              "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        48
+      ],
+      "id": "10516e23-76b3-40f6-8890-a682f609092a",
+      "name": "If - Validar tempo de vida do lead"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.deal.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"FIELDS\": {\n\t\"TITLE\": \"{{ $('When Executed by Another Workflow').item.json.razao }}\",\n    \"UF_CRM_1728656134\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\",\n    \"CATEGORY_ID\": 0,\n    \"CONTACT_IDS\": [\"{{ $json.result?.[0]?.ID || $json.result }}\"],\n    \"SOURCE_ID\": \"UC_KX2LJ5\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        192,
+        272
+      ],
+      "id": "ad05d50a-17ea-40aa-81a5-188244dbbe6e",
+      "name": "Criar Lead",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "=sucesso"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "false"
+            },
+            {
+              "fieldId": "criar_card",
+              "fieldValue": "sucesso"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        384,
+        272
+      ],
+      "id": "390e778c-fbff-4cda-b24a-6c14e3eb94ee",
+      "name": "Update - Status Sucesso",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "telefone"
+            },
+            {
+              "name": "razao"
+            },
+            {
+              "name": "cnpj"
+            },
+            {
+              "name": "id_supabase"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        272
+      ],
+      "id": "92973c37-2443-462e-b06e-3dc563f171ac",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "=sucesso"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "false"
+            },
+            {
+              "fieldId": "criar_card",
+              "fieldValue": "card já cadastrado"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        384,
+        32
+      ],
+      "id": "5f035176-b5cc-4df0-856f-9ad1d26f2a17",
+      "name": "Update - Status já existente",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        496,
+        160
+      ],
+      "id": "6e3a96b6-039b-4052-b2b6-a9d48ab12c31",
+      "name": "Fim"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "cnpj",
+              "value": "={{ $json.cnpj }}"
+            },
+            {
+              "key": "razao",
+              "value": "={{ $json.razao }}"
+            },
+            {
+              "key": "id_supabase",
+              "value": "={{ $json.id_supabase }}"
+            },
+            {
+              "key": "telefone",
+              "value": "={{ $json.telefone }}"
+            },
+            {
+              "key": "data",
+              "value": "={{ $now.format('yyyy-MM-dd') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -416,
+        272
+      ],
+      "id": "91ac4fb3-3670-4ff7-baa7-846fab861538",
+      "name": "Execution Data"
+    }
+  ],
+  "connections": {
+    "Procurar Contato": {
+      "main": [
+        [
+          {
+            "node": "If - Validar Existência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar Existência": {
+      "main": [
+        [
+          {
+            "node": "If - Validar tempo de vida do lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Contato": {
+      "main": [
+        [
+          {
+            "node": "Criar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar tempo de vida do lead": {
+      "main": [
+        [
+          {
+            "node": "Update - Status já existente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Lead": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Sucesso": {
+      "main": [
+        [
+          {
+            "node": "Fim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status já existente": {
+      "main": [
+        [
+          {
+            "node": "Fim",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Procurar Contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "activeVersionId": "e7cc7764-04b6-43fe-a5e4-958be5c6ab58",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-13T21:22:56.256Z",
+      "createdAt": "2026-05-13T21:22:56.256Z",
+      "role": "workflow:owner",
+      "workflowId": "uMVDpP68bRwEIRmv",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-14T02:27:42.000Z",
+    "createdAt": "2026-05-14T02:27:39.691Z",
+    "versionId": "e7cc7764-04b6-43fe-a5e4-958be5c6ab58",
+    "workflowId": "uMVDpP68bRwEIRmv",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.list",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"filter\": {\n    \"PHONE\": \"{{ $json.telefone }}\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -224,
+          272
+        ],
+        "id": "709a5e18-01ba-4b56-b097-9f4022f7d3e8",
+        "name": "Procurar Contato",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c2ee86b-3565-4cc9-b857-2fb44d52ce16",
+                "leftValue": "={{ $json.total }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -32,
+          272
+        ],
+        "id": "03900bf6-80d1-40fa-b75f-82676a008a97",
+        "name": "If - Validar Existência"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"fields\": {\n    \"NAME\": \"{{ $('When Executed by Another Workflow').item.json.razao }} - {{ $('When Executed by Another Workflow').item.json.cnpj }}\",\n    \"PHONE\": [\n      {\n        \"VALUE\": \"{{ $('When Executed by Another Workflow').item.json.telefone }}\",\n        \"VALUE_TYPE\": \"MOBILE\"\n      }\n    ]\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          80,
+          464
+        ],
+        "id": "5aec872f-ec6a-4388-a9c9-0c0448c35de7",
+        "name": "Criar Contato",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "25e0c53a-e5a2-4c1f-8800-3d0ee1714a5f",
+                "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+                "rightValue": "={{ $now }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "afterOrEquals"
+                }
+              },
+              {
+                "id": "d076b0aa-083f-4797-ba55-078f60a91f0c",
+                "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+                "rightValue": "={{ $now }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "afterOrEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          80,
+          48
+        ],
+        "id": "10516e23-76b3-40f6-8890-a682f609092a",
+        "name": "If - Validar tempo de vida do lead"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.deal.add",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"FIELDS\": {\n\t\"TITLE\": \"{{ $('When Executed by Another Workflow').item.json.razao }}\",\n    \"UF_CRM_1728656134\": \"{{ $('When Executed by Another Workflow').item.json.cnpj }}\",\n    \"CATEGORY_ID\": 0,\n    \"CONTACT_IDS\": [\"{{ $json.result?.[0]?.ID || $json.result }}\"],\n    \"SOURCE_ID\": \"UC_KX2LJ5\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          192,
+          272
+        ],
+        "id": "ad05d50a-17ea-40aa-81a5-188244dbbe6e",
+        "name": "Criar Lead",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "=sucesso"
+              },
+              {
+                "fieldId": "transferido",
+                "fieldValue": "false"
+              },
+              {
+                "fieldId": "criar_card",
+                "fieldValue": "sucesso"
+              },
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          384,
+          272
+        ],
+        "id": "390e778c-fbff-4cda-b24a-6c14e3eb94ee",
+        "name": "Update - Status Sucesso",
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "telefone"
+              },
+              {
+                "name": "razao"
+              },
+              {
+                "name": "cnpj"
+              },
+              {
+                "name": "id_supabase"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -624,
+          272
+        ],
+        "id": "92973c37-2443-462e-b06e-3dc563f171ac",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.id_supabase }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "status",
+                "fieldValue": "=sucesso"
+              },
+              {
+                "fieldId": "transferido",
+                "fieldValue": "false"
+              },
+              {
+                "fieldId": "criar_card",
+                "fieldValue": "card já cadastrado"
+              },
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          384,
+          32
+        ],
+        "id": "5f035176-b5cc-4df0-856f-9ad1d26f2a17",
+        "name": "Update - Status já existente",
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          496,
+          160
+        ],
+        "id": "6e3a96b6-039b-4052-b2b6-a9d48ab12c31",
+        "name": "Fim"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "cnpj",
+                "value": "={{ $json.cnpj }}"
+              },
+              {
+                "key": "razao",
+                "value": "={{ $json.razao }}"
+              },
+              {
+                "key": "id_supabase",
+                "value": "={{ $json.id_supabase }}"
+              },
+              {
+                "key": "telefone",
+                "value": "={{ $json.telefone }}"
+              },
+              {
+                "key": "data",
+                "value": "={{ $now.format('yyyy-MM-dd') }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -416,
+          272
+        ],
+        "id": "91ac4fb3-3670-4ff7-baa7-846fab861538",
+        "name": "Execution Data"
+      }
+    ],
+    "connections": {
+      "Procurar Contato": {
+        "main": [
+          [
+            {
+              "node": "If - Validar Existência",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If - Validar Existência": {
+        "main": [
+          [
+            {
+              "node": "If - Validar tempo de vida do lead",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Criar Contato",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Criar Contato": {
+        "main": [
+          [
+            {
+              "node": "Criar Lead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If - Validar tempo de vida do lead": {
+        "main": [
+          [
+            {
+              "node": "Update - Status já existente",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Criar Lead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Criar Lead": {
+        "main": [
+          [
+            {
+              "node": "Update - Status Sucesso",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Status Sucesso": {
+        "main": [
+          [
+            {
+              "node": "Fim",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Status já existente": {
+        "main": [
+          [
+            {
+              "node": "Fim",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Procurar Contato",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Kommit Automação",
+    "name": "Version e7cc7764",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    }
+  ]
+}
