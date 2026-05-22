@@ -1,0 +1,495 @@
+{
+  "id": "INAIRMgpvUP6W7qa",
+  "name": "Robo 2",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        -80
+      ],
+      "id": "e13abb0a-6fb0-4ce0-a201-be7d75047794",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Junta todas as conversas de TODOS os items\nconst todasConversas = [];\n\nfor (const item of items) {\n  if (item.json?.data?.payload) {\n    todasConversas.push(...item.json.data.payload);\n  }\n}\n\n// Filtra quem tem label robo\nconst resultado = todasConversas.filter(conv =>\n  Array.isArray(conv.labels) &&\n  conv.labels.some(l => String(l).toLowerCase() === \"robo2\")\n);\n\n// Retorna cada conversa como um item separado\nreturn resultado.map(conv => ({\n  json: conv\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -64
+      ],
+      "id": "de3e357e-5c88-4637-8ba5-5813c2024445",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"content\": \"Olá, consegue me dar um retorno?\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        800,
+        -64
+      ],
+      "id": "a080be1b-5ebf-437a-ac37-8a22ed3f65c5",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Junta todas as conversas de TODOS os items\nconst todasConversas = [];\n\nfor (const item of items) {\n  if (item.json?.data?.payload) {\n    todasConversas.push(...item.json.data.payload);\n  }\n}\n\n// Filtra quem tem label robo\nconst resultado = todasConversas.filter(conv =>\n  Array.isArray(conv.labels) &&\n  conv.labels.some(l => String(l).toLowerCase() === \"robo2\")\n);\n\n// Retorna cada conversa como um item separado\nreturn resultado.map(conv => ({\n  json: conv\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        -64
+      ],
+      "id": "159e5cbe-c945-468d-a707-4f3a363330e1",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { labels: ($json.labels || []).filter(l => l !== 'robo2') } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2208,
+        -64
+      ],
+      "id": "7390d6c7-8760-409e-8e3b-9d08a9c76f69",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        128,
+        -80
+      ],
+      "id": "1886c8d0-db5f-4e88-8faa-ec309e556448",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -64
+      ],
+      "id": "0f8d25d0-a95f-4c1f-a04e-a554ffd11ba5"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1008,
+        -64
+      ],
+      "id": "534ad5af-6a01-46e3-ab95-f9869f4feddd",
+      "name": "Wait"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1440,
+        -64
+      ],
+      "id": "4a3c0e9b-c628-4790-9f1a-b75031b024e6",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        -64
+      ],
+      "id": "1083952f-78cf-4120-82f8-be23b2066067"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2384,
+        -64
+      ],
+      "id": "a634f6b7-5d02-4fe6-a8e4-ac6dc9f76698",
+      "name": "Wait1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const perPage = 100; // ajuste se quiser (50/100)\nconst pages = 80;\n\nreturn Array.from({ length: pages }, (_, i) => ({\n  json: { page: i + 1, per_page: perPage }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -64
+      ],
+      "id": "41b3c318-558b-4ed7-9535-a10179eec008",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "per_page",
+              "value": "={{ $json.per_page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        464,
+        -64
+      ],
+      "id": "51728afd-c5a5-45f5-bda9-bdedf50b051b",
+      "name": "Busca a conversa6",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const perPage = 100; // ajuste se quiser (50/100)\nconst pages = 80;\n\nreturn Array.from({ length: pages }, (_, i) => ({\n  json: { page: i + 1, per_page: perPage }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        -64
+      ],
+      "id": "113c2878-547a-4094-8eff-51493bc31514",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "per_page",
+              "value": "={{ $json.per_page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1840,
+        -64
+      ],
+      "id": "b4d755f4-8bcd-4116-bd9a-5929a65cd66a",
+      "name": "Busca a conversa7",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa7": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-18T16:37:31.472Z",
+      "createdAt": "2026-02-18T16:37:31.472Z",
+      "role": "workflow:owner",
+      "workflowId": "INAIRMgpvUP6W7qa",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
