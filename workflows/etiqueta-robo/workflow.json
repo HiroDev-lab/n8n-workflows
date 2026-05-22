@@ -1,0 +1,602 @@
+{
+  "id": "HZZrzfFl5IbgM4O3",
+  "name": "Etiqueta robo",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 18
+            }
+          ]
+        }
+      },
+      "id": "aaa00001-0000-0000-0000-000000000001",
+      "name": "Agenda 18h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+      },
+      "id": "aaa00001-0000-0000-0000-000000000005",
+      "name": "Gerar Paginas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 200,
+        "options": {}
+      },
+      "id": "aaa00001-0000-0000-0000-000000000006",
+      "name": "Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        48,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aaa00001-0000-0000-0000-000000000004",
+      "name": "Buscar Conversas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        320,
+        224
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "function norm(s) {\n  return s.toString().toLowerCase().normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").trim();\n}\n\nconst protectedNorm = [\"conta_em_analise\", \"pendencia\", \"conta_aberta\", \"mais_tarde\", \"maquininha\"];\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n  const listaDeConversas = Array.isArray(corpo?.data?.payload) ? corpo.data.payload : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv.meta?.assignee?.id;\n    if (assigneeId === 1) continue;\n\n    const convLabels = (conv.labels || []).map(norm);\n    const hasProtected = protectedNorm.some(pl => convLabels.includes(pl));\n\n    if (!hasProtected) {\n      const newLabels = [...new Set([...conv.labels, \"robo\"])];\n      resultados.push({ json: { conversation_id: conv.id, labels: newLabels } });\n    }\n  }\n}\n\nreturn resultados;"
+      },
+      "id": "aaa00001-0000-0000-0000-000000000002",
+      "name": "Filtrar Conversas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({labels: $json.labels}) }}",
+        "options": {}
+      },
+      "id": "aaa00001-0000-0000-0000-000000000003",
+      "name": "Adicionar Etiqueta Robo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        800,
+        224
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {},
+      "id": "aaa00001-0000-0000-0000-000000000007",
+      "name": "Voltar ao Loop",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "jean@maxxinvestbr.com, rafael@maxxinvestbr.com",
+        "subject": "=Relatorio Diario - Robo de Etiquetas | {{ $json.date }}",
+        "message": "=<h2>Relatorio Diario - Robo de Etiquetas</h2><p><strong>Data:</strong> {{ $json.date }}</p><p><strong>Conversas etiquetadas hoje:</strong> <strong>{{ $json.totalRobo }}</strong></p><p><em>Enviado automaticamente as 18h.</em></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        400
+      ],
+      "id": "faa04c6e-374b-41f4-b3a8-2edae305f4ee",
+      "name": "Send a message",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const date = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric' }); const totalRobo = $(\"Adicionar Etiqueta Robo\").all().length; return [{ json: { date, totalRobo } }];"
+      },
+      "id": "cc000001-0000-0000-0000-000000000099",
+      "name": "Contar Etiquetas Robo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        48,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Agenda 18h": {
+      "main": [
+        [
+          {
+            "node": "Gerar Paginas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Paginas": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "Contar Etiquetas Robo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buscar Conversas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Conversas": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Conversas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Conversas": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Etiqueta Robo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Etiqueta Robo": {
+      "main": [
+        [
+          {
+            "node": "Voltar ao Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voltar ao Loop": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contar Etiquetas Robo": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Agenda 18h": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "a9a92fc1-4e40-422f-b278-9fddde2af48b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-06T18:15:06.070Z",
+      "createdAt": "2026-05-06T18:15:06.070Z",
+      "role": "workflow:owner",
+      "workflowId": "HZZrzfFl5IbgM4O3",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-21T11:27:26.000Z",
+    "createdAt": "2026-05-21T11:27:18.947Z",
+    "versionId": "a9a92fc1-4e40-422f-b278-9fddde2af48b",
+    "workflowId": "HZZrzfFl5IbgM4O3",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 18
+              }
+            ]
+          }
+        },
+        "id": "aaa00001-0000-0000-0000-000000000001",
+        "name": "Agenda 18h",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -352,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+        },
+        "id": "aaa00001-0000-0000-0000-000000000005",
+        "name": "Gerar Paginas",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -144,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "batchSize": 200,
+          "options": {}
+        },
+        "id": "aaa00001-0000-0000-0000-000000000006",
+        "name": "Loop",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          48,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              },
+              {
+                "name": "per_page",
+                "value": "100"
+              },
+              {
+                "name": "page",
+                "value": "={{ $json.page }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "aaa00001-0000-0000-0000-000000000004",
+        "name": "Buscar Conversas",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          320,
+          224
+        ],
+        "retryOnFail": true,
+        "maxTries": 5,
+        "continueOnFail": true
+      },
+      {
+        "parameters": {
+          "jsCode": "function norm(s) {\n  return s.toString().toLowerCase().normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").trim();\n}\n\nconst protectedNorm = [\"conta_em_analise\", \"pendencia\", \"conta_aberta\", \"mais_tarde\", \"maquininha\"];\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n  const listaDeConversas = Array.isArray(corpo?.data?.payload) ? corpo.data.payload : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv.meta?.assignee?.id;\n    if (assigneeId === 1) continue;\n\n    const convLabels = (conv.labels || []).map(norm);\n    const hasProtected = protectedNorm.some(pl => convLabels.includes(pl));\n\n    if (!hasProtected) {\n      const newLabels = [...new Set([...conv.labels, \"robo\"])];\n      resultados.push({ json: { conversation_id: conv.id, labels: newLabels } });\n    }\n  }\n}\n\nreturn resultados;"
+        },
+        "id": "aaa00001-0000-0000-0000-000000000002",
+        "name": "Filtrar Conversas",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          560,
+          224
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({labels: $json.labels}) }}",
+          "options": {}
+        },
+        "id": "aaa00001-0000-0000-0000-000000000003",
+        "name": "Adicionar Etiqueta Robo",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          800,
+          224
+        ],
+        "retryOnFail": true,
+        "maxTries": 5
+      },
+      {
+        "parameters": {},
+        "id": "aaa00001-0000-0000-0000-000000000007",
+        "name": "Voltar ao Loop",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1040,
+          224
+        ]
+      },
+      {
+        "parameters": {
+          "sendTo": "jean@maxxinvestbr.com, rafael@maxxinvestbr.com",
+          "subject": "=Relatorio Diario - Robo de Etiquetas | {{ $json.date }}",
+          "message": "=<h2>Relatorio Diario - Robo de Etiquetas</h2><p><strong>Data:</strong> {{ $json.date }}</p><p><strong>Conversas etiquetadas hoje:</strong> <strong>{{ $json.totalRobo }}</strong></p><p><em>Enviado automaticamente as 18h.</em></p>",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.2,
+        "position": [
+          288,
+          400
+        ],
+        "id": "faa04c6e-374b-41f4-b3a8-2edae305f4ee",
+        "name": "Send a message",
+        "webhookId": "66d0df56-457f-4040-862d-3cbc63fc7fe9",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const date = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric' }); const totalRobo = $(\"Adicionar Etiqueta Robo\").all().length; return [{ json: { date, totalRobo } }];"
+        },
+        "id": "cc000001-0000-0000-0000-000000000099",
+        "name": "Contar Etiquetas Robo",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          48,
+          400
+        ]
+      }
+    ],
+    "connections": {
+      "Agenda 18h": {
+        "main": [
+          [
+            {
+              "node": "Gerar Paginas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gerar Paginas": {
+        "main": [
+          [
+            {
+              "node": "Loop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop": {
+        "main": [
+          [
+            {
+              "node": "Contar Etiquetas Robo",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Buscar Conversas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Buscar Conversas": {
+        "main": [
+          [
+            {
+              "node": "Filtrar Conversas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrar Conversas": {
+        "main": [
+          [
+            {
+              "node": "Adicionar Etiqueta Robo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adicionar Etiqueta Robo": {
+        "main": [
+          [
+            {
+              "node": "Voltar ao Loop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Voltar ao Loop": {
+        "main": [
+          [
+            {
+              "node": "Loop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Contar Etiquetas Robo": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version a9a92fc1",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
