@@ -1,0 +1,3723 @@
+{
+  "id": "xcb8dnVOHV3Vc9Zo",
+  "name": "Automação Inbound",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.telefoneProcessado }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -464,
+        528
+      ],
+      "id": "9f89645b-93ab-45db-8c01-eccf5015d3c5",
+      "name": "Busca o contato no chat",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1648,
+        512
+      ],
+      "id": "023820bf-6eee-405c-a322-0d0f267dc47d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -736,
+        512
+      ],
+      "id": "0ed939d3-76e0-4fe3-9e86-3a7770612edf",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        320,
+        528
+      ],
+      "id": "107bc19c-7864-4d25-b4e6-b9798bc8f870"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        528
+      ],
+      "id": "f0ca5c5e-6c5c-4101-a217-d02d5aee3826",
+      "name": "Wait3",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46b3b5af-8a79-40ed-bb8d-8c1214c4ec4d",
+              "leftValue": "={{ $json.meta.count }}",
+              "rightValue": "=0",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -736,
+        368
+      ],
+      "id": "7f3c6605-7598-42b0-a950-6a22baa03bfa",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        128,
+        192
+      ],
+      "id": "5a12fc75-6790-452d-bf92-f69d08370708",
+      "name": "Busca a conversa2",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].meta.sender.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $('Loop Over Items').item.json.CNPJ }}\",\n    \"nome_cliente\": \"{{ $('Loop Over Items').item.json.Razao }}\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        368,
+        176
+      ],
+      "id": "c9493508-993d-4582-933d-6aa9bd67d3d0",
+      "name": "Adiciona os dados1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -448,
+        176
+      ],
+      "id": "0e2df080-f8dc-4942-879f-f49f56e239a3",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        272
+      ],
+      "id": "cefd78e3-9460-47cd-b22b-73010bc435f5"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        0
+      ],
+      "id": "052381ed-4e29-4f21-9d39-e071a22ae670",
+      "name": "Wait4",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f3ed8b0d-0a86-4d58-9adc-77323ce75821",
+              "name": "Razao",
+              "value": "={{ $('Loop Over Items').item.json.Razao }}",
+              "type": "string"
+            },
+            {
+              "id": "6a2ac446-002b-4e1e-bc82-c6eb71a72e48",
+              "name": "CNPJ",
+              "value": "={{ $('Loop Over Items').item.json.CNPJ }}",
+              "type": "number"
+            },
+            {
+              "id": "8a3070c2-8069-400f-99d9-54d6cc3ed668",
+              "name": "Status",
+              "value": "={{ $('Loop Over Items').item.json.Status }}",
+              "type": "string"
+            },
+            {
+              "id": "85457154-c5b1-4aab-8e29-9fc5598a16b1",
+              "name": "Telefone",
+              "value": "={{ $('Loop Over Items').item.json.Telefone }}",
+              "type": "number"
+            },
+            {
+              "id": "c74eaa28-81f1-4548-8647-755d32200641",
+              "name": "Tipo",
+              "value": "={{ $('Loop Over Items').item.json.Tipo }}",
+              "type": "string"
+            },
+            {
+              "id": "a4ae6f14-1a1e-4b00-b35b-89f5386e12bf",
+              "name": "Resposta",
+              "value": "={{ $('Loop Over Items').item.json.Resposta }}",
+              "type": "string"
+            },
+            {
+              "id": "7be04bbd-d81a-4314-9a70-0d713b439bdd",
+              "name": "id",
+              "value": "={{ $('Loop Over Items').item.json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "084abb81-f786-4d19-82f0-5edecebcb83c",
+              "name": "createdAt",
+              "value": "={{ $('Loop Over Items').item.json.createdAt }}",
+              "type": "string"
+            },
+            {
+              "id": "f7bf779a-aa0d-4475-a090-1d50f8bf30cb",
+              "name": "updatedAt",
+              "value": "={{ $('Loop Over Items').item.json.updatedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "d4bac8e4-babb-4716-bbef-7ff0c123e213",
+              "name": "telefoneProcessado",
+              "value": "={{ $('Loop Over Items').item.json.telefoneProcessado }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        528
+      ],
+      "id": "1ce2bada-00e3-4991-bc1f-b83d9d565c03",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1760,
+        896
+      ],
+      "id": "6a28a330-71fa-41d6-94c9-f272b1ed8487",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "CHATWOOT": "={{ $json.NumeroCorreto !== null ? \"sim\" : \"não\" }}",
+            "Atualizado": "={{$now.setZone('America/Sao_Paulo').toFormat('dd-MM-yyyy')}}",
+            "Demanda": "Pendente",
+            "Hora": "={{$now.setZone('America/Sao_Paulo').toFormat('HH:mm:ss')}}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Razão",
+              "displayName": "Razão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Viabilidade",
+              "displayName": "Viabilidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CHATWOOT",
+              "displayName": "CHATWOOT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HORA",
+              "displayName": "HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Operadores",
+              "displayName": "Operadores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atribuição",
+              "displayName": "Atribuição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROW_ID",
+              "displayName": "ROW_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Start",
+              "displayName": "Start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Criado",
+              "displayName": "Criado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atualizado",
+              "displayName": "Atualizado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qual BM?",
+              "displayName": "Qual BM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ associado",
+              "displayName": "CNPJ associado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Razão associada",
+              "displayName": "Razão associada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ A",
+              "displayName": "CNPJ A",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Demanda",
+              "displayName": "Demanda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id da conversa",
+              "displayName": "Id da conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 1",
+              "displayName": "Coluna 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 2",
+              "displayName": "Coluna 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -752,
+        1024
+      ],
+      "id": "8f036686-9398-4391-b898-2972faa91777",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Razão": "={{ $json.Razao }}",
+            "Telefone": "={{ $json.Telefone }}",
+            "CNPJ": "={{ $json.CNPJ }}",
+            "CHATWOOT": "={{ $json.NumeroCorreto !== null ? \"sim\" : \"não\" }}",
+            "HORA": "={{$now.format('dd-mm-yyyy HH:MM:ss')}}",
+            "Atualizado": "={{$now.setZone('America/Sao_Paulo').toFormat('dd-MM-yyyy')}}",
+            "STATUS": "={{ $json.Tipo }}",
+            "Demanda": "Pendente",
+            "Hora": "={{$now.setZone('America/Sao_Paulo').toFormat('HH:mm:ss')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Razão",
+              "displayName": "Razão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Viabilidade",
+              "displayName": "Viabilidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CHATWOOT",
+              "displayName": "CHATWOOT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "HORA",
+              "displayName": "HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Operadores",
+              "displayName": "Operadores",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atribuição",
+              "displayName": "Atribuição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ROW_ID",
+              "displayName": "ROW_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Start",
+              "displayName": "Start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Criado",
+              "displayName": "Criado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Atualizado",
+              "displayName": "Atualizado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hora",
+              "displayName": "Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qual BM?",
+              "displayName": "Qual BM?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ associado",
+              "displayName": "CNPJ associado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Razão associada",
+              "displayName": "Razão associada",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ A",
+              "displayName": "CNPJ A",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Demanda",
+              "displayName": "Demanda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id da conversa",
+              "displayName": "Id da conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 1",
+              "displayName": "Coluna 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Coluna 2",
+              "displayName": "Coluna 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -752,
+        800
+      ],
+      "id": "dfb505c2-48a5-43ba-8469-96b4cc4cc222",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "executou",
+              "value": "sim"
+            },
+            {
+              "key": "fluxo",
+              "value": "buscador"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -1216,
+        512
+      ],
+      "id": "536adb32-0664-473b-b45f-adf150d26791",
+      "name": "Execution Data"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "executou",
+              "value": "sim"
+            },
+            {
+              "key": "fluxo",
+              "value": "escritor"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -1392,
+        896
+      ],
+      "id": "df42a3fe-052e-4afc-8743-86b88f9cbfb3",
+      "name": "Execution Data1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1200,
+        896
+      ],
+      "id": "87b14091-b03d-4fff-b7a4-3769f003b83b",
+      "name": "GetLeads1",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const novosLeads = $(\"Get a row3\").all();\nconst leadsPlanilha = $(\"GetLeads1\").all();\n\n// Criamos um Set com todos os CNPJs que já existem na planilha\nconst cnpjsExistentes = new Set(\n  leadsPlanilha\n    .map(item => String(item.json.CNPJ || \"\").trim())\n    .filter(cnpj => cnpj !== \"\")\n);\n\n// Filtramos apenas quem NÃO está no Set de existentes\nreturn novosLeads.filter(item => {\n  const cnpj = String(item.json.CNPJ || \"\").trim();\n  return !cnpjsExistentes.has(cnpj);\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        800
+      ],
+      "id": "e3703f49-bada-4db9-b58b-b78e0a099f98",
+      "name": "Novos Leads"
+    },
+    {
+      "parameters": {
+        "jsCode": "const novosLeads = $(\"Get a row3\").all();\nconst leadsPlanilha = $(\"GetLeads1\").all();\n\n// Criamos um mapa para buscar o row_number pelo CNPJ\nconst mapaPlanilha = {};\nleadsPlanilha.forEach(item => {\n  const cnpj = String(item.json.CNPJ || \"\").trim();\n  if (cnpj !== \"\") {\n    mapaPlanilha[cnpj] = item.json.row_number;\n  }\n});\n\n// Filtramos apenas quem existe e anexamos o row_number\nreturn novosLeads\n  .filter(item => {\n    const cnpj = String(item.json.CNPJ || \"\").trim();\n    return cnpj !== \"\" && mapaPlanilha[cnpj] !== undefined;\n  })\n  .map(item => {\n    const cnpj = String(item.json.CNPJ).trim();\n    return {\n      json: {\n        ...item.json,\n        row_number: mapaPlanilha[cnpj]\n      }\n    };\n  });"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        1024
+      ],
+      "id": "09529da5-d29c-4f14-bc52-311b137bef2f",
+      "name": "Atualizar Leads",
+      "executeOnce": false,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.flatMap((item) => {\n  const raw = String(item.json.Telefone ?? \"\").trim();\n  if (!raw) return [{ json: { ...item.json, telefoneProcessado: \"\" } }];\n\n  // Só dígitos\n  let digits = raw.replace(/\\D/g, \"\");\n\n  // Se vier com 00 internacional (ex: 0055...), remove 00\n  if (digits.startsWith(\"00\")) digits = digits.slice(2);\n\n  // Helpers\n  const uniq = (arr) => [...new Set(arr)].filter((v) => v && String(v).length > 0);\n\n  const variants = [];\n\n  // Detecta se tem 55\n  const has55 = digits.startsWith(\"55\");\n\n  // Função que gera combinações de prefixo (+ / sem +) e (55 / sem 55)\n  function addPrefixCombos(fullNoPlus) {\n    // fullNoPlus é \"55...\" ou \"DDD...\" ou \"NUM...\"\n    const noPlus = String(fullNoPlus);\n\n    // com/sem +\n    variants.push(noPlus);\n    variants.push(\"+\" + noPlus);\n\n    // se começar com 55, também gera sem 55\n    if (noPlus.startsWith(\"55\")) {\n      const no55 = noPlus.slice(2);\n      variants.push(no55);\n      variants.push(\"+\" + no55);\n    }\n\n    // se não começar com 55, também gera com 55 (quando fizer sentido)\n    // (só tenta se parecer BR: tamanho 10/11 (DDD+num) ou 8/9 (num))\n    const d = noPlus.replace(/\\D/g, \"\");\n    if (!d.startsWith(\"55\")) {\n      if (d.length === 10 || d.length === 11 || d.length === 8 || d.length === 9) {\n        variants.push(\"55\" + d);\n        variants.push(\"+55\" + d);\n      }\n    }\n  }\n\n  // Função que gera com/sem DDD, com/sem 9 (quando aplicável)\n  function addDddAnd9Combos(pais, ddd, num) {\n    const base = `${pais}${ddd}${num}`;\n    addPrefixCombos(base);\n\n    // variações sem DDD\n    addPrefixCombos(num);\n\n    // variações só com DDD+num (sem 55)\n    addPrefixCombos(`${ddd}${num}`);\n\n    // Agora tenta variações com/sem 9 quando num for 8/9 dígitos (BR)\n    // Regra prática:\n    // - Celular local: 9 dígitos (começa com 9)\n    // - Fixo local: 8 dígitos (não começa com 9 normalmente)\n    // Se vier 8 dígitos, gera versão com 9 + num\n    // Se vier 9 dígitos começando com 9, gera sem o 9 (8 dígitos)\n    const onlyNum = String(num);\n\n    const numCom9 = onlyNum.length === 9\n      ? onlyNum\n      : (\"9\" + onlyNum);\n\n    const numSem9 = (onlyNum.length === 9 && onlyNum.startsWith(\"9\"))\n      ? onlyNum.slice(1)\n      : (onlyNum.length === 8 ? onlyNum : onlyNum); // se já não dá pra tirar, mantém\n\n    // Só aplica quando fizer sentido (8 ou 9 dígitos)\n    if (onlyNum.length === 8 || (onlyNum.length === 9 && onlyNum.startsWith(\"9\"))) {\n      // com 9\n      addPrefixCombos(`${pais}${ddd}${numCom9}`);\n      addPrefixCombos(`${ddd}${numCom9}`);\n      addPrefixCombos(`${numCom9}`);\n\n      // sem 9\n      addPrefixCombos(`${pais}${ddd}${numSem9}`);\n      addPrefixCombos(`${ddd}${numSem9}`);\n      addPrefixCombos(`${numSem9}`);\n    }\n  }\n\n  // --- Tentativa de interpretar como BR ---\n  // Casos comuns:\n  // - 55 + DDD(2) + num(8/9)  => 12/13 dígitos\n  // - DDD(2) + num(8/9)       => 10/11 dígitos\n  // - num(8/9)                => 8/9 dígitos\n\n  // Se tiver 55, remove pra analisar tamanho\n  const digitsNo55 = has55 ? digits.slice(2) : digits;\n\n  // 55 + DDD + NUM\n  if (has55 && (digits.length === 12 || digits.length === 13)) {\n    const pais = \"55\";\n    const ddd = digits.slice(2, 4);\n    const num = digits.slice(4);\n    addDddAnd9Combos(pais, ddd, num);\n\n  // DDD + NUM (sem 55)\n  } else if (!has55 && (digits.length === 10 || digits.length === 11)) {\n    const pais = \"55\";\n    const ddd = digits.slice(0, 2);\n    const num = digits.slice(2);\n    addDddAnd9Combos(pais, ddd, num);\n\n  // Só NUM (sem DDD)\n  } else if (digits.length === 8 || digits.length === 9) {\n    // Não dá pra cravar DDD. Gera com/sem +, com/sem 55, e com/sem 9 se aplicável.\n    addPrefixCombos(digits);\n\n    if (digits.length === 8) {\n      addPrefixCombos(\"9\" + digits); // com 9\n    } else if (digits.length === 9 && digits.startsWith(\"9\")) {\n      addPrefixCombos(digits.slice(1)); // sem 9\n    }\n\n  // Qualquer outro formato: devolve o que der\n  } else {\n    // Ainda assim gera com/sem +\n    variants.push(digits);\n    variants.push(\"+\" + digits);\n\n    // e se não tiver 55 mas parecer que pode ser BR (ex: 12/13 com 55 faltando)\n    // (aqui não invento muito — só adiciono 55 na frente)\n    if (!digits.startsWith(\"55\")) {\n      variants.push(\"55\" + digits);\n      variants.push(\"+55\" + digits);\n    }\n  }\n\n  const uniqueVariations = uniq(variants);\n\n  return uniqueVariations.map((tel) => ({\n    json: { ...item.json, telefoneProcessado: tel },\n  }));\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        512
+      ],
+      "id": "830948da-d882-49f3-8bff-58ec247e3d62",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f82bf355-6216-4167-9b88-8b42c71cedd7",
+              "leftValue": "={{ $json.Atualizado }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        384
+      ],
+      "id": "df735108-532b-447e-83b3-33acf376c0f0",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f82bf355-6216-4167-9b88-8b42c71cedd7",
+              "leftValue": "={{ $json.Atualizado }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "577b30b5-8798-4064-b6d4-fe9af8c7907a",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1424,
+        512
+      ],
+      "id": "6e9196b9-f323-4b46-b8ad-d5237e6a82d4",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        384
+      ],
+      "id": "4e96d0b5-8bef-4d5d-a19e-0d12d5868549",
+      "name": "Get a row1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "Concluido"
+            },
+            {
+              "fieldId": "Resposta",
+              "fieldValue": "Não está no chat"
+            },
+            {
+              "fieldId": "Atualizado",
+              "fieldValue": "false"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        368
+      ],
+      "id": "61cb5ae4-19fd-4e19-9ddb-2802860b9111",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        176
+      ],
+      "id": "98777a2b-83e4-49ae-8f76-033395948331",
+      "name": "Get a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "Concluido"
+            },
+            {
+              "fieldId": "Resposta",
+              "fieldValue": "Sem conversa ativa"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "28ce53cc-2cb5-4ffb-adbc-7fd25582d34a",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "Concluido"
+            },
+            {
+              "fieldId": "Resposta",
+              "fieldValue": "Presente no chat"
+            },
+            {
+              "fieldId": "Atualizado",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "NumeroCorreto",
+              "fieldValue": "={{ $json.payload[0].meta.sender.phone_number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        160
+      ],
+      "id": "06c4346b-779a-47e0-9a85-fd0ea6d8dcc1",
+      "name": "Update a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "keyValue": "Concluido"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1568,
+        896
+      ],
+      "id": "ee9cd3e5-c020-4c23-8531-333de5719125",
+      "name": "Get a row3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Novos Leads').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "Cadastrado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        800
+      ],
+      "id": "19cac0fb-1263-49a3-a6b0-ae31ea140870",
+      "name": "Update a row3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Dados Roster",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Atualizar Leads').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "Cadastrado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        1024
+      ],
+      "id": "49faae1b-9535-49c0-90da-2f0d8f25ead3",
+      "name": "Update a row4",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dc64c4ae-4db0-4b32-acdf-0be354d342bd",
+              "leftValue": "={{ $json.payload[0].status }}",
+              "rightValue": "open",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        176
+      ],
+      "id": "8f35fd79-f2e4-497d-8c68-ab7de80656b1",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload.id }}/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        592,
+        176
+      ],
+      "id": "d26a1731-9737-4dc3-a234-a00ab59b0296",
+      "name": "Busca a conversa5",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Busca o contato no chat": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Busca o contato no chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa2": {
+      "main": [
+        [
+          {
+            "node": "Adiciona os dados1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a row2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona os dados1": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Busca a conversa2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get a row3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update a row4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Update a row3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data1": {
+      "main": [
+        [
+          {
+            "node": "GetLeads1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetLeads1": {
+      "main": [
+        [
+          {
+            "node": "Novos Leads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Atualizar Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Novos Leads": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar Leads": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row2": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row1": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row2": {
+      "main": [
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row3": {
+      "main": [
+        [
+          {
+            "node": "Execution Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Update a row2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa5": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "a53ad7d3-1967-4f3c-8bc1-f3965a595d77",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2026-02-13T18:45:41.085Z",
+      "createdAt": "2026-02-13T18:45:41.085Z",
+      "role": "workflow:owner",
+      "workflowId": "xcb8dnVOHV3Vc9Zo",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-20T17:07:32.000Z",
+    "createdAt": "2026-03-16T18:17:13.276Z",
+    "versionId": "a53ad7d3-1967-4f3c-8bc1-f3965a595d77",
+    "workflowId": "xcb8dnVOHV3Vc9Zo",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/search",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "q",
+                "value": "={{ $json.telefoneProcessado }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -464,
+          528
+        ],
+        "id": "9f89645b-93ab-45db-8c01-eccf5015d3c5",
+        "name": "Busca o contato no chat",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 2
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -1648,
+          512
+        ],
+        "id": "023820bf-6eee-405c-a322-0d0f267dc47d",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -736,
+          512
+        ],
+        "id": "0ed939d3-76e0-4fe3-9e86-3a7770612edf",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me",
+        "typeVersion": 1,
+        "position": [
+          320,
+          528
+        ],
+        "id": "107bc19c-7864-4d25-b4e6-b9798bc8f870"
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          48,
+          528
+        ],
+        "id": "f0ca5c5e-6c5c-4101-a217-d02d5aee3826",
+        "name": "Wait3",
+        "webhookId": "ecfeaed7-4f51-44a6-b288-a0aadcb4c7b9",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "46b3b5af-8a79-40ed-bb8d-8c1214c4ec4d",
+                "leftValue": "={{ $json.meta.count }}",
+                "rightValue": "=0",
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -736,
+          368
+        ],
+        "id": "7f3c6605-7598-42b0-a950-6a22baa03bfa",
+        "name": "If5"
+      },
+      {
+        "parameters": {
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}/conversations",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          128,
+          192
+        ],
+        "id": "5a12fc75-6790-452d-bf92-f69d08370708",
+        "name": "Busca a conversa2",
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].meta.sender.id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"custom_attributes\": {\n    \"cnpj\": \"{{ $('Loop Over Items').item.json.CNPJ }}\",\n    \"nome_cliente\": \"{{ $('Loop Over Items').item.json.Razao }}\"\n  }\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          368,
+          176
+        ],
+        "id": "c9493508-993d-4582-933d-6aa9bd67d3d0",
+        "name": "Adiciona os dados1",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -448,
+          176
+        ],
+        "id": "0e2df080-f8dc-4942-879f-f49f56e239a3",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me1",
+        "typeVersion": 1,
+        "position": [
+          1392,
+          272
+        ],
+        "id": "cefd78e3-9460-47cd-b22b-73010bc435f5"
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1376,
+          0
+        ],
+        "id": "052381ed-4e29-4f21-9d39-e071a22ae670",
+        "name": "Wait4",
+        "webhookId": "ecfeaed7-4f51-44a6-b288-a0aadcb4c7b9",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f3ed8b0d-0a86-4d58-9adc-77323ce75821",
+                "name": "Razao",
+                "value": "={{ $('Loop Over Items').item.json.Razao }}",
+                "type": "string"
+              },
+              {
+                "id": "6a2ac446-002b-4e1e-bc82-c6eb71a72e48",
+                "name": "CNPJ",
+                "value": "={{ $('Loop Over Items').item.json.CNPJ }}",
+                "type": "number"
+              },
+              {
+                "id": "8a3070c2-8069-400f-99d9-54d6cc3ed668",
+                "name": "Status",
+                "value": "={{ $('Loop Over Items').item.json.Status }}",
+                "type": "string"
+              },
+              {
+                "id": "85457154-c5b1-4aab-8e29-9fc5598a16b1",
+                "name": "Telefone",
+                "value": "={{ $('Loop Over Items').item.json.Telefone }}",
+                "type": "number"
+              },
+              {
+                "id": "c74eaa28-81f1-4548-8647-755d32200641",
+                "name": "Tipo",
+                "value": "={{ $('Loop Over Items').item.json.Tipo }}",
+                "type": "string"
+              },
+              {
+                "id": "a4ae6f14-1a1e-4b00-b35b-89f5386e12bf",
+                "name": "Resposta",
+                "value": "={{ $('Loop Over Items').item.json.Resposta }}",
+                "type": "string"
+              },
+              {
+                "id": "7be04bbd-d81a-4314-9a70-0d713b439bdd",
+                "name": "id",
+                "value": "={{ $('Loop Over Items').item.json.id }}",
+                "type": "number"
+              },
+              {
+                "id": "084abb81-f786-4d19-82f0-5edecebcb83c",
+                "name": "createdAt",
+                "value": "={{ $('Loop Over Items').item.json.createdAt }}",
+                "type": "string"
+              },
+              {
+                "id": "f7bf779a-aa0d-4475-a090-1d50f8bf30cb",
+                "name": "updatedAt",
+                "value": "={{ $('Loop Over Items').item.json.updatedAt }}",
+                "type": "string"
+              },
+              {
+                "id": "d4bac8e4-babb-4716-bbef-7ff0c123e213",
+                "name": "telefoneProcessado",
+                "value": "={{ $('Loop Over Items').item.json.telefoneProcessado }}",
+                "type": "string"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -224,
+          528
+        ],
+        "id": "1ce2bada-00e3-4991-bc1f-b83d9d565c03",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 1
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -1760,
+          896
+        ],
+        "id": "6a28a330-71fa-41d6-94c9-f272b1ed8487",
+        "name": "Schedule Trigger1"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $json.row_number }}",
+              "CHATWOOT": "={{ $json.NumeroCorreto !== null ? \"sim\" : \"não\" }}",
+              "Atualizado": "={{$now.setZone('America/Sao_Paulo').toFormat('dd-MM-yyyy')}}",
+              "Demanda": "Pendente",
+              "Hora": "={{$now.setZone('America/Sao_Paulo').toFormat('HH:mm:ss')}}"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": [
+              {
+                "id": "Razão",
+                "displayName": "Razão",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Viabilidade",
+                "displayName": "Viabilidade",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Telefone",
+                "displayName": "Telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ",
+                "displayName": "CNPJ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "STATUS",
+                "displayName": "STATUS",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CHATWOOT",
+                "displayName": "CHATWOOT",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "HORA",
+                "displayName": "HORA",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Operadores",
+                "displayName": "Operadores",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atribuição",
+                "displayName": "Atribuição",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ROW_ID",
+                "displayName": "ROW_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Start",
+                "displayName": "Start",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Criado",
+                "displayName": "Criado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atualizado",
+                "displayName": "Atualizado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Hora",
+                "displayName": "Hora",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Qual BM?",
+                "displayName": "Qual BM?",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ associado",
+                "displayName": "CNPJ associado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Razão associada",
+                "displayName": "Razão associada",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ A",
+                "displayName": "CNPJ A",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Demanda",
+                "displayName": "Demanda",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Id da conversa",
+                "displayName": "Id da conversa",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 1",
+                "displayName": "Coluna 1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 2",
+                "displayName": "Coluna 2",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -752,
+          1024
+        ],
+        "id": "8f036686-9398-4391-b898-2972faa91777",
+        "name": "Update row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Razão": "={{ $json.Razao }}",
+              "Telefone": "={{ $json.Telefone }}",
+              "CNPJ": "={{ $json.CNPJ }}",
+              "CHATWOOT": "={{ $json.NumeroCorreto !== null ? \"sim\" : \"não\" }}",
+              "HORA": "={{$now.format('dd-mm-yyyy HH:MM:ss')}}",
+              "Atualizado": "={{$now.setZone('America/Sao_Paulo').toFormat('dd-MM-yyyy')}}",
+              "STATUS": "={{ $json.Tipo }}",
+              "Demanda": "Pendente",
+              "Hora": "={{$now.setZone('America/Sao_Paulo').toFormat('HH:mm:ss')}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Razão",
+                "displayName": "Razão",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Viabilidade",
+                "displayName": "Viabilidade",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Telefone",
+                "displayName": "Telefone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "CNPJ",
+                "displayName": "CNPJ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "STATUS",
+                "displayName": "STATUS",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "CHATWOOT",
+                "displayName": "CHATWOOT",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "HORA",
+                "displayName": "HORA",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Operadores",
+                "displayName": "Operadores",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atribuição",
+                "displayName": "Atribuição",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ROW_ID",
+                "displayName": "ROW_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Start",
+                "displayName": "Start",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Criado",
+                "displayName": "Criado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Atualizado",
+                "displayName": "Atualizado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Hora",
+                "displayName": "Hora",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Qual BM?",
+                "displayName": "Qual BM?",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ associado",
+                "displayName": "CNPJ associado",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Razão associada",
+                "displayName": "Razão associada",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "CNPJ A",
+                "displayName": "CNPJ A",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Demanda",
+                "displayName": "Demanda",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Id da conversa",
+                "displayName": "Id da conversa",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 1",
+                "displayName": "Coluna 1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Coluna 2",
+                "displayName": "Coluna 2",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -752,
+          800
+        ],
+        "id": "dfb505c2-48a5-43ba-8469-96b4cc4cc222",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "executou",
+                "value": "sim"
+              },
+              {
+                "key": "fluxo",
+                "value": "buscador"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -1216,
+          512
+        ],
+        "id": "536adb32-0664-473b-b45f-adf150d26791",
+        "name": "Execution Data"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "executou",
+                "value": "sim"
+              },
+              {
+                "key": "fluxo",
+                "value": "escritor"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          -1392,
+          896
+        ],
+        "id": "df42a3fe-052e-4afc-8743-86b88f9cbfb3",
+        "name": "Execution Data1"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?gid=0#gid=0",
+            "mode": "url"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -1200,
+          896
+        ],
+        "id": "87b14091-b03d-4fff-b7a4-3769f003b83b",
+        "name": "GetLeads1",
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const novosLeads = $(\"Get a row3\").all();\nconst leadsPlanilha = $(\"GetLeads1\").all();\n\n// Criamos um Set com todos os CNPJs que já existem na planilha\nconst cnpjsExistentes = new Set(\n  leadsPlanilha\n    .map(item => String(item.json.CNPJ || \"\").trim())\n    .filter(cnpj => cnpj !== \"\")\n);\n\n// Filtramos apenas quem NÃO está no Set de existentes\nreturn novosLeads.filter(item => {\n  const cnpj = String(item.json.CNPJ || \"\").trim();\n  return !cnpjsExistentes.has(cnpj);\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -992,
+          800
+        ],
+        "id": "e3703f49-bada-4db9-b58b-b78e0a099f98",
+        "name": "Novos Leads"
+      },
+      {
+        "parameters": {
+          "jsCode": "const novosLeads = $(\"Get a row3\").all();\nconst leadsPlanilha = $(\"GetLeads1\").all();\n\n// Criamos um mapa para buscar o row_number pelo CNPJ\nconst mapaPlanilha = {};\nleadsPlanilha.forEach(item => {\n  const cnpj = String(item.json.CNPJ || \"\").trim();\n  if (cnpj !== \"\") {\n    mapaPlanilha[cnpj] = item.json.row_number;\n  }\n});\n\n// Filtramos apenas quem existe e anexamos o row_number\nreturn novosLeads\n  .filter(item => {\n    const cnpj = String(item.json.CNPJ || \"\").trim();\n    return cnpj !== \"\" && mapaPlanilha[cnpj] !== undefined;\n  })\n  .map(item => {\n    const cnpj = String(item.json.CNPJ).trim();\n    return {\n      json: {\n        ...item.json,\n        row_number: mapaPlanilha[cnpj]\n      }\n    };\n  });"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -992,
+          1024
+        ],
+        "id": "09529da5-d29c-4f14-bc52-311b137bef2f",
+        "name": "Atualizar Leads",
+        "executeOnce": false,
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "jsCode": "return items.flatMap((item) => {\n  const raw = String(item.json.Telefone ?? \"\").trim();\n  if (!raw) return [{ json: { ...item.json, telefoneProcessado: \"\" } }];\n\n  // Só dígitos\n  let digits = raw.replace(/\\D/g, \"\");\n\n  // Se vier com 00 internacional (ex: 0055...), remove 00\n  if (digits.startsWith(\"00\")) digits = digits.slice(2);\n\n  // Helpers\n  const uniq = (arr) => [...new Set(arr)].filter((v) => v && String(v).length > 0);\n\n  const variants = [];\n\n  // Detecta se tem 55\n  const has55 = digits.startsWith(\"55\");\n\n  // Função que gera combinações de prefixo (+ / sem +) e (55 / sem 55)\n  function addPrefixCombos(fullNoPlus) {\n    // fullNoPlus é \"55...\" ou \"DDD...\" ou \"NUM...\"\n    const noPlus = String(fullNoPlus);\n\n    // com/sem +\n    variants.push(noPlus);\n    variants.push(\"+\" + noPlus);\n\n    // se começar com 55, também gera sem 55\n    if (noPlus.startsWith(\"55\")) {\n      const no55 = noPlus.slice(2);\n      variants.push(no55);\n      variants.push(\"+\" + no55);\n    }\n\n    // se não começar com 55, também gera com 55 (quando fizer sentido)\n    // (só tenta se parecer BR: tamanho 10/11 (DDD+num) ou 8/9 (num))\n    const d = noPlus.replace(/\\D/g, \"\");\n    if (!d.startsWith(\"55\")) {\n      if (d.length === 10 || d.length === 11 || d.length === 8 || d.length === 9) {\n        variants.push(\"55\" + d);\n        variants.push(\"+55\" + d);\n      }\n    }\n  }\n\n  // Função que gera com/sem DDD, com/sem 9 (quando aplicável)\n  function addDddAnd9Combos(pais, ddd, num) {\n    const base = `${pais}${ddd}${num}`;\n    addPrefixCombos(base);\n\n    // variações sem DDD\n    addPrefixCombos(num);\n\n    // variações só com DDD+num (sem 55)\n    addPrefixCombos(`${ddd}${num}`);\n\n    // Agora tenta variações com/sem 9 quando num for 8/9 dígitos (BR)\n    // Regra prática:\n    // - Celular local: 9 dígitos (começa com 9)\n    // - Fixo local: 8 dígitos (não começa com 9 normalmente)\n    // Se vier 8 dígitos, gera versão com 9 + num\n    // Se vier 9 dígitos começando com 9, gera sem o 9 (8 dígitos)\n    const onlyNum = String(num);\n\n    const numCom9 = onlyNum.length === 9\n      ? onlyNum\n      : (\"9\" + onlyNum);\n\n    const numSem9 = (onlyNum.length === 9 && onlyNum.startsWith(\"9\"))\n      ? onlyNum.slice(1)\n      : (onlyNum.length === 8 ? onlyNum : onlyNum); // se já não dá pra tirar, mantém\n\n    // Só aplica quando fizer sentido (8 ou 9 dígitos)\n    if (onlyNum.length === 8 || (onlyNum.length === 9 && onlyNum.startsWith(\"9\"))) {\n      // com 9\n      addPrefixCombos(`${pais}${ddd}${numCom9}`);\n      addPrefixCombos(`${ddd}${numCom9}`);\n      addPrefixCombos(`${numCom9}`);\n\n      // sem 9\n      addPrefixCombos(`${pais}${ddd}${numSem9}`);\n      addPrefixCombos(`${ddd}${numSem9}`);\n      addPrefixCombos(`${numSem9}`);\n    }\n  }\n\n  // --- Tentativa de interpretar como BR ---\n  // Casos comuns:\n  // - 55 + DDD(2) + num(8/9)  => 12/13 dígitos\n  // - DDD(2) + num(8/9)       => 10/11 dígitos\n  // - num(8/9)                => 8/9 dígitos\n\n  // Se tiver 55, remove pra analisar tamanho\n  const digitsNo55 = has55 ? digits.slice(2) : digits;\n\n  // 55 + DDD + NUM\n  if (has55 && (digits.length === 12 || digits.length === 13)) {\n    const pais = \"55\";\n    const ddd = digits.slice(2, 4);\n    const num = digits.slice(4);\n    addDddAnd9Combos(pais, ddd, num);\n\n  // DDD + NUM (sem 55)\n  } else if (!has55 && (digits.length === 10 || digits.length === 11)) {\n    const pais = \"55\";\n    const ddd = digits.slice(0, 2);\n    const num = digits.slice(2);\n    addDddAnd9Combos(pais, ddd, num);\n\n  // Só NUM (sem DDD)\n  } else if (digits.length === 8 || digits.length === 9) {\n    // Não dá pra cravar DDD. Gera com/sem +, com/sem 55, e com/sem 9 se aplicável.\n    addPrefixCombos(digits);\n\n    if (digits.length === 8) {\n      addPrefixCombos(\"9\" + digits); // com 9\n    } else if (digits.length === 9 && digits.startsWith(\"9\")) {\n      addPrefixCombos(digits.slice(1)); // sem 9\n    }\n\n  // Qualquer outro formato: devolve o que der\n  } else {\n    // Ainda assim gera com/sem +\n    variants.push(digits);\n    variants.push(\"+\" + digits);\n\n    // e se não tiver 55 mas parecer que pode ser BR (ex: 12/13 com 55 faltando)\n    // (aqui não invento muito — só adiciono 55 na frente)\n    if (!digits.startsWith(\"55\")) {\n      variants.push(\"55\" + digits);\n      variants.push(\"+55\" + digits);\n    }\n  }\n\n  const uniqueVariations = uniq(variants);\n\n  return uniqueVariations.map((tel) => ({\n    json: { ...item.json, telefoneProcessado: tel },\n  }));\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -992,
+          512
+        ],
+        "id": "830948da-d882-49f3-8bff-58ec247e3d62",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "f82bf355-6216-4167-9b88-8b42c71cedd7",
+                "leftValue": "={{ $json.Atualizado }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -336,
+          384
+        ],
+        "id": "df735108-532b-447e-83b3-33acf376c0f0",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "f82bf355-6216-4167-9b88-8b42c71cedd7",
+                "leftValue": "={{ $json.Atualizado }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -192,
+          16
+        ],
+        "id": "577b30b5-8798-4064-b6d4-fe9af8c7907a",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Status",
+                "keyValue": "Pendente"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -1424,
+          512
+        ],
+        "id": "6e9196b9-f323-4b46-b8ad-d5237e6a82d4",
+        "name": "Get a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -528,
+          384
+        ],
+        "id": "4e96d0b5-8bef-4d5d-a19e-0d12d5868549",
+        "name": "Get a row1",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Status",
+                "fieldValue": "Concluido"
+              },
+              {
+                "fieldId": "Resposta",
+                "fieldValue": "Não está no chat"
+              },
+              {
+                "fieldId": "Atualizado",
+                "fieldValue": "false"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -96,
+          368
+        ],
+        "id": "61cb5ae4-19fd-4e19-9ddb-2802860b9111",
+        "name": "Update a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -192,
+          176
+        ],
+        "id": "98777a2b-83e4-49ae-8f76-033395948331",
+        "name": "Get a row2",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Status",
+                "fieldValue": "Concluido"
+              },
+              {
+                "fieldId": "Resposta",
+                "fieldValue": "Sem conversa ativa"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          16,
+          0
+        ],
+        "id": "28ce53cc-2cb5-4ffb-adbc-7fd25582d34a",
+        "name": "Update a row1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('Loop Over Items1').item.json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Status",
+                "fieldValue": "Concluido"
+              },
+              {
+                "fieldId": "Resposta",
+                "fieldValue": "Presente no chat"
+              },
+              {
+                "fieldId": "Atualizado",
+                "fieldValue": "true"
+              },
+              {
+                "fieldId": "NumeroCorreto",
+                "fieldValue": "={{ $json.payload[0].meta.sender.phone_number }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1104,
+          160
+        ],
+        "id": "06c4346b-779a-47e0-9a85-fd0ea6d8dcc1",
+        "name": "Update a row2",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Status",
+                "keyValue": "Concluido"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -1568,
+          896
+        ],
+        "id": "ee9cd3e5-c020-4c23-8531-333de5719125",
+        "name": "Get a row3",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('Novos Leads').item.json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Status",
+                "fieldValue": "Cadastrado"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -512,
+          800
+        ],
+        "id": "19cac0fb-1263-49a3-a6b0-ae31ea140870",
+        "name": "Update a row3",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "Dados Roster",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $('Atualizar Leads').item.json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "Status",
+                "fieldValue": "Cadastrado"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -512,
+          1024
+        ],
+        "id": "49faae1b-9535-49c0-90da-2f0d8f25ead3",
+        "name": "Update a row4",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "dc64c4ae-4db0-4b32-acdf-0be354d342bd",
+                "leftValue": "={{ $json.payload[0].status }}",
+                "rightValue": "open",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          832,
+          176
+        ],
+        "id": "8f35fd79-f2e4-497d-8c68-ab7de80656b1",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload.id }}/conversations",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          592,
+          176
+        ],
+        "id": "d26a1731-9737-4dc3-a234-a00ab59b0296",
+        "name": "Busca a conversa5",
+        "onError": "continueRegularOutput"
+      }
+    ],
+    "connections": {
+      "Busca o contato no chat": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "If5",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Busca o contato no chat",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait3": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If5": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get a row1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Busca a conversa2": {
+        "main": [
+          [
+            {
+              "node": "Adiciona os dados1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get a row2",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adiciona os dados1": {
+        "main": [
+          [
+            {
+              "node": "Busca a conversa5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Busca a conversa2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait4": {
+        "main": [
+          [
+            {
+              "node": "Replace Me1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Wait3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger1": {
+        "main": [
+          [
+            {
+              "node": "Get a row3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Update a row4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Update a row3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data1": {
+        "main": [
+          [
+            {
+              "node": "GetLeads1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetLeads1": {
+        "main": [
+          [
+            {
+              "node": "Novos Leads",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Atualizar Leads",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Novos Leads": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Atualizar Leads": {
+        "main": [
+          [
+            {
+              "node": "Update row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Update a row1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row1": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row2": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a row1": {
+        "main": [
+          [
+            {
+              "node": "Wait4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a row2": {
+        "main": [
+          [
+            {
+              "node": "Wait4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row3": {
+        "main": [
+          [
+            {
+              "node": "Execution Data1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Update a row2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update a row1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Busca a conversa5": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version a53ad7d3",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
