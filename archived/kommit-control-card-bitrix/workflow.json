@@ -1,0 +1,30 @@
+{
+  "id": "LGpbjgAZDeAdA6hG",
+  "name": "Kommit - Control Card Bitrix",
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-09T01:22:20.038Z",
+      "createdAt": "2026-03-09T01:22:20.038Z",
+      "role": "workflow:owner",
+      "workflowId": "LGpbjgAZDeAdA6hG",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
