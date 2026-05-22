@@ -1,0 +1,496 @@
+{
+  "id": "ECAwavtnIy9QiHRf",
+  "name": "W.01.Interface",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Painel de Automação Avançado</title>\n    \n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css\" />\n    <script src=\"https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js\"></script>\n\n    <style>\n        /* Reset e Base Carbon Dark */\n        * { box-sizing: border-box; margin: 0; padding: 0; }\n        \n        body {\n            background-color: #161616;\n            color: #f4f4f4;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            padding: 20px;\n        }\n\n        .card {\n            background-color: #262626;\n            width: 100%;\n            max-width: 550px;\n            padding: 32px;\n            border-radius: 4px;\n            border-top: 3px solid #f1c21b;\n            box-shadow: 0 10px 30px rgba(0,0,0,0.5);\n            position: relative; \n        }\n\n        h2 { font-size: 1.1rem; margin-bottom: 24px; color: #ffffff; font-weight: 600; letter-spacing: 0.5px; }\n        .form-group { margin-bottom: 18px; }\n        label { display: block; font-size: 11px; color: #b0b0b0; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500; }\n\n        input[type=\"date\"] {\n            width: 100%;\n            background-color: #393939;\n            color: #ffffff;\n            border: 1px solid transparent;\n            padding: 8px 12px; \n            height: 38px; \n            border-radius: 4px;\n            font-size: 13px;\n            outline: none;\n            transition: border-color 0.2s;\n        }\n        input[type=\"date\"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; opacity: 0.6; }\n        input[type=\"date\"]:focus { border-color: #f1c21b; }\n\n        .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px; }\n\n        /* Choices.js Customização */\n        .choices__inner { background-color: #393939 !important; border: 1px solid transparent !important; border-radius: 4px !important; min-height: 38px !important; padding: 4px 8px !important; display: flex; align-items: center; }\n        .choices.is-focused .choices__inner { border-color: #f1c21b !important; }\n        .choices__input { background-color: transparent !important; color: #fff !important; font-size: 13px !important; margin-bottom: 0 !important; }\n        .choices__input::placeholder { color: #888 !important; }\n        \n        .choices__list--dropdown { background-color: #262626 !important; border: 1px solid #474747 !important; color: #fff !important; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-size: 13px !important; z-index: 10 !important; }\n        .choices__list--dropdown .choices__item--selectable.is-highlighted { background-color: #393939 !important; }\n        .choices__list--dropdown .choices__item[data-value=\"todas\"] { background-color: #f1c21b !important; color: #161616 !important; font-weight: 700 !important; }\n        .choices__list--dropdown .choices__item[data-value=\"todas\"].is-highlighted { background-color: #e5b300 !important; }\n        \n        .choices__list--multiple .choices__item { background-color: #f1c21b !important; border: none !important; color: #161616 !important; border-radius: 3px !important; font-weight: 500 !important; font-size: 11px !important; padding: 3px 6px !important; margin: 2px 4px 2px 0 !important; display: inline-flex; align-items: center; }\n        .choices__button { border-left: 1px solid rgba(0,0,0,0.2) !important; margin: 0 0 0 6px !important; padding: 0 0 0 6px !important; background-size: 8px !important; width: 12px !important; opacity: 0.7; background-image: url(\"data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2221%22%20height%3D%2221%22%3E%3Cpath%20fill%3D%22%23161616%22%20d%3D%22M21%202.105L18.895%200%2010.5%208.395%202.105%200%200%202.105%208.395%2010.5%200%2018.895%202.105%2021%2010.5%2012.605%2018.895%2021%2021%2018.895%2012.605%2010.5z%22%2F%3E%3C%2Fsvg%3E\") !important; }\n        .choices__button:hover { opacity: 1; }\n\n        button { width: 100%; background-color: #f1c21b; color: #161616; border: none; padding: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; margin-top: 10px; letter-spacing: 0.5px; transition: background-color 0.2s, transform 0.1s; }\n        button:hover { background-color: #e5b300; }\n        button:active { transform: scale(0.98); }\n\n        /* --- MODAIS E TELA DE LOADING --- */\n        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }\n        .modal-overlay.show { opacity: 1; visibility: visible; }\n        .modal-box { background-color: #262626; padding: 28px 32px; border-radius: 6px; border-top: 4px solid #f1c21b; box-shadow: 0 15px 40px rgba(0,0,0,0.8); width: 90%; max-width: 380px; text-align: center; transform: translateY(-20px); transition: transform 0.3s ease; }\n        .modal-overlay.show .modal-box { transform: translateY(0); }\n        .modal-box h3 { color: #f1c21b; margin-bottom: 12px; font-size: 1.2rem; font-weight: 600; }\n        .modal-box p { color: #e0e0e0; font-size: 14px; margin-bottom: 24px; line-height: 1.5; }\n        .modal-box button { width: auto; min-width: 140px; margin-top: 0; }\n\n        .spinner {\n            width: 50px;\n            height: 50px;\n            border: 4px solid rgba(255, 255, 255, 0.1);\n            border-left-color: #f1c21b;\n            border-radius: 50%;\n            animation: spin 1s linear infinite;\n            margin: 0 auto 20px auto;\n        }\n        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n        \n        #modal_loading .modal-box { border-top: none; padding-top: 40px; }\n        #modal_loading h3 { color: #ffffff; }\n        #modal_loading p { color: #b0b0b0; font-size: 13px; }\n    </style>\n</head>\n<body>\n\n    <div class=\"card\">\n        <h2>Filtros da Automação</h2>\n        \n        <form id=\"meu_formulario\">\n            \n            <div class=\"date-grid\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\">\n                    <label for=\"data_inicio\">Data Início</label>\n                    <input type=\"date\" id=\"data_inicio\" name=\"data_inicio\">\n                </div>\n                <div class=\"form-group\" style=\"margin-bottom: 0;\">\n                    <label for=\"data_fim\">Data Fim</label>\n                    <input type=\"date\" id=\"data_fim\" name=\"data_fim\">\n                </div>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"caixas_entrada\">Caixas de Entrada</label>\n                <select id=\"caixas_entrada\" multiple>\n                    <option value=\"todas\" selected>Todas as caixas</option>\n                </select>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"etiquetas_busca\">Etiquetas de Busca (Incluir)</label>\n                <select id=\"etiquetas_busca\" multiple>\n                    <option value=\"todas\" selected>Todas as etiquetas</option>\n                </select>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"etiquetas_excluir\">Excluir Etiquetas (Ignorar)</label>\n                <select id=\"etiquetas_excluir\" multiple></select>\n            </div>\n\n            <button type=\"submit\">Iniciar Extração</button>\n\n        </form>\n    </div>\n\n    <div id=\"modal_inicial\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <h3 id=\"modal_inicial_titulo\">Aviso Importante</h3>\n            <p>Bem-vindo! O sistema do Chatwoot envia os leads por paginação.<br><br>Isso significa que buscar todos os registros <strong>pode demorar um pouco</strong>, dependendo da quantidade de conversas e das datas selecionadas.</p>\n            <button type=\"button\" onclick=\"fecharModalInicial()\">ENTENDIDO</button>\n        </div>\n    </div>\n\n    <div id=\"modal_alerta\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <h3 id=\"modal_titulo\">Atenção</h3>\n            <p id=\"modal_mensagem\">Mensagem de erro aqui.</p>\n            <button type=\"button\" onclick=\"fecharAlerta()\">OK, ENTENDI</button>\n        </div>\n    </div>\n\n    <div id=\"modal_loading\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <div class=\"spinner\"></div>\n            <h3>Processando...</h3>\n            <p>Estamos buscando e processando seus leads.<br><br><strong>Por favor, aguarde e não feche esta página.</strong></p>\n        </div>\n    </div>\n\n    <script>\n        const dadosCaixas = {{ JSON.stringify($json.lista_caixas || []) }};\n        const dadosEtiquetas = {{ JSON.stringify($json.lista_etiquetas || []) }};\n        \n        // URL DO SEU WEBHOOK GATILHO (LEMBRE-SE DE CONFIGURAR COMO POST NO N8N!)\n        const URL_WEBHOOK = 'https://n8n.srv991153.hstgr.cloud/webhook/p02/relatorios/chatwoot/backend'; \n\n        // FUNÇÃO PARA FECHAR O AVISO INICIAL\n        function fecharModalInicial() {\n            document.getElementById('modal_inicial').classList.remove('show');\n        }\n\n        function mostrarAlerta(mensagem, titulo = 'Atenção') {\n            document.getElementById('modal_titulo').innerText = titulo;\n            document.getElementById('modal_mensagem').innerText = mensagem;\n            document.getElementById('modal_alerta').classList.add('show');\n        }\n\n        function fecharAlerta() {\n            document.getElementById('modal_alerta').classList.remove('show');\n        }\n\n        function popularSelect(idDoSelect, listaDeDados, usarNomeComoValor = false) {\n            const selectElement = document.getElementById(idDoSelect);\n            listaDeDados.forEach(item => {\n                const option = document.createElement('option');\n                option.value = usarNomeComoValor ? item.name : item.id;\n                option.textContent = item.name;\n                selectElement.appendChild(option);\n            });\n        }\n\n        document.addEventListener('DOMContentLoaded', function() {\n            \n            // Abre o aviso inicial assim que a tela carrega (com um delay sutil para a animação rodar)\n            setTimeout(() => {\n                document.getElementById('modal_inicial').classList.add('show');\n            }, 150);\n\n            popularSelect('caixas_entrada', dadosCaixas, false); // Envia ID\n            popularSelect('etiquetas_busca', dadosEtiquetas, true); // Envia Nome\n            popularSelect('etiquetas_excluir', dadosEtiquetas, true); // Envia Nome\n\n            const config = {\n                removeItemButton: true,\n                searchPlaceholderValue: 'Pesquisar...',\n                noResultsText: 'Nenhum resultado encontrado',\n                noChoicesText: 'Não há mais opções',\n                itemSelectText: 'Clique para selecionar',\n                shouldSort: false \n            };\n\n            new Choices('#caixas_entrada', config);\n            new Choices('#etiquetas_busca', config);\n            new Choices('#etiquetas_excluir', config);\n\n            const form = document.getElementById('meu_formulario');\n            const dataInicio = document.getElementById('data_inicio');\n            const dataFim = document.getElementById('data_fim');\n            const caixasEntrada = document.getElementById('caixas_entrada');\n            const etiquetasBusca = document.getElementById('etiquetas_busca');\n            const etiquetasExcluir = document.getElementById('etiquetas_excluir');\n\n            form.addEventListener('submit', async function(event) {\n                // Impede o redirecionamento nativo da tela branca\n                event.preventDefault();\n                \n                if (!dataInicio.value) return mostrarAlerta('Você precisa selecionar a Data de Início.', 'Data Incompleta');\n                if (!dataFim.value) return mostrarAlerta('Você precisa selecionar a Data de Fim.', 'Data Incompleta');\n                if (dataInicio.value > dataFim.value) return mostrarAlerta('A Data de Fim não pode ser anterior à Data de Início. Por favor, ajuste o período.', 'Período Inválido');\n                if (caixasEntrada.selectedOptions.length === 0) return mostrarAlerta('Selecione pelo menos uma Caixa de Entrada para continuar.', 'Caixa Vazia');\n                if (etiquetasBusca.selectedOptions.length === 0) return mostrarAlerta('Selecione pelo menos uma opção em \"Etiquetas de Busca (Incluir)\".', 'Etiqueta Vazia');\n\n                // LÓGICA DE PREPARAÇÃO DOS ARRAYS PERFEITOS\n                const escolhasCaixas = Array.from(caixasEntrada.selectedOptions).map(opt => opt.value);\n                const escolhasEtiquetas = Array.from(etiquetasBusca.selectedOptions).map(opt => opt.value);\n                const escolhasExcluir = Array.from(etiquetasExcluir.selectedOptions).map(opt => opt.value);\n                \n                let isTodasCaixas = false;\n                let arrayFinalCaixas = [];\n                if (escolhasCaixas.includes('todas')) {\n                    isTodasCaixas = true;\n                    arrayFinalCaixas = dadosCaixas.map(item => item.id);\n                } else {\n                    arrayFinalCaixas = escolhasCaixas;\n                }\n\n                let isTodasEtiquetas = false;\n                let arrayFinalEtiquetas = [];\n                if (escolhasEtiquetas.includes('todas')) {\n                    isTodasEtiquetas = true;\n                    arrayFinalEtiquetas = dadosEtiquetas.map(item => item.name);\n                } else {\n                    arrayFinalEtiquetas = escolhasEtiquetas;\n                }\n\n                // Cria o Payload JSON 100% estruturado\n                const payloadJSON = {\n                    data_inicio: dataInicio.value,\n                    data_fim: dataFim.value,\n                    caixas_entrada: arrayFinalCaixas,\n                    etiquetas_busca: arrayFinalEtiquetas,\n                    etiquetas_excluir: escolhasExcluir,\n                    is_todas_caixas_selecionado: isTodasCaixas,\n                    is_todas_etiquetas_selecionado: isTodasEtiquetas\n                };\n\n                // MOSTRA A TELA DE LOADING NA CARA DO CLIENTE\n                document.getElementById('modal_loading').classList.add('show');\n\n                try {\n                    // Manda tudo invisivelmente para o n8n usando POST com application/json\n                    const resposta = await fetch(URL_WEBHOOK, {\n                        method: 'POST',\n                        headers: {\n                            'Content-Type': 'application/json'\n                        },\n                        body: JSON.stringify(payloadJSON)\n                    });\n\n                    if (!resposta.ok) throw new Error('Servidor retornou erro: ' + resposta.status);\n\n                    // Espera o arquivo ser devolvido pelo Respond to Webhook\n                    const arquivoBlob = await resposta.blob();\n\n                    // TRUQUE PARA FORÇAR O DOWNLOAD INVISÍVEL NO NAVEGADOR\n                    const urlDownload = window.URL.createObjectURL(arquivoBlob);\n                    const linkDownload = document.createElement('a');\n                    linkDownload.style.display = 'none';\n                    linkDownload.href = urlDownload;\n                    linkDownload.download = 'extracao_leads_chatwoot.xls'; \n                    \n                    document.body.appendChild(linkDownload);\n                    linkDownload.click();\n                    \n                    window.URL.revokeObjectURL(urlDownload);\n                    document.body.removeChild(linkDownload);\n\n                    document.getElementById('modal_loading').classList.remove('show');\n                    mostrarAlerta('O processamento terminou e o download do arquivo foi iniciado!', 'Sucesso!');\n\n                } catch (erro) {\n                    console.error(erro);\n                    document.getElementById('modal_loading').classList.remove('show');\n                    mostrarAlerta('Parece que o processamento falhou ou o n8n demorou demais para responder. Tente selecionar um período menor.', 'Erro de Conexão');\n                }\n            });\n        });\n    </script>\n\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        528
+      ],
+      "id": "5b33ae1a-b15a-45ca-893e-6c92b73e3fba",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "path": "p02/relatorios/chatwoot/interface",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        544
+      ],
+      "id": "8cd503dc-5e95-4455-b605-93c2cb0f3d18",
+      "name": "Webhook2"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1440,
+        528
+      ],
+      "id": "a70bac8d-64ef-45cf-b4f1-be7d534a321d",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Acesso direto e rápido ao primeiro item\nconst payload = $input.first().json.payload || [];\nconst total = payload.length;\n\n// 2. Pré-alocação do array (evita que o JS tenha que redimensionar o array na memória várias vezes)\nconst caixasFiltradas = new Array(total);\n\n// 3. Loop 'for' clássico: é o método mais veloz no motor V8 (Node.js)\nfor (let i = 0; i < total; i++) {\n  const caixa = payload[i];\n  caixasFiltradas[i] = {\n    id: caixa.id,\n    name: caixa.name\n  };\n}\n\n// 4. Retorno mantendo a estrutura original\nreturn {\n  lista_caixas: caixasFiltradas\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        544
+      ],
+      "id": "7572a4f9-0112-4b9e-84c8-f42c977dfeed",
+      "name": "Filter - Inbox"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os dados do nó anterior\nconst dadosEntrada = $input.all()[0].json;\nconst listaEtiquetas = dadosEntrada.payload;\n\n// Filtra apenas o ID e o Nome (que nessa rota se chama 'title')\nconst etiquetasFiltradas = listaEtiquetas.map(etiqueta => {\n  return {\n    id: etiqueta.id,\n    name: etiqueta.title // Já renomeei para 'name' para ficar padronizado no seu fluxo\n  };\n});\n\n// Retorna um único objeto, mantendo a lista agregada dentro da propriedade \"lista_etiquetas\"\nreturn {\n  lista_etiquetas: etiquetasFiltradas\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        368
+      ],
+      "id": "8e71ba82-55d1-4226-815d-6cd4b47c48c2",
+      "name": "Filter - Labels"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1040,
+        528
+      ],
+      "id": "11be36b8-8905-4938-b62e-5996adf602d9",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/inboxes",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        384,
+        544
+      ],
+      "id": "3744df35-4fbf-4bcc-a032-2eb4d56eac32",
+      "name": "Chatwoot - Get Inbox",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        496,
+        368
+      ],
+      "id": "843ae890-e204-4e90-80dc-141c3fe2da13",
+      "name": "Chatwoot - Get Labels",
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter - Inbox": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter - Labels": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Inbox": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Labels",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter - Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Labels": {
+      "main": [
+        [
+          {
+            "node": "Filter - Labels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Ko33aHk6TjFU7YMa",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "f1c71ae5-240c-44df-86d4-ff08afa0e765",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-04-23T00:12:14.427Z",
+      "createdAt": "2026-04-23T00:12:14.427Z",
+      "role": "workflow:owner",
+      "workflowId": "ECAwavtnIy9QiHRf",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-23T14:45:03.000Z",
+    "createdAt": "2026-04-23T14:45:00.689Z",
+    "versionId": "f1c71ae5-240c-44df-86d4-ff08afa0e765",
+    "workflowId": "ECAwavtnIy9QiHRf",
+    "nodes": [
+      {
+        "parameters": {
+          "html": "<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Painel de Automação Avançado</title>\n    \n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css\" />\n    <script src=\"https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js\"></script>\n\n    <style>\n        /* Reset e Base Carbon Dark */\n        * { box-sizing: border-box; margin: 0; padding: 0; }\n        \n        body {\n            background-color: #161616;\n            color: #f4f4f4;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            padding: 20px;\n        }\n\n        .card {\n            background-color: #262626;\n            width: 100%;\n            max-width: 550px;\n            padding: 32px;\n            border-radius: 4px;\n            border-top: 3px solid #f1c21b;\n            box-shadow: 0 10px 30px rgba(0,0,0,0.5);\n            position: relative; \n        }\n\n        h2 { font-size: 1.1rem; margin-bottom: 24px; color: #ffffff; font-weight: 600; letter-spacing: 0.5px; }\n        .form-group { margin-bottom: 18px; }\n        label { display: block; font-size: 11px; color: #b0b0b0; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500; }\n\n        input[type=\"date\"] {\n            width: 100%;\n            background-color: #393939;\n            color: #ffffff;\n            border: 1px solid transparent;\n            padding: 8px 12px; \n            height: 38px; \n            border-radius: 4px;\n            font-size: 13px;\n            outline: none;\n            transition: border-color 0.2s;\n        }\n        input[type=\"date\"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; opacity: 0.6; }\n        input[type=\"date\"]:focus { border-color: #f1c21b; }\n\n        .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px; }\n\n        /* Choices.js Customização */\n        .choices__inner { background-color: #393939 !important; border: 1px solid transparent !important; border-radius: 4px !important; min-height: 38px !important; padding: 4px 8px !important; display: flex; align-items: center; }\n        .choices.is-focused .choices__inner { border-color: #f1c21b !important; }\n        .choices__input { background-color: transparent !important; color: #fff !important; font-size: 13px !important; margin-bottom: 0 !important; }\n        .choices__input::placeholder { color: #888 !important; }\n        \n        .choices__list--dropdown { background-color: #262626 !important; border: 1px solid #474747 !important; color: #fff !important; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-size: 13px !important; z-index: 10 !important; }\n        .choices__list--dropdown .choices__item--selectable.is-highlighted { background-color: #393939 !important; }\n        .choices__list--dropdown .choices__item[data-value=\"todas\"] { background-color: #f1c21b !important; color: #161616 !important; font-weight: 700 !important; }\n        .choices__list--dropdown .choices__item[data-value=\"todas\"].is-highlighted { background-color: #e5b300 !important; }\n        \n        .choices__list--multiple .choices__item { background-color: #f1c21b !important; border: none !important; color: #161616 !important; border-radius: 3px !important; font-weight: 500 !important; font-size: 11px !important; padding: 3px 6px !important; margin: 2px 4px 2px 0 !important; display: inline-flex; align-items: center; }\n        .choices__button { border-left: 1px solid rgba(0,0,0,0.2) !important; margin: 0 0 0 6px !important; padding: 0 0 0 6px !important; background-size: 8px !important; width: 12px !important; opacity: 0.7; background-image: url(\"data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2221%22%20height%3D%2221%22%3E%3Cpath%20fill%3D%22%23161616%22%20d%3D%22M21%202.105L18.895%200%2010.5%208.395%202.105%200%200%202.105%208.395%2010.5%200%2018.895%202.105%2021%2010.5%2012.605%2018.895%2021%2021%2018.895%2012.605%2010.5z%22%2F%3E%3C%2Fsvg%3E\") !important; }\n        .choices__button:hover { opacity: 1; }\n\n        button { width: 100%; background-color: #f1c21b; color: #161616; border: none; padding: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; margin-top: 10px; letter-spacing: 0.5px; transition: background-color 0.2s, transform 0.1s; }\n        button:hover { background-color: #e5b300; }\n        button:active { transform: scale(0.98); }\n\n        /* --- MODAIS E TELA DE LOADING --- */\n        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }\n        .modal-overlay.show { opacity: 1; visibility: visible; }\n        .modal-box { background-color: #262626; padding: 28px 32px; border-radius: 6px; border-top: 4px solid #f1c21b; box-shadow: 0 15px 40px rgba(0,0,0,0.8); width: 90%; max-width: 380px; text-align: center; transform: translateY(-20px); transition: transform 0.3s ease; }\n        .modal-overlay.show .modal-box { transform: translateY(0); }\n        .modal-box h3 { color: #f1c21b; margin-bottom: 12px; font-size: 1.2rem; font-weight: 600; }\n        .modal-box p { color: #e0e0e0; font-size: 14px; margin-bottom: 24px; line-height: 1.5; }\n        .modal-box button { width: auto; min-width: 140px; margin-top: 0; }\n\n        .spinner {\n            width: 50px;\n            height: 50px;\n            border: 4px solid rgba(255, 255, 255, 0.1);\n            border-left-color: #f1c21b;\n            border-radius: 50%;\n            animation: spin 1s linear infinite;\n            margin: 0 auto 20px auto;\n        }\n        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n        \n        #modal_loading .modal-box { border-top: none; padding-top: 40px; }\n        #modal_loading h3 { color: #ffffff; }\n        #modal_loading p { color: #b0b0b0; font-size: 13px; }\n    </style>\n</head>\n<body>\n\n    <div class=\"card\">\n        <h2>Filtros da Automação</h2>\n        \n        <form id=\"meu_formulario\">\n            \n            <div class=\"date-grid\">\n                <div class=\"form-group\" style=\"margin-bottom: 0;\">\n                    <label for=\"data_inicio\">Data Início</label>\n                    <input type=\"date\" id=\"data_inicio\" name=\"data_inicio\">\n                </div>\n                <div class=\"form-group\" style=\"margin-bottom: 0;\">\n                    <label for=\"data_fim\">Data Fim</label>\n                    <input type=\"date\" id=\"data_fim\" name=\"data_fim\">\n                </div>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"caixas_entrada\">Caixas de Entrada</label>\n                <select id=\"caixas_entrada\" multiple>\n                    <option value=\"todas\" selected>Todas as caixas</option>\n                </select>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"etiquetas_busca\">Etiquetas de Busca (Incluir)</label>\n                <select id=\"etiquetas_busca\" multiple>\n                    <option value=\"todas\" selected>Todas as etiquetas</option>\n                </select>\n            </div>\n\n            <div class=\"form-group\">\n                <label for=\"etiquetas_excluir\">Excluir Etiquetas (Ignorar)</label>\n                <select id=\"etiquetas_excluir\" multiple></select>\n            </div>\n\n            <button type=\"submit\">Iniciar Extração</button>\n\n        </form>\n    </div>\n\n    <div id=\"modal_inicial\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <h3 id=\"modal_inicial_titulo\">Aviso Importante</h3>\n            <p>Bem-vindo! O sistema do Chatwoot envia os leads por paginação.<br><br>Isso significa que buscar todos os registros <strong>pode demorar um pouco</strong>, dependendo da quantidade de conversas e das datas selecionadas.</p>\n            <button type=\"button\" onclick=\"fecharModalInicial()\">ENTENDIDO</button>\n        </div>\n    </div>\n\n    <div id=\"modal_alerta\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <h3 id=\"modal_titulo\">Atenção</h3>\n            <p id=\"modal_mensagem\">Mensagem de erro aqui.</p>\n            <button type=\"button\" onclick=\"fecharAlerta()\">OK, ENTENDI</button>\n        </div>\n    </div>\n\n    <div id=\"modal_loading\" class=\"modal-overlay\">\n        <div class=\"modal-box\">\n            <div class=\"spinner\"></div>\n            <h3>Processando...</h3>\n            <p>Estamos buscando e processando seus leads.<br><br><strong>Por favor, aguarde e não feche esta página.</strong></p>\n        </div>\n    </div>\n\n    <script>\n        const dadosCaixas = {{ JSON.stringify($json.lista_caixas || []) }};\n        const dadosEtiquetas = {{ JSON.stringify($json.lista_etiquetas || []) }};\n        \n        // URL DO SEU WEBHOOK GATILHO (LEMBRE-SE DE CONFIGURAR COMO POST NO N8N!)\n        const URL_WEBHOOK = 'https://n8n.srv991153.hstgr.cloud/webhook/p02/relatorios/chatwoot/backend'; \n\n        // FUNÇÃO PARA FECHAR O AVISO INICIAL\n        function fecharModalInicial() {\n            document.getElementById('modal_inicial').classList.remove('show');\n        }\n\n        function mostrarAlerta(mensagem, titulo = 'Atenção') {\n            document.getElementById('modal_titulo').innerText = titulo;\n            document.getElementById('modal_mensagem').innerText = mensagem;\n            document.getElementById('modal_alerta').classList.add('show');\n        }\n\n        function fecharAlerta() {\n            document.getElementById('modal_alerta').classList.remove('show');\n        }\n\n        function popularSelect(idDoSelect, listaDeDados, usarNomeComoValor = false) {\n            const selectElement = document.getElementById(idDoSelect);\n            listaDeDados.forEach(item => {\n                const option = document.createElement('option');\n                option.value = usarNomeComoValor ? item.name : item.id;\n                option.textContent = item.name;\n                selectElement.appendChild(option);\n            });\n        }\n\n        document.addEventListener('DOMContentLoaded', function() {\n            \n            // Abre o aviso inicial assim que a tela carrega (com um delay sutil para a animação rodar)\n            setTimeout(() => {\n                document.getElementById('modal_inicial').classList.add('show');\n            }, 150);\n\n            popularSelect('caixas_entrada', dadosCaixas, false); // Envia ID\n            popularSelect('etiquetas_busca', dadosEtiquetas, true); // Envia Nome\n            popularSelect('etiquetas_excluir', dadosEtiquetas, true); // Envia Nome\n\n            const config = {\n                removeItemButton: true,\n                searchPlaceholderValue: 'Pesquisar...',\n                noResultsText: 'Nenhum resultado encontrado',\n                noChoicesText: 'Não há mais opções',\n                itemSelectText: 'Clique para selecionar',\n                shouldSort: false \n            };\n\n            new Choices('#caixas_entrada', config);\n            new Choices('#etiquetas_busca', config);\n            new Choices('#etiquetas_excluir', config);\n\n            const form = document.getElementById('meu_formulario');\n            const dataInicio = document.getElementById('data_inicio');\n            const dataFim = document.getElementById('data_fim');\n            const caixasEntrada = document.getElementById('caixas_entrada');\n            const etiquetasBusca = document.getElementById('etiquetas_busca');\n            const etiquetasExcluir = document.getElementById('etiquetas_excluir');\n\n            form.addEventListener('submit', async function(event) {\n                // Impede o redirecionamento nativo da tela branca\n                event.preventDefault();\n                \n                if (!dataInicio.value) return mostrarAlerta('Você precisa selecionar a Data de Início.', 'Data Incompleta');\n                if (!dataFim.value) return mostrarAlerta('Você precisa selecionar a Data de Fim.', 'Data Incompleta');\n                if (dataInicio.value > dataFim.value) return mostrarAlerta('A Data de Fim não pode ser anterior à Data de Início. Por favor, ajuste o período.', 'Período Inválido');\n                if (caixasEntrada.selectedOptions.length === 0) return mostrarAlerta('Selecione pelo menos uma Caixa de Entrada para continuar.', 'Caixa Vazia');\n                if (etiquetasBusca.selectedOptions.length === 0) return mostrarAlerta('Selecione pelo menos uma opção em \"Etiquetas de Busca (Incluir)\".', 'Etiqueta Vazia');\n\n                // LÓGICA DE PREPARAÇÃO DOS ARRAYS PERFEITOS\n                const escolhasCaixas = Array.from(caixasEntrada.selectedOptions).map(opt => opt.value);\n                const escolhasEtiquetas = Array.from(etiquetasBusca.selectedOptions).map(opt => opt.value);\n                const escolhasExcluir = Array.from(etiquetasExcluir.selectedOptions).map(opt => opt.value);\n                \n                let isTodasCaixas = false;\n                let arrayFinalCaixas = [];\n                if (escolhasCaixas.includes('todas')) {\n                    isTodasCaixas = true;\n                    arrayFinalCaixas = dadosCaixas.map(item => item.id);\n                } else {\n                    arrayFinalCaixas = escolhasCaixas;\n                }\n\n                let isTodasEtiquetas = false;\n                let arrayFinalEtiquetas = [];\n                if (escolhasEtiquetas.includes('todas')) {\n                    isTodasEtiquetas = true;\n                    arrayFinalEtiquetas = dadosEtiquetas.map(item => item.name);\n                } else {\n                    arrayFinalEtiquetas = escolhasEtiquetas;\n                }\n\n                // Cria o Payload JSON 100% estruturado\n                const payloadJSON = {\n                    data_inicio: dataInicio.value,\n                    data_fim: dataFim.value,\n                    caixas_entrada: arrayFinalCaixas,\n                    etiquetas_busca: arrayFinalEtiquetas,\n                    etiquetas_excluir: escolhasExcluir,\n                    is_todas_caixas_selecionado: isTodasCaixas,\n                    is_todas_etiquetas_selecionado: isTodasEtiquetas\n                };\n\n                // MOSTRA A TELA DE LOADING NA CARA DO CLIENTE\n                document.getElementById('modal_loading').classList.add('show');\n\n                try {\n                    // Manda tudo invisivelmente para o n8n usando POST com application/json\n                    const resposta = await fetch(URL_WEBHOOK, {\n                        method: 'POST',\n                        headers: {\n                            'Content-Type': 'application/json'\n                        },\n                        body: JSON.stringify(payloadJSON)\n                    });\n\n                    if (!resposta.ok) throw new Error('Servidor retornou erro: ' + resposta.status);\n\n                    // Espera o arquivo ser devolvido pelo Respond to Webhook\n                    const arquivoBlob = await resposta.blob();\n\n                    // TRUQUE PARA FORÇAR O DOWNLOAD INVISÍVEL NO NAVEGADOR\n                    const urlDownload = window.URL.createObjectURL(arquivoBlob);\n                    const linkDownload = document.createElement('a');\n                    linkDownload.style.display = 'none';\n                    linkDownload.href = urlDownload;\n                    linkDownload.download = 'extracao_leads_chatwoot.xls'; \n                    \n                    document.body.appendChild(linkDownload);\n                    linkDownload.click();\n                    \n                    window.URL.revokeObjectURL(urlDownload);\n                    document.body.removeChild(linkDownload);\n\n                    document.getElementById('modal_loading').classList.remove('show');\n                    mostrarAlerta('O processamento terminou e o download do arquivo foi iniciado!', 'Sucesso!');\n\n                } catch (erro) {\n                    console.error(erro);\n                    document.getElementById('modal_loading').classList.remove('show');\n                    mostrarAlerta('Parece que o processamento falhou ou o n8n demorou demais para responder. Tente selecionar um período menor.', 'Erro de Conexão');\n                }\n            });\n        });\n    </script>\n\n</body>\n</html>"
+        },
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          1024,
+          528
+        ],
+        "id": "5b33ae1a-b15a-45ca-893e-6c92b73e3fba",
+        "name": "HTML"
+      },
+      {
+        "parameters": {
+          "path": "p02/relatorios/chatwoot/interface",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          176,
+          544
+        ],
+        "id": "8cd503dc-5e95-4455-b605-93c2cb0f3d18",
+        "name": "Webhook2",
+        "webhookId": "6238e966-eb7c-410e-92f4-6c71fa3c042c"
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $json.html }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1232,
+          528
+        ],
+        "id": "a70bac8d-64ef-45cf-b4f1-be7d534a321d",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsCode": "// 1. Acesso direto e rápido ao primeiro item\nconst payload = $input.first().json.payload || [];\nconst total = payload.length;\n\n// 2. Pré-alocação do array (evita que o JS tenha que redimensionar o array na memória várias vezes)\nconst caixasFiltradas = new Array(total);\n\n// 3. Loop 'for' clássico: é o método mais veloz no motor V8 (Node.js)\nfor (let i = 0; i < total; i++) {\n  const caixa = payload[i];\n  caixasFiltradas[i] = {\n    id: caixa.id,\n    name: caixa.name\n  };\n}\n\n// 4. Retorno mantendo a estrutura original\nreturn {\n  lista_caixas: caixasFiltradas\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          544
+        ],
+        "id": "7572a4f9-0112-4b9e-84c8-f42c977dfeed",
+        "name": "Filter - Inbox"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Pega os dados do nó anterior\nconst dadosEntrada = $input.all()[0].json;\nconst listaEtiquetas = dadosEntrada.payload;\n\n// Filtra apenas o ID e o Nome (que nessa rota se chama 'title')\nconst etiquetasFiltradas = listaEtiquetas.map(etiqueta => {\n  return {\n    id: etiqueta.id,\n    name: etiqueta.title // Já renomeei para 'name' para ficar padronizado no seu fluxo\n  };\n});\n\n// Retorna um único objeto, mantendo a lista agregada dentro da propriedade \"lista_etiquetas\"\nreturn {\n  lista_etiquetas: etiquetasFiltradas\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          720,
+          368
+        ],
+        "id": "8e71ba82-55d1-4226-815d-6cd4b47c48c2",
+        "name": "Filter - Labels"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          832,
+          528
+        ],
+        "id": "11be36b8-8905-4938-b62e-5996adf602d9",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/inboxes",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          384,
+          544
+        ],
+        "id": "3744df35-4fbf-4bcc-a032-2eb4d56eac32",
+        "name": "Chatwoot - Get Inbox",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          496,
+          368
+        ],
+        "id": "843ae890-e204-4e90-80dc-141c3fe2da13",
+        "name": "Chatwoot - Get Labels",
+        "retryOnFail": true
+      }
+    ],
+    "connections": {
+      "HTML": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook2": {
+        "main": [
+          [
+            {
+              "node": "Chatwoot - Get Inbox",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter - Inbox": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Filter - Labels": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Chatwoot - Get Inbox": {
+        "main": [
+          [
+            {
+              "node": "Filter - Inbox",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Chatwoot - Get Labels",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Chatwoot - Get Labels": {
+        "main": [
+          [
+            {
+              "node": "Filter - Labels",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Kommit Automação",
+    "name": "Version f1c71ae5",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-01-03T18:38:39.532Z",
+      "createdAt": "2026-01-03T18:38:39.532Z",
+      "id": "9cHymv3czR62smRu",
+      "name": "p02"
+    },
+    {
+      "updatedAt": "2026-04-23T00:14:28.932Z",
+      "createdAt": "2026-04-23T00:14:28.932Z",
+      "id": "sB1vA0YETOes1DOd",
+      "name": "chatwoot"
+    }
+  ]
+}
