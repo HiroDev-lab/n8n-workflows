@@ -1,0 +1,2149 @@
+{
+  "id": "5oVGecfxH6nhCfgq",
+  "name": "Disparo de mensagens",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Menu de opções\"] }}",
+                    "rightValue": "=Criar Campanha",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cfe6635c-8077-47a4-95cf-d5d5bed52d7b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Criar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9272d03e-a0df-4a19-a414-a83123ab78fb",
+                    "leftValue": "={{ $json[\"Menu de opções\"] }}",
+                    "rightValue": "Pausar Campanha",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pausar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "28ae91ad-d26f-45b2-bb80-db170a019ce2",
+                    "leftValue": "={{ $json[\"Menu de opções\"] }}",
+                    "rightValue": "Cancelar Campanha",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Encerrar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2d6c80df-9208-4b04-b9f6-47693dfd4646",
+                    "leftValue": "={{ $json[\"Menu de opções\"] }}",
+                    "rightValue": "Desapausar Campanha",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Desapausar"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -608,
+        -128
+      ],
+      "id": "1f87d7da-35b0-49ad-8058-f10e78256bab",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Qual o tipo de mensagem que você quer enviar?\"] }}",
+                    "rightValue": "Texto",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5b8ce55e-c2e0-4ad6-9806-ee89be223ea7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c862e820-7f89-4d95-86a9-856e64d55222",
+                    "leftValue": "={{ $json[\"Qual o tipo de mensagem que você quer enviar?\"] }}",
+                    "rightValue": "Audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6e18ebb3-774b-473b-b224-4ab7a3f3529e",
+                    "leftValue": "={{ $json[\"Qual o tipo de mensagem que você quer enviar?\"] }}",
+                    "rightValue": "Imagem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5ca9f10b-d8b2-4475-b4e0-8128f0720471",
+                    "leftValue": "={{ $json[\"Qual o tipo de mensagem que você quer enviar?\"] }}",
+                    "rightValue": "Texto e imagem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto e imagem"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        -288
+      ],
+      "id": "b8909e63-401e-4e90-887f-3a9ff3a484bf",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Você quer pausar qual campanha?\"] }}",
+                    "rightValue": "=",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "34653da1-0327-4db9-9569-2e82f2fabd0a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pausar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bb41f1a7-f179-4766-aa00-04874c1b89d4",
+                    "leftValue": "={{ $json[\"PAUSAR TODAS AS CAMPANHAS\"] }}",
+                    "rightValue": "Sim",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pausar Todas"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        144
+      ],
+      "id": "822f1c73-290b-4467-8833-4d793c531158",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Você quer cancelar qual campanha?\"] }}",
+                    "rightValue": "=",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "34653da1-0327-4db9-9569-2e82f2fabd0a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bb41f1a7-f179-4766-aa00-04874c1b89d4",
+                    "leftValue": "={{ $json[\"CANCELAR TODAS AS CAMPANHAS\"] }}",
+                    "rightValue": "Sim",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelar Todas"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        784
+      ],
+      "id": "128aa905-55f0-4318-92f3-3f23b15c387f",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Opção invalida, escolha outra",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        112,
+        960
+      ],
+      "id": "3ed80913-9a26-4584-8adb-e722aeec5bb5",
+      "name": "Informa que nada foi selecionado1"
+    },
+    {
+      "parameters": {
+        "formTitle": "Sistema de Disparo de WhatsApp",
+        "formDescription": "Painel de Controle  de Campanhas",
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Começar",
+          "path": "polymerplastic",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -1024,
+        -112
+      ],
+      "id": "00bb9004-e601-411f-92a0-92bcfd26e3fa",
+      "name": "Trigger"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Menu de opções",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Criar Campanha"
+                  },
+                  {
+                    "option": "Pausar Campanha"
+                  },
+                  {
+                    "option": "Cancelar Campanha"
+                  },
+                  {
+                    "option": "Desapausar Campanha"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formTitle": "Sistema de Disparo",
+          "buttonLabel": "Avancar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Green Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; /* Destaque para: Qual o tipo de mensagem que você quer enviar? */\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Dropdowns */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Outros Estados */\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -816,
+        -112
+      ],
+      "id": "0f3336e2-7f28-4a28-b058-40225cb1f09e",
+      "name": "Menu"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Delay mínimo entre as mensagens (em segundos)",
+              "fieldType": "number",
+              "placeholder": "Recomendação 30s",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Delay máximo entre as mensagens (em segundos)",
+              "fieldType": "number",
+              "placeholder": "Recomendação 90s",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nome da campanha",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Mensagem de curiosidade",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sim"
+                  },
+                  {
+                    "option": "Não"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Base de dados",
+              "fieldType": "file",
+              "fieldName": "data",
+              "acceptFileTypes": ".csv, .xlsx",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Data do agendamento do inicio da campanha ",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Hora do agendamento do inicio da campanha ",
+              "fieldType": "dropdown",
+              "defaultValue": "09:00",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "08:00"
+                  },
+                  {
+                    "option": "08:30"
+                  },
+                  {
+                    "option": "09:00"
+                  },
+                  {
+                    "option": "09:30"
+                  },
+                  {
+                    "option": "10:00"
+                  },
+                  {
+                    "option": "10:30"
+                  },
+                  {
+                    "option": "11:00"
+                  },
+                  {
+                    "option": "11:30"
+                  },
+                  {
+                    "option": "12:00"
+                  },
+                  {
+                    "option": "12:30"
+                  },
+                  {
+                    "option": "13:00"
+                  },
+                  {
+                    "option": "13:30"
+                  },
+                  {
+                    "option": "14:00"
+                  },
+                  {
+                    "option": "14:30"
+                  },
+                  {
+                    "option": "15:00"
+                  },
+                  {
+                    "option": "15:30"
+                  },
+                  {
+                    "option": "16:00"
+                  },
+                  {
+                    "option": "16:30"
+                  },
+                  {
+                    "option": "17:00"
+                  },
+                  {
+                    "option": "17:30"
+                  },
+                  {
+                    "option": "18:00"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; \n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff; /* Texto branco */\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Outros */\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- CORREÇÃO DE VISIBILIDADE (ADICIONE ISSO ABAIXO DO :ROOT) --- */\n\n/* Força o fundo escuro em todos os campos para o texto branco aparecer */\ninput, select, textarea {\n\tbackground-color: #24292e !important;\n\tcolor: #ffffff !important;\n\tborder: 1px solid var(--color-input-border) !important;\n}\n\n/* Ajuste para o campo de \"Base de Dados\" (Upload de arquivo) */\ninput[type=\"file\"] {\n\tpadding: 8px;\n\tbackground-color: #1a1d21 !important;\n}\n\n/* Estiliza o botão \"Escolher arquivos\" dentro do campo */\ninput[type=\"file\"]::file-selector-button {\n\tbackground-color: #3f444d;\n\tcolor: white;\n\tborder: none;\n\tpadding: 5px 10px;\n\tborder-radius: 4px;\n\tmargin-right: 10px;\n\tcursor: pointer;\n}\n\ninput[type=\"file\"]::file-selector-button:hover {\n\tbackground-color: #4f555e;\n}\n\n/* Ajuste para o calendário (Data) e Relógio (Hora) ficarem no modo escuro */\ninput[type=\"date\"], input[type=\"time\"] {\n\tcolor-scheme: dark;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -432,
+        -240
+      ],
+      "id": "21d10e01-6130-4012-af63-d28ec1128e8d",
+      "name": "Definir Configurações"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.data[0].filename.replace(/^.*\\./, '') }}",
+                    "rightValue": "xlsx",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ae34802f-0cb1-4804-8fc9-dcd8c9930262"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "xlsx"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d728f892-c7da-43ac-8e6d-c365a3b33573",
+                    "leftValue": "={{$json.data[0].filename.replace(/^.*\\./, '') }}",
+                    "rightValue": "csv",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "csv"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -240
+      ],
+      "id": "6a25a775-b9ba-4cad-b8eb-2fdc2cf3e664",
+      "name": "CSV or XLSX"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -144
+      ],
+      "id": "39409770-bf2c-4f07-ac42-1deb3abe5b68",
+      "name": "Extract CSV"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -368
+      ],
+      "id": "361665a4-e04f-4f2d-8171-b9116858a6a4",
+      "name": "Extract XLSX"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -256
+      ],
+      "id": "694e2732-bf32-419c-8537-ba647f18c9f8",
+      "name": "Aggregate CSV"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual o tipo de mensagem que você quer enviar?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Texto"
+                  },
+                  {
+                    "option": "Imagem"
+                  },
+                  {
+                    "option": "Audio"
+                  },
+                  {
+                    "option": "Texto e imagem"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon Original) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; \n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus (Verde Neon) */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Estados */\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- FIX DE VISIBILIDADE (Obrigatório para o texto aparecer) --- */\n\ninput, select, textarea {\n    background-color: #24292e !important; /* Fundo escuro interno */\n    color: #ffffff !important;           /* Texto branco ao digitar */\n    border: 1px solid var(--color-input-border) !important;\n}\n\n/* Estilo para as opções dos Dropdowns */\noption {\n    background-color: #1a1d21;\n    color: #ffffff;\n}\n\n/* Foco Neon */\ninput:focus, select:focus, textarea:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.3);\n    outline: none;\n}\n\n/* Ajuste para calendário e hora no modo escuro */\ninput[type=\"date\"], input[type=\"time\"] {\n    color-scheme: dark;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        400,
+        -256
+      ],
+      "id": "a7e7b841-fc0f-4fec-99d0-e235c4aae002",
+      "name": "Definir Tipo de Mensagem",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Campanha Criada com sucesso",
+          "formDescription": "=ID: {{ $json.id }}\nCampanha: {{ $json.Nome }}",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        2112,
+        -256
+      ],
+      "id": "f4947234-693c-491e-9bc9-be0ea6356658",
+      "name": "Voltar ao Menu"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual o texto?",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Padrão Neon Green) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; /* Destaque para: Qual o texto? */\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 500px; /* Um pouco mais largo para o texto */\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- AJUSTES ESPECÍFICOS PARA O TEXTAREA --- */\n\n/* Garante que o fundo seja escuro e o texto branco apareça */\ntextarea, input {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 12px !important;\n    line-height: 1.6 !important;\n}\n\n/* Dá uma altura mínima confortável para o campo de texto */\ntextarea {\n    min-height: 150px;\n    resize: vertical; /* Permite ao usuário ajustar a altura */\n}\n\n/* Brilho Verde Neon ao focar no campo */\ntextarea:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.25);\n    outline: none;\n}\n\n/* Cor do placeholder (o texto de dica interno) */\ntextarea::placeholder {\n    color: rgba(255, 255, 255, 0.3);\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        800,
+        -528
+      ],
+      "id": "4d291634-1892-452e-80c4-55bc3c24f8ae",
+      "name": "Capture Text"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual o áudio que você quer mandar?",
+              "fieldType": "file",
+              "fieldName": "data",
+              "acceptFileTypes": ".mp3",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "Somente arquivos mp3",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; /* Cor para: Qual o áudio que você quer mandar? */\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- AJUSTES PARA O CAMPO DE ARQUIVO (AUDIO) --- */\n\n/* Fundo do campo de upload */\ninput[type=\"file\"] {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 10px !important;\n    cursor: pointer;\n}\n\n/* Estilização do botão \"Escolher arquivo\" interno */\ninput[type=\"file\"]::file-selector-button {\n    background-color: #00ff9d;\n    color: #0b0e11;\n    border: none;\n    padding: 8px 16px;\n    border-radius: 4px;\n    margin-right: 15px;\n    font-weight: bold;\n    cursor: pointer;\n    transition: background 0.2s;\n}\n\ninput[type=\"file\"]::file-selector-button:hover {\n    background-color: #00cc7d;\n}\n\n/* Brilho Verde Neon ao focar */\ninput:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.25);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        800,
+        -352
+      ],
+      "id": "de5e1ce5-3737-45f0-8c3e-6a4187dc94b4",
+      "name": "Capture MP3"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual imagem você quer enviar?",
+              "fieldType": "file",
+              "fieldName": "data",
+              "acceptFileTypes": ".jpg, .png",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "Somente arquivos jpg e png",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; /* Estilo para: Qual imagem você quer enviar? */\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- AJUSTES PARA O CAMPO DE IMAGEM (FILE) --- */\n\n/* Fundo do campo de upload para o texto branco ser visível */\ninput[type=\"file\"] {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 10px !important;\n    cursor: pointer;\n    border-radius: var(--border-radius-input);\n}\n\n/* Estilização do botão de escolha interno */\ninput[type=\"file\"]::file-selector-button {\n    background-color: #00ff9d;\n    color: #0b0e11;\n    border: none;\n    padding: 8px 16px;\n    border-radius: 4px;\n    margin-right: 15px;\n    font-weight: bold;\n    cursor: pointer;\n    transition: all 0.2s ease;\n}\n\ninput[type=\"file\"]::file-selector-button:hover {\n    background-color: #00cc7d;\n    transform: scale(1.02);\n}\n\n/* Glow Verde Neon ao selecionar */\ninput:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.25);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        800,
+        -176
+      ],
+      "id": "877a989c-9490-475b-b37f-8d53778f1d55",
+      "name": "Capture Image"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Qual o texto?",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Qual a imagem?",
+              "fieldType": "file",
+              "fieldName": "data",
+              "acceptFileTypes": ".png, .jpg",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "Somente arquivos jpg e png",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; /* Estilo para as labels das perguntas */\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 500px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- FIX DE VISIBILIDADE E ESTILO DOS CAMPOS --- */\n\n/* Fundo escuro para Inputs e Textareas (Resolve o texto invisível) */\ninput, textarea {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 12px !important;\n}\n\n/* Ajuste específico para o \"Qual o texto?\" (Textarea) */\ntextarea {\n    min-height: 120px;\n    resize: vertical;\n}\n\n/* Ajuste específico para o \"Qual a imagem?\" (File) */\ninput[type=\"file\"] {\n    background-color: #24292e !important;\n    cursor: pointer;\n    padding: 10px !important;\n}\n\n/* Estilização do botão interno de Escolher Arquivo */\ninput[type=\"file\"]::file-selector-button {\n    background-color: #00ff9d;\n    color: #0b0e11;\n    border: none;\n    padding: 8px 16px;\n    border-radius: 4px;\n    margin-right: 15px;\n    font-weight: bold;\n    cursor: pointer;\n    transition: all 0.2s ease;\n}\n\ninput[type=\"file\"]::file-selector-button:hover {\n    background-color: #00cc7d;\n}\n\n/* Efeito Neon ao focar nos campos */\ntextarea:focus, input:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.25);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        800,
+        16
+      ],
+      "id": "8bbb051b-e8ed-4842-859a-b5b24239292b",
+      "name": "Captura Image/Text"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        -256
+      ],
+      "id": "915c4637-7762-44d3-b462-2d3373d25637",
+      "name": "Converter Base 64"
+    },
+    {
+      "parameters": {
+        "tableId": "Campanhas de disparo",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nome",
+              "fieldValue": "={{ $('Definir Configurações').item.json[\"Nome da campanha\"] }}"
+            },
+            {
+              "fieldId": "Delay mínimo",
+              "fieldValue": "={{ $('Definir Configurações').item.json[\"Delay mínimo entre as mensagens (em segundos)\"] }}"
+            },
+            {
+              "fieldId": "Delay máximo",
+              "fieldValue": "={{ $('Definir Configurações').item.json[\"Delay máximo entre as mensagens (em segundos)\"] }}"
+            },
+            {
+              "fieldId": "Status",
+              "fieldValue": "agendado"
+            },
+            {
+              "fieldId": "Mensagem",
+              "fieldValue": "={{ $('Definir Tipo de Mensagem').item.json['Qual o tipo de mensagem que você quer enviar?'] }}"
+            },
+            {
+              "fieldId": "File",
+              "fieldValue": "={{ $json.data ?? null }}"
+            },
+            {
+              "fieldId": "Agendamento",
+              "fieldValue": "={{ $('CSV or XLSX').item.json[\"Data do agendamento do inicio da campanha \"] + \" \" + $('CSV or XLSX').item.json[\"Hora do agendamento do inicio da campanha \"] + \"+00\" }}"
+            },
+            {
+              "fieldId": "curiosidade",
+              "fieldValue": "={{ $('Definir Configurações').item.json[\"Mensagem de curiosidade\"].toLowerCase().trim() === 'sim' }}"
+            },
+            {
+              "fieldId": "mensagem de texto",
+              "fieldValue": "={{ $json['Qual o texto?'] ?? $('Captura Image/Text').item.json['Qual o texto?'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -256
+      ],
+      "id": "f6201af3-efd8-4bc7-b911-1a829a64ffa9",
+      "name": "Create - Campanha",
+      "executeOnce": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let listaDeDados = [];\n\n// 1. Tenta pegar os dados do nó 'Aggregate'\ntry {\n  const itemAgrupado = $('Aggregate XLSX').first();\n  listaDeDados = itemAgrupado?.json?.data || [];\n} catch (erro) {\n  // Se der erro (porque o nó 'Aggregate' não rodou no fluxo), o código não trava. \n  // Ele apenas ignora e continua.\n}\n\n// 2. Se a lista ainda estiver vazia (porque o primeiro não rodou ou não tinha dados), tenta o segundo\nif (listaDeDados.length === 0) {\n  try {\n    const itemAgrupado1 = $('Aggregate CSV').first();\n    listaDeDados = itemAgrupado1?.json?.data || [];\n  } catch (erro) {\n    // Também ignora se o 'Aggregate1' não tiver rodado\n  }\n}\n\n// Se nenhum dos dois gerou dados, encerra retornando vazio para não quebrar o próximo nó\nif (listaDeDados.length === 0) {\n  return [];\n}\n\n// 3. Mapeia a lista vencedora para o formato padrão que o n8n exige [{ json: { ... } }]\nreturn listaDeDados.map(item => {\n  return {\n    json: item\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -256
+      ],
+      "id": "2dc9915a-c0fc-452d-ac37-ae8382fead5c",
+      "name": "Get - Number"
+    },
+    {
+      "parameters": {
+        "tableId": "Tabela de números para disparo",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "numero",
+              "fieldValue": "={{ $json.TELEFONE ?? $json.NUMEROS }}"
+            },
+            {
+              "fieldId": "agendamento",
+              "fieldValue": "={{ $('CSV or XLSX').item.json[\"Data do agendamento do inicio da campanha \"] + \" \" + $('CSV or XLSX').item.json[\"Hora do agendamento do inicio da campanha \"] + \"+00\" }}"
+            },
+            {
+              "fieldId": "campanha",
+              "fieldValue": "={{ $('Definir Configurações').item.json[\"Nome da campanha\"] }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        -256
+      ],
+      "id": "22aca75c-7e53-4dcb-a137-9198cccb6ff7",
+      "name": "Create - Base de Disparo",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        160
+      ],
+      "id": "c021f3e3-8c44-4056-b659-fd7ea4ba38cd",
+      "name": "Get - Campanhas",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Você quer pausar qual campanha?"
+            },
+            {
+              "fieldLabel": "PAUSAR TODAS AS CAMPANHAS",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sim"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "=Lista de Campanhas ativas atuais:\n{{ $input.all().map(item => item.json.Nome).join('\\n') }}",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; \n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio (Padrão Verde Neon) */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- ESTILO \"STATUS BOARD\" PARA A LISTA DE CAMPANHAS (Description) --- */\n\n.n8n-form-description {\n    background-color: #0b0e11 !important; /* Fundo mais escuro que o card */\n    border: 1px solid #2d3238 !important;\n    border-left: 4px solid #00ff9d !important; /* Detalhe neon lateral */\n    padding: 16px !important;\n    border-radius: 6px;\n    font-family: 'Consolas', 'Monaco', monospace !important; /* Fonte técnica */\n    color: #00ff9d !important; /* Texto em verde neon */\n    font-size: 12px !important;\n    line-height: 1.6;\n    margin-bottom: 25px;\n    white-space: pre-wrap; /* Mantém as quebras de linha da sua lista */\n}\n\n/* --- CHECKBOX CUSTOMIZADO --- */\n\ninput[type=\"checkbox\"] {\n    accent-color: #00ff9d; /* Checkbox fica verde neon ao marcar */\n    width: 18px;\n    height: 18px;\n    cursor: pointer;\n    vertical-align: middle;\n}\n\n/* --- FIX DE VISIBILIDADE DO INPUT DE TEXTO --- */\n\ninput[type=\"text\"] {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 12px !important;\n}\n\ninput[type=\"text\"]:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.2);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -240,
+        160
+      ],
+      "id": "da3a8fd5-f00a-4232-8b18-56d768fe86ca",
+      "name": "Select - Campanha"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Nome",
+              "condition": "eq",
+              "keyValue": "={{ $json[\"Você quer pausar qual campanha?\"] }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "pausado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "d8a6081b-6599-4313-93a9-52b757fcb0e6",
+      "name": "Update - Status Pause",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "gte",
+              "keyValue": "0"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "pausado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        160
+      ],
+      "id": "94dc54e1-a61a-4851-8bf8-945b3c7d7669",
+      "name": "Update - ALL Status Pause",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Campanha Pausada com sucesso",
+          "formDescription": "=ID: {{ $json.id }}\nCampanha: {{ $json.Nome }}",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        400,
+        64
+      ],
+      "id": "7c0e9fe9-8e11-4f57-9bae-bd38088c81bf",
+      "name": "Exibir Resultado"
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Opção invalida, escolha outra",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        192,
+        336
+      ],
+      "id": "cb0c8b6e-6a59-41a1-b473-bb255ead3d85",
+      "name": "Exibir Erro"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Você quer cancelar qual campanha?"
+            },
+            {
+              "fieldLabel": "Cancelar TODAS AS CAMPANHAS",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sim"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "=Lista de Campanhas atuais:\n{{ $input.all().map(item => item.json.Nome).join('\\n') }}",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; \n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio (Padrão Verde Neon) */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- ESTILO \"STATUS BOARD\" PARA A LISTA DE CAMPANHAS (Description) --- */\n\n.n8n-form-description {\n    background-color: #0b0e11 !important; /* Fundo mais escuro que o card */\n    border: 1px solid #2d3238 !important;\n    border-left: 4px solid #00ff9d !important; /* Detalhe neon lateral */\n    padding: 16px !important;\n    border-radius: 6px;\n    font-family: 'Consolas', 'Monaco', monospace !important; /* Fonte técnica */\n    color: #00ff9d !important; /* Texto em verde neon */\n    font-size: 12px !important;\n    line-height: 1.6;\n    margin-bottom: 25px;\n    white-space: pre-wrap; /* Mantém as quebras de linha da sua lista */\n}\n\n/* --- CHECKBOX CUSTOMIZADO --- */\n\ninput[type=\"checkbox\"] {\n    accent-color: #00ff9d; /* Checkbox fica verde neon ao marcar */\n    width: 18px;\n    height: 18px;\n    cursor: pointer;\n    vertical-align: middle;\n}\n\n/* --- FIX DE VISIBILIDADE DO INPUT DE TEXTO --- */\n\ninput[type=\"text\"] {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 12px !important;\n}\n\ninput[type=\"text\"]:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.2);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -272,
+        800
+      ],
+      "id": "f50efcfd-cf55-4738-ba3d-abb39e3f3e89",
+      "name": "Select - Campanha - Cancelamento"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "pausado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        800
+      ],
+      "id": "c88e85a7-04e5-40ee-8100-d831b0724497",
+      "name": "Get - Campanhas Cancelamento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Nome",
+              "condition": "eq",
+              "keyValue": "={{ $json['Você quer cancelar qual campanha?'] }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "cancelada"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        112,
+        624
+      ],
+      "id": "275f579b-4744-4182-bc07-898b8b999a11",
+      "name": "Update - Status Cancelamento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "gte",
+              "keyValue": "0"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "cancelada"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        112,
+        800
+      ],
+      "id": "2c2a034e-ae6d-4b03-8a42-d1aea27e095d",
+      "name": "Update - ALL Status Cancelamento",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Campanha Canceladas com sucesso",
+          "formDescription": "=ID: {{ $json.id }}\nCampanha: {{ $json.Nome }}",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        288,
+        720
+      ],
+      "id": "9eb92d19-f660-43a2-ad8c-74a3dc837854",
+      "name": "Exibir Resultado - Cancelamento"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Você quer despausar qual campanha?\"] }}",
+                    "rightValue": "=",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "id": "34653da1-0327-4db9-9569-2e82f2fabd0a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pausar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bb41f1a7-f179-4766-aa00-04874c1b89d4",
+                    "leftValue": "={{ $json[\"Pausar TODAS AS CAMPANHAS\"] }}",
+                    "rightValue": "Sim",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Despausar todas"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        1440
+      ],
+      "id": "3342f23d-a5da-46c6-a3bc-bb7d6c804bfe",
+      "name": "Switch5"
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Opção invalida, escolha outra",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        128,
+        1616
+      ],
+      "id": "a3c040a6-9870-4130-8a97-8fb5cedc596e",
+      "name": "Informa que nada foi selecionado"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "pausado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        1456
+      ],
+      "id": "1fe2a455-9062-431e-90f0-522c7e2e213b",
+      "name": "Get - Campanhas despause",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Você quer despausar qual campanha?"
+            },
+            {
+              "fieldLabel": "Despausar TODAS AS CAMPANHAS",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Sim"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "=Lista de Campanhas atuais:\n{{ $input.all().map(item => item.json.Nome).join('\\n') }}",
+          "buttonLabel": "Avançar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette (Verde Neon) --- */\n\t--color-background: #0f1113; \n\t--color-card-bg: #1a1d21;    \n\t--color-card-border: #2d3238; \n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7; \n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive & Focus */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  \n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; \n\t\n\t/* Botão de Envio (Padrão Verde Neon) */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t\n\t/* Border Radii */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 6px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}\n\n/* --- ESTILO \"STATUS BOARD\" PARA A LISTA DE CAMPANHAS (Description) --- */\n\n.n8n-form-description {\n    background-color: #0b0e11 !important; /* Fundo mais escuro que o card */\n    border: 1px solid #2d3238 !important;\n    border-left: 4px solid #00ff9d !important; /* Detalhe neon lateral */\n    padding: 16px !important;\n    border-radius: 6px;\n    font-family: 'Consolas', 'Monaco', monospace !important; /* Fonte técnica */\n    color: #00ff9d !important; /* Texto em verde neon */\n    font-size: 12px !important;\n    line-height: 1.6;\n    margin-bottom: 25px;\n    white-space: pre-wrap; /* Mantém as quebras de linha da sua lista */\n}\n\n/* --- CHECKBOX CUSTOMIZADO --- */\n\ninput[type=\"checkbox\"] {\n    accent-color: #00ff9d; /* Checkbox fica verde neon ao marcar */\n    width: 18px;\n    height: 18px;\n    cursor: pointer;\n    vertical-align: middle;\n}\n\n/* --- FIX DE VISIBILIDADE DO INPUT DE TEXTO --- */\n\ninput[type=\"text\"] {\n    background-color: #24292e !important;\n    color: #ffffff !important;\n    border: 1px solid var(--color-input-border) !important;\n    padding: 12px !important;\n}\n\ninput[type=\"text\"]:focus {\n    border-color: #00ff9d !important;\n    box-shadow: 0 0 8px rgba(0, 255, 157, 0.2);\n    outline: none;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        -256,
+        1456
+      ],
+      "id": "8f23d4ac-98e5-42a0-bc92-f3c3fec954a8",
+      "name": "Select - Campanha - despause"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Nome",
+              "condition": "eq",
+              "keyValue": "={{ $json[\"Você quer despausar qual campanha?\"] }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        128,
+        1280
+      ],
+      "id": "1204c217-47e5-4992-939e-46b968fb6400",
+      "name": "Update - Status despause",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "gte",
+              "keyValue": "0"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        128,
+        1456
+      ],
+      "id": "e59dbe6a-e89f-4d8b-99ec-8dcb3c0bbe64",
+      "name": "Update - ALL Status despause",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "formTitle": "Campanha despausada com sucesso",
+          "formDescription": "=ID: {{ $json.id }}\nCampanha: {{ $json.Nome }}",
+          "buttonLabel": "Voltar",
+          "customCss": ":root {\n\t--font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 700;\n\t--font-size-body: 13px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 22px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 30px;\n\t--font-size-html-h2: 22px;\n\t--font-size-html-h3: 18px;\n\t--font-size-html-h4: 15px;\n\t--font-size-html-h5: 13px;\n\t--font-size-html-h6: 11px;\n\t--font-size-subheader: 15px;\n\n\t/* --- Black Carbon Palette --- */\n\t--color-background: #0f1113; /* Fundo ultra escuro */\n\t--color-card-bg: #1a1d21;    /* Cinza chumbo profundo */\n\t--color-card-border: #2d3238; /* Borda metálica sutil */\n\t--color-card-shadow: rgba(0, 0, 0, 0.6);\n\t\n\t/* Typography */\n\t--color-header: #ffffff;\n\t--color-header-subtext: #9ba1a6;\n\t--color-label: #e2e4e7;\n\t--color-html-text: #bdc1c6;\n\t--color-input-text: #ffffff;\n\t\n\t/* Interactive Elements */\n\t--color-link: #9ba1a6;\n\t--color-html-link: #00ff9d;  /* Verde Neon (High Performance) */\n\t--color-input-border: #3f444d;\n\t--color-focus-border: #00ff9d; /* Glow ao focar */\n\t\n\t/* Buttons & Status */\n\t--color-submit-btn-bg: #00ff9d;\n\t--color-submit-btn-text: #0b0e11;\n\t--color-error: #ff4d4d;\n\t--color-required: #00ff9d;\n\t--color-clear-button-bg: #3f444d;\n\t\n\t/* Test / Warnings */\n\t--color-test-notice-text: #f39c12;\n\t--color-test-notice-bg: #261e12;\n\t--color-test-notice-border: #443621;\n\n\t/* Border Radii (Mais quadrado/agressivo) */\n\t--border-radius-card: 10px;\n\t--border-radius-input: 4px;\n\t--border-radius-clear-btn: 4px;\n\t--card-border-radius: 10px;\n\n\t/* Spacing & Dimensions */\n\t--padding-container-top: 40px;\n\t--padding-card: 32px;\n\t--container-width: 480px;\n\t--submit-btn-height: 52px;\n\t--checkbox-size: 20px;\n\n\t/* Effects */\n\t--box-shadow-card: 0px 10px 30px rgba(0, 0, 0, 0.5);\n\t--opacity-placeholder: 0.4;\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        304,
+        1376
+      ],
+      "id": "698317dd-48b4-45f3-9f26-c708cc4d1b09",
+      "name": "Exibir Resultado - Despause"
+    }
+  ],
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Definir Configurações",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get - Campanhas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get - Campanhas Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get - Campanhas despause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Capture Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Capture MP3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Capture Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Captura Image/Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Pause",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - ALL Status Pause",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exibir Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - ALL Status Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Informa que nada foi selecionado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informa que nada foi selecionado1": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Menu": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Definir Configurações": {
+      "main": [
+        [
+          {
+            "node": "CSV or XLSX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSV or XLSX": {
+      "main": [
+        [
+          {
+            "node": "Extract XLSX",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract CSV",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Extract CSV": {
+      "main": [
+        [
+          {
+            "node": "Aggregate CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract XLSX": {
+      "main": [
+        [
+          {
+            "node": "Aggregate CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate CSV": {
+      "main": [
+        [
+          {
+            "node": "Definir Tipo de Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Definir Tipo de Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voltar ao Menu": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Capture Text": {
+      "main": [
+        [
+          {
+            "node": "Create - Campanha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Capture MP3": {
+      "main": [
+        [
+          {
+            "node": "Converter Base 64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Capture Image": {
+      "main": [
+        [
+          {
+            "node": "Converter Base 64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Captura Image/Text": {
+      "main": [
+        [
+          {
+            "node": "Converter Base 64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter Base 64": {
+      "main": [
+        [
+          {
+            "node": "Create - Campanha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create - Campanha": {
+      "main": [
+        [
+          {
+            "node": "Get - Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Number": {
+      "main": [
+        [
+          {
+            "node": "Create - Base de Disparo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create - Base de Disparo": {
+      "main": [
+        [
+          {
+            "node": "Voltar ao Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Campanhas": {
+      "main": [
+        [
+          {
+            "node": "Select - Campanha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select - Campanha": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Pause": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - ALL Status Pause": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exibir Resultado": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exibir Erro": {
+      "main": [
+        [
+          {
+            "node": "Get - Campanhas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select - Campanha - Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Campanhas Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Select - Campanha - Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado - Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - ALL Status Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado - Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exibir Resultado - Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "node": "Update - Status despause",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - ALL Status despause",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Informa que nada foi selecionado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Informa que nada foi selecionado": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Campanhas despause": {
+      "main": [
+        [
+          {
+            "node": "Select - Campanha - despause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select - Campanha - despause": {
+      "main": [
+        [
+          {
+            "node": "Switch5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status despause": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado - Despause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - ALL Status despause": {
+      "main": [
+        [
+          {
+            "node": "Exibir Resultado - Despause",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exibir Resultado - Despause": {
+      "main": [
+        [
+          {
+            "node": "Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-07T16:11:11.268Z",
+      "createdAt": "2026-03-07T16:11:11.268Z",
+      "role": "workflow:owner",
+      "workflowId": "5oVGecfxH6nhCfgq",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
