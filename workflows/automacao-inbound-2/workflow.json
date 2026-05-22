@@ -1,0 +1,423 @@
+{
+  "id": "gNxnWgMrt9n2F90c",
+  "name": "Automação Inbound 2",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2208,
+        2080
+      ],
+      "id": "53675a69-ccb9-4a73-8d1a-0ce11b3153dc",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+              "leftValue": "={{ $json[\"CNPJ associado\"].toLowerCase().replace('ã', 'a') }}",
+              "rightValue": "=nao",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+              "leftValue": "={{ $('Google Sheets Trigger').item.json.CHATWOOT.toLowerCase() }}",
+              "rightValue": "sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2016,
+        2080
+      ],
+      "id": "6735ecdc-0f6b-4cd7-97e8-9e2412e802d1",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}/toggle_status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"status\": \"resolved\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1520,
+        2064
+      ],
+      "id": "f2d52b7c-f0ad-4055-811c-7afd1f5c048f",
+      "name": "Resolve a conversa1",
+      "executeOnce": false,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Informações inbound 2.0",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+            },
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        2064
+      ],
+      "id": "a4b1aaf0-8e05-4180-9154-732437229170",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Resolve a conversa1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Google Sheets Trigger": {
+      "documentId": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+      "sheetId": 323812150,
+      "lastRevision": 167277,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I&revision=167277&exportFormat=xlsx"
+    },
+    "node:Google Sheets Trigger1": {
+      "documentId": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+      "sheetId": 323812150,
+      "lastRevision": 18674,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I&revision=18674&exportFormat=xlsx"
+    },
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "0eaf646b-8815-431e-9778-f82e91c200c0",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-18T11:31:10.614Z",
+      "createdAt": "2026-02-18T11:31:10.614Z",
+      "role": "workflow:owner",
+      "workflowId": "gNxnWgMrt9n2F90c",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-13T14:11:19.000Z",
+    "createdAt": "2026-03-13T14:10:37.411Z",
+    "versionId": "0eaf646b-8815-431e-9778-f82e91c200c0",
+    "workflowId": "gNxnWgMrt9n2F90c",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "event": "rowUpdate",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTrigger",
+        "typeVersion": 1,
+        "position": [
+          -2208,
+          2080
+        ],
+        "id": "53675a69-ccb9-4a73-8d1a-0ce11b3153dc",
+        "name": "Google Sheets Trigger",
+        "credentials": {
+          "googleSheetsTriggerOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+                "leftValue": "={{ $json[\"CNPJ associado\"].toLowerCase().replace('ã', 'a') }}",
+                "rightValue": "=nao",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+                "leftValue": "={{ $('Google Sheets Trigger').item.json.CHATWOOT.toLowerCase() }}",
+                "rightValue": "sim",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -2016,
+          2080
+        ],
+        "id": "6735ecdc-0f6b-4cd7-97e8-9e2412e802d1",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}/toggle_status",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"status\": \"resolved\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -1520,
+          2064
+        ],
+        "id": "f2d52b7c-f0ad-4055-811c-7afd1f5c048f",
+        "name": "Resolve a conversa1",
+        "executeOnce": false,
+        "retryOnFail": false
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "Informações inbound 2.0",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+              },
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -1760,
+          2064
+        ],
+        "id": "a4b1aaf0-8e05-4180-9154-732437229170",
+        "name": "Get many rows1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Google Sheets Trigger": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Get many rows1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          [
+            {
+              "node": "Resolve a conversa1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 0eaf646b",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
