@@ -1,0 +1,1506 @@
+{
+  "id": "ao9PdJvqSMRSkKpy",
+  "name": "Kommit - Receber.Leads",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "apic6",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        304,
+        16
+      ],
+      "id": "5af07771-8641-48c9-afe2-785d4585db1a",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "nome",
+              "value": "={{ $json.body.nome }}"
+            },
+            {
+              "key": "cnpj",
+              "value": "={{ $json.body.CNPJ }}"
+            },
+            {
+              "key": "email",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "key": "telefone",
+              "value": "={{ $json.body.telefone }}"
+            },
+            {
+              "key": "flow",
+              "value": "fila"
+            },
+            {
+              "key": "campanha_id",
+              "value": "={{ $json.body.campanha_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        528,
+        16
+      ],
+      "id": "4ab7b7d6-323d-48ef-8b65-33eab769a48b",
+      "name": "Execution Data",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        16
+      ],
+      "id": "827938eb-182b-4a84-87f3-12222f89ad91",
+      "name": "END"
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "nome",
+              "fieldValue": "={{ $json.nome ?? \"Empresa\" }}"
+            },
+            {
+              "fieldId": "sobrenome",
+              "fieldValue": "={{ $json.nome ?? \"Empresa\"}}"
+            },
+            {
+              "fieldId": "razao",
+              "fieldValue": "={{ $json.nome ?? \"Empresa\" }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ ('55' + $json.telefone.replace(/\\D/g, '')).slice(-13) }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "email@email.com"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "pendente"
+            },
+            {
+              "fieldId": "cnpj",
+              "fieldValue": "={{ $json.cnpj.toString().replace(/\\D/g, '') }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            },
+            {
+              "fieldId": "campanha",
+              "fieldValue": "={{ $json.campanha }}"
+            },
+            {
+              "fieldId": "socio",
+              "fieldValue": "={{ $json.socio }}"
+            },
+            {
+              "fieldId": "criar_card",
+              "fieldValue": "={{ $json.status === 'Ligado' ? 'pendente' : 'nao' }}"
+            },
+            {
+              "fieldId": "enviar_mensagem",
+              "fieldValue": "={{ $json.enviar_mensagem  === 'Sim' ? 'pendente': 'nao'}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        16
+      ],
+      "id": "986184e9-0dd7-4c1a-9662-c298134e2b6f",
+      "name": "Adicionar a Fila",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a98d1ed4-05e7-42cd-b06b-e1c9e08d3931",
+              "name": "nome",
+              "value": "={{ $('Webhook').item.json.body.nome }}",
+              "type": "string"
+            },
+            {
+              "id": "ff07dfb8-459b-4593-8202-ef6a8ae2227b",
+              "name": "cnpj",
+              "value": "={{ $('Webhook').item.json.body.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "8123b48a-0ae8-441c-9925-a53f8072161c",
+              "name": "socio",
+              "value": "={{ $('Webhook').item.json.body.SOCIO }}",
+              "type": "string"
+            },
+            {
+              "id": "45800cab-ef79-42ab-ab3b-8967c61c48a7",
+              "name": "telefone",
+              "value": "={{ $('Webhook').item.json.body.telefone }}",
+              "type": "string"
+            },
+            {
+              "id": "9b7002e2-41ee-4ba0-b01c-e2d45b49bf6d",
+              "name": "campanha",
+              "value": "={{ $('Webhook').item.json.body.campanha_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1db4b826-bc8c-4896-877d-b2093118dc0c",
+              "name": "criar_card",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "77e21dc3-8d02-4823-a0e7-6b3d6187585f",
+              "name": "enviar_mensagem",
+              "value": "={{ $json.enviar_mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        16
+      ],
+      "id": "93a65744-d634-47eb-91c7-5ef1e6be4091",
+      "name": "ENV"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "status_automacao",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        752,
+        16
+      ],
+      "id": "db2e56f0-ab0f-42bd-a492-d16fef30185d",
+      "name": "Get a row",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "notes": "Recupera a configuração atual da automação:\n1. Se o sistema deve criar o card na bitrix ou não\n2. Se o sistema deve enviar mensagem no WhatsApp Meta Oficial ou não"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        336
+      ],
+      "id": "9cab923b-b73a-4791-a645-715dcf4cfb4e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        352
+      ],
+      "id": "a5f348c7-4d33-46b1-abaa-231017553c30",
+      "placeholder": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7a2f6bd4-2fe8-4ae9-bfcd-d8ca037b7b63",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1616,
+        352
+      ],
+      "id": "2d5314a0-0fd0-4678-8e4f-ef34f56992c2",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        304,
+        336
+      ],
+      "id": "14748c6f-b633-4359-bdc3-56a600c8de51",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "status_automacao",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        528,
+        336
+      ],
+      "id": "79462b60-b6dd-427a-b695-072b03a4ac63",
+      "name": "Get - Config Automação",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      },
+      "notes": "Recupera a configuração atual da automação:\n1. Se o sistema deve criar o card na bitrix ou não\n2. Se o sistema deve enviar mensagem no WhatsApp Meta Oficial ou não"
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "returnAll": true,
+        "filters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "ao9PdJvqSMRSkKpy",
+            "mode": "list",
+            "cachedResultName": "Kommit - Receber.Leads (#ao9PdJvqSMRSkKpy)"
+          },
+          "status": "error"
+        },
+        "options": {
+          "activeWorkflows": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        752,
+        336
+      ],
+      "id": "6e58906d-6d00-40dc-8e24-c7eb3d6f92bd",
+      "name": "Get - Executions Erro",
+      "credentials": {
+        "n8nApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0fa8f48-e829-44a8-88d0-d92d06dc8991",
+              "name": "webhook",
+              "value": "={{ $json.data.resultData.runData.Webhook[0].data.main[0][0].json.body }}",
+              "type": "object"
+            },
+            {
+              "id": "231a3740-14a7-433d-afd2-e6974235ce7b",
+              "name": "status",
+              "value": "={{ $('Get - Config Automação').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "58d5d890-5962-42a0-9f50-15e78f13911b",
+              "name": "enviar_mensagem",
+              "value": "={{ $('Get - Config Automação').item.json.enviar_mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        336
+      ],
+      "id": "b7ffad6f-4da7-49e1-9c85-219806bc55fd",
+      "name": "Mapeamento"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "cnpj",
+              "keyValue": "={{ $json.webhook.CNPJ }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        352
+      ],
+      "id": "f5addfb8-7fa0-44f1-9195-a8a51b5e1225",
+      "name": "Get - Lead",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "socio",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.SOCIO }}"
+            },
+            {
+              "fieldId": "campanha",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.campanha_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        224
+      ],
+      "id": "b8a5450a-deba-4e9d-a2ad-c60334450b10",
+      "name": "Update - Socio e Campanha",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "nome",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\" }}"
+            },
+            {
+              "fieldId": "sobrenome",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\"}}"
+            },
+            {
+              "fieldId": "razao",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\" }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ ('55' + $('Loop Over Items').item.json.webhook.telefone.replace(/\\D/g, '')).slice(-13) }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "email@email.com"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "=pendente"
+            },
+            {
+              "fieldId": "cnpj",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.CNPJ.toString().replace(/\\D/g, '') }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            },
+            {
+              "fieldId": "campanha",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.campanha_id }}"
+            },
+            {
+              "fieldId": "socio",
+              "fieldValue": "={{ $('Loop Over Items').item.json.webhook.SOCIO }}"
+            },
+            {
+              "fieldId": "criar_card",
+              "fieldValue": "={{ $('Loop Over Items').item.json.status === 'Ligado' ? 'pendente' : 'nao' }}"
+            },
+            {
+              "fieldId": "enviar_mensagem",
+              "fieldValue": "={{  $('Loop Over Items').item.json.enviar_mensagem === 'Sim' ? 'pendente': 'nao'}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        480
+      ],
+      "id": "65062cb7-b5e0-44eb-9d98-33a6b127bcd2",
+      "name": "Create - Fila",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar a Fila": {
+      "main": [
+        [
+          {
+            "node": "END",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "END": {
+      "main": [
+        []
+      ]
+    },
+    "ENV": {
+      "main": [
+        [
+          {
+            "node": "Adicionar a Fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "ENV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get - Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update - Socio e Campanha",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create - Fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get - Config Automação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Config Automação": {
+      "main": [
+        [
+          {
+            "node": "Get - Executions Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Executions Erro": {
+      "main": [
+        [
+          {
+            "node": "Mapeamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mapeamento": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Lead": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Socio e Campanha": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create - Fila": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "a55524e1-0c61-411a-b441-ddfdda133cde",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-05-13T17:02:58.291Z",
+      "createdAt": "2026-05-13T17:02:58.291Z",
+      "role": "workflow:owner",
+      "workflowId": "ao9PdJvqSMRSkKpy",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-14T15:02:06.000Z",
+    "createdAt": "2026-05-14T15:01:40.583Z",
+    "versionId": "a55524e1-0c61-411a-b441-ddfdda133cde",
+    "workflowId": "ao9PdJvqSMRSkKpy",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "apic6",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          304,
+          16
+        ],
+        "id": "5af07771-8641-48c9-afe2-785d4585db1a",
+        "name": "Webhook",
+        "webhookId": "fc46fa7b-637f-40cb-9415-e5c752a03cd5"
+      },
+      {
+        "parameters": {
+          "dataToSave": {
+            "values": [
+              {
+                "key": "nome",
+                "value": "={{ $json.body.nome }}"
+              },
+              {
+                "key": "cnpj",
+                "value": "={{ $json.body.CNPJ }}"
+              },
+              {
+                "key": "email",
+                "value": "={{ $json.body.email }}"
+              },
+              {
+                "key": "telefone",
+                "value": "={{ $json.body.telefone }}"
+              },
+              {
+                "key": "flow",
+                "value": "fila"
+              },
+              {
+                "key": "campanha_id",
+                "value": "={{ $json.body.campanha_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executionData",
+        "typeVersion": 1.1,
+        "position": [
+          528,
+          16
+        ],
+        "id": "4ab7b7d6-323d-48ef-8b65-33eab769a48b",
+        "name": "Execution Data",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1424,
+          16
+        ],
+        "id": "827938eb-182b-4a84-87f3-12222f89ad91",
+        "name": "END"
+      },
+      {
+        "parameters": {
+          "tableId": "leads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "nome",
+                "fieldValue": "={{ $json.nome ?? \"Empresa\" }}"
+              },
+              {
+                "fieldId": "sobrenome",
+                "fieldValue": "={{ $json.nome ?? \"Empresa\"}}"
+              },
+              {
+                "fieldId": "razao",
+                "fieldValue": "={{ $json.nome ?? \"Empresa\" }}"
+              },
+              {
+                "fieldId": "telefone",
+                "fieldValue": "={{ ('55' + $json.telefone.replace(/\\D/g, '')).slice(-13) }}"
+              },
+              {
+                "fieldId": "email",
+                "fieldValue": "email@email.com"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "pendente"
+              },
+              {
+                "fieldId": "cnpj",
+                "fieldValue": "={{ $json.cnpj.toString().replace(/\\D/g, '') }}"
+              },
+              {
+                "fieldId": "created_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+              },
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+              },
+              {
+                "fieldId": "campanha",
+                "fieldValue": "={{ $json.campanha }}"
+              },
+              {
+                "fieldId": "socio",
+                "fieldValue": "={{ $json.socio }}"
+              },
+              {
+                "fieldId": "criar_card",
+                "fieldValue": "={{ $json.status === 'Ligado' ? 'pendente' : 'nao' }}"
+              },
+              {
+                "fieldId": "enviar_mensagem",
+                "fieldValue": "={{ $json.enviar_mensagem  === 'Sim' ? 'pendente': 'nao'}}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1200,
+          16
+        ],
+        "id": "986184e9-0dd7-4c1a-9662-c298134e2b6f",
+        "name": "Adicionar a Fila",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a98d1ed4-05e7-42cd-b06b-e1c9e08d3931",
+                "name": "nome",
+                "value": "={{ $('Webhook').item.json.body.nome }}",
+                "type": "string"
+              },
+              {
+                "id": "ff07dfb8-459b-4593-8202-ef6a8ae2227b",
+                "name": "cnpj",
+                "value": "={{ $('Webhook').item.json.body.CNPJ }}",
+                "type": "string"
+              },
+              {
+                "id": "8123b48a-0ae8-441c-9925-a53f8072161c",
+                "name": "socio",
+                "value": "={{ $('Webhook').item.json.body.SOCIO }}",
+                "type": "string"
+              },
+              {
+                "id": "45800cab-ef79-42ab-ab3b-8967c61c48a7",
+                "name": "telefone",
+                "value": "={{ $('Webhook').item.json.body.telefone }}",
+                "type": "string"
+              },
+              {
+                "id": "9b7002e2-41ee-4ba0-b01c-e2d45b49bf6d",
+                "name": "campanha",
+                "value": "={{ $('Webhook').item.json.body.campanha_id }}",
+                "type": "string"
+              },
+              {
+                "id": "1db4b826-bc8c-4896-877d-b2093118dc0c",
+                "name": "criar_card",
+                "value": "={{ $json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "77e21dc3-8d02-4823-a0e7-6b3d6187585f",
+                "name": "enviar_mensagem",
+                "value": "={{ $json.enviar_mensagem }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          976,
+          16
+        ],
+        "id": "93a65744-d634-47eb-91c7-5ef1e6be4091",
+        "name": "ENV"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "status_automacao",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "1"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          752,
+          16
+        ],
+        "id": "db2e56f0-ab0f-42bd-a492-d16fef30185d",
+        "name": "Get a row",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        },
+        "notes": "Recupera a configuração atual da automação:\n1. Se o sistema deve criar o card na bitrix ou não\n2. Se o sistema deve enviar mensagem no WhatsApp Meta Oficial ou não"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1200,
+          336
+        ],
+        "id": "9cab923b-b73a-4791-a645-715dcf4cfb4e",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me",
+        "typeVersion": 1,
+        "position": [
+          1840,
+          352
+        ],
+        "id": "a5f348c7-4d33-46b1-abaa-231017553c30",
+        "placeholder": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "7a2f6bd4-2fe8-4ae9-bfcd-d8ca037b7b63",
+                "leftValue": "={{ $json.id }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1616,
+          352
+        ],
+        "id": "2d5314a0-0fd0-4678-8e4f-ef34f56992c2",
+        "name": "If"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          304,
+          336
+        ],
+        "id": "14748c6f-b633-4359-bdc3-56a600c8de51",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "status_automacao",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "1"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          528,
+          336
+        ],
+        "id": "79462b60-b6dd-427a-b695-072b03a4ac63",
+        "name": "Get - Config Automação",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        },
+        "notes": "Recupera a configuração atual da automação:\n1. Se o sistema deve criar o card na bitrix ou não\n2. Se o sistema deve enviar mensagem no WhatsApp Meta Oficial ou não"
+      },
+      {
+        "parameters": {
+          "resource": "execution",
+          "returnAll": true,
+          "filters": {
+            "workflowId": {
+              "__rl": true,
+              "value": "ao9PdJvqSMRSkKpy",
+              "mode": "list",
+              "cachedResultName": "Kommit - Receber.Leads (#ao9PdJvqSMRSkKpy)"
+            },
+            "status": "error"
+          },
+          "options": {
+            "activeWorkflows": true
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.n8n",
+        "typeVersion": 1,
+        "position": [
+          752,
+          336
+        ],
+        "id": "6e58906d-6d00-40dc-8e24-c7eb3d6f92bd",
+        "name": "Get - Executions Erro",
+        "credentials": {
+          "n8nApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c0fa8f48-e829-44a8-88d0-d92d06dc8991",
+                "name": "webhook",
+                "value": "={{ $json.data.resultData.runData.Webhook[0].data.main[0][0].json.body }}",
+                "type": "object"
+              },
+              {
+                "id": "231a3740-14a7-433d-afd2-e6974235ce7b",
+                "name": "status",
+                "value": "={{ $('Get - Config Automação').item.json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "58d5d890-5962-42a0-9f50-15e78f13911b",
+                "name": "enviar_mensagem",
+                "value": "={{ $('Get - Config Automação').item.json.enviar_mensagem }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          976,
+          336
+        ],
+        "id": "b7ffad6f-4da7-49e1-9c85-219806bc55fd",
+        "name": "Mapeamento"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "cnpj",
+                "keyValue": "={{ $json.webhook.CNPJ }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1424,
+          352
+        ],
+        "id": "f5addfb8-7fa0-44f1-9195-a8a51b5e1225",
+        "name": "Get - Lead",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "leads",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "socio",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.SOCIO }}"
+              },
+              {
+                "fieldId": "campanha",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.campanha_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1728,
+          224
+        ],
+        "id": "b8a5450a-deba-4e9d-a2ad-c60334450b10",
+        "name": "Update - Socio e Campanha",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "leads",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "nome",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\" }}"
+              },
+              {
+                "fieldId": "sobrenome",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\"}}"
+              },
+              {
+                "fieldId": "razao",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.nome ?? \"Empresa\" }}"
+              },
+              {
+                "fieldId": "telefone",
+                "fieldValue": "={{ ('55' + $('Loop Over Items').item.json.webhook.telefone.replace(/\\D/g, '')).slice(-13) }}"
+              },
+              {
+                "fieldId": "email",
+                "fieldValue": "email@email.com"
+              },
+              {
+                "fieldId": "status",
+                "fieldValue": "=pendente"
+              },
+              {
+                "fieldId": "cnpj",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.CNPJ.toString().replace(/\\D/g, '') }}"
+              },
+              {
+                "fieldId": "created_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+              },
+              {
+                "fieldId": "updated_at",
+                "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+              },
+              {
+                "fieldId": "campanha",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.campanha_id }}"
+              },
+              {
+                "fieldId": "socio",
+                "fieldValue": "={{ $('Loop Over Items').item.json.webhook.SOCIO }}"
+              },
+              {
+                "fieldId": "criar_card",
+                "fieldValue": "={{ $('Loop Over Items').item.json.status === 'Ligado' ? 'pendente' : 'nao' }}"
+              },
+              {
+                "fieldId": "enviar_mensagem",
+                "fieldValue": "={{  $('Loop Over Items').item.json.enviar_mensagem === 'Sim' ? 'pendente': 'nao'}}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          1728,
+          480
+        ],
+        "id": "65062cb7-b5e0-44eb-9d98-33a6b127bcd2",
+        "name": "Create - Fila",
+        "retryOnFail": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Execution Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execution Data": {
+        "main": [
+          [
+            {
+              "node": "Get a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adicionar a Fila": {
+        "main": [
+          [
+            {
+              "node": "END",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "END": {
+        "main": [
+          []
+        ]
+      },
+      "ENV": {
+        "main": [
+          [
+            {
+              "node": "Adicionar a Fila",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a row": {
+        "main": [
+          [
+            {
+              "node": "ENV",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Get - Lead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Update - Socio e Campanha",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create - Fila",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Get - Config Automação",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Config Automação": {
+        "main": [
+          [
+            {
+              "node": "Get - Executions Erro",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Executions Erro": {
+        "main": [
+          [
+            {
+              "node": "Mapeamento",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Mapeamento": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get - Lead": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update - Socio e Campanha": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create - Fila": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Kommit Automação",
+    "name": "Version a55524e1",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    }
+  ]
+}
