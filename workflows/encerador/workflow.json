@@ -1,0 +1,292 @@
+{
+  "id": "dgCeoQciud2Mhoor",
+  "name": "Encerador",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d127b8b6-d049-41aa-b2dc-c30859e3b742",
+        "options": {}
+      },
+      "id": "e0261616-281d-4fbb-bd19-923d007d4586",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || {};\nconst messageType = body.message_type;\n\nif (messageType !== \"incoming\") return [];\n\nconst rawContent = body.content || (body.messages?.[0]?.content) || \"\";\nconst conversationId = body.conversation?.id || body.conversation_id;\n\nconst exactKeywords = [\"encerrar\", \"sair\", \"bloquear\"];\nconst partialKeywords = [\n  \"encerrar atendimento\",\n  \"n\\u00e3o solicitei contato\"\n];\n\nconst sanitized = rawContent\n  .toString()\n  .toLowerCase()\n  .normalize(\"NFC\")\n  .replace(/\\u2060/g, \"\")\n  .trim();\n\nconst isExact = exactKeywords.some(opt => sanitized === opt);\nconst isPartial = partialKeywords.some(opt => sanitized.includes(opt));\n\nif (!isExact && !isPartial) return [];\n\nreturn [\n  {\n    json: {\n      conversation_id: conversationId\n    }\n  }\n];"
+      },
+      "id": "f04a778d-bb19-4f37-8673-354cfa8c3c99",
+      "name": "Filtrar Palavras-Chave",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $node[\"Filtrar Palavras-Chave\"].json.conversation_id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"labels\": [\"black_list\"]\n}",
+        "options": {}
+      },
+      "id": "184e5342-f680-4699-8c92-cdf461474d33",
+      "name": "Adicionar Etiqueta Blacklist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        704,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $node[\"Filtrar Palavras-Chave\"].json.conversation_id }}/toggle_status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"resolved\"\n}",
+        "options": {}
+      },
+      "id": "2668fec8-bf19-4057-b99f-0d42d83191f0",
+      "name": "Finalizar Conversa",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        960,
+        304
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Palavras-Chave",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Palavras-Chave": {
+      "main": [
+        [
+          {
+            "node": "Adicionar Etiqueta Blacklist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adicionar Etiqueta Blacklist": {
+      "main": [
+        [
+          {
+            "node": "Finalizar Conversa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "55d4126c-6538-493c-89db-7d89b03dadef",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-30T17:49:32.943Z",
+      "createdAt": "2026-03-30T17:49:32.943Z",
+      "role": "workflow:owner",
+      "workflowId": "dgCeoQciud2Mhoor",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-08T17:39:23.000Z",
+    "createdAt": "2026-05-08T17:39:22.509Z",
+    "versionId": "55d4126c-6538-493c-89db-7d89b03dadef",
+    "workflowId": "dgCeoQciud2Mhoor",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "d127b8b6-d049-41aa-b2dc-c30859e3b742",
+          "options": {}
+        },
+        "id": "e0261616-281d-4fbb-bd19-923d007d4586",
+        "name": "Webhook1",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "webhookId": "d127b8b6-d049-41aa-b2dc-c30859e3b742",
+        "position": [
+          208,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $json.body || {};\nconst messageType = body.message_type;\n\nif (messageType !== \"incoming\") return [];\n\nconst rawContent = body.content || (body.messages?.[0]?.content) || \"\";\nconst conversationId = body.conversation?.id || body.conversation_id;\n\nconst exactKeywords = [\"encerrar\", \"sair\", \"bloquear\"];\nconst partialKeywords = [\n  \"encerrar atendimento\",\n  \"n\\u00e3o solicitei contato\"\n];\n\nconst sanitized = rawContent\n  .toString()\n  .toLowerCase()\n  .normalize(\"NFC\")\n  .replace(/\\u2060/g, \"\")\n  .trim();\n\nconst isExact = exactKeywords.some(opt => sanitized === opt);\nconst isPartial = partialKeywords.some(opt => sanitized.includes(opt));\n\nif (!isExact && !isPartial) return [];\n\nreturn [\n  {\n    json: {\n      conversation_id: conversationId\n    }\n  }\n];"
+        },
+        "id": "f04a778d-bb19-4f37-8673-354cfa8c3c99",
+        "name": "Filtrar Palavras-Chave",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $node[\"Filtrar Palavras-Chave\"].json.conversation_id }}/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"labels\": [\"black_list\"]\n}",
+          "options": {}
+        },
+        "id": "184e5342-f680-4699-8c92-cdf461474d33",
+        "name": "Adicionar Etiqueta Blacklist",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          704,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $node[\"Filtrar Palavras-Chave\"].json.conversation_id }}/toggle_status",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"status\": \"resolved\"\n}",
+          "options": {}
+        },
+        "id": "2668fec8-bf19-4057-b99f-0d42d83191f0",
+        "name": "Finalizar Conversa",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          960,
+          304
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook1": {
+        "main": [
+          [
+            {
+              "node": "Filtrar Palavras-Chave",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrar Palavras-Chave": {
+        "main": [
+          [
+            {
+              "node": "Adicionar Etiqueta Blacklist",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Adicionar Etiqueta Blacklist": {
+        "main": [
+          [
+            {
+              "node": "Finalizar Conversa",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 55d4126c",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
