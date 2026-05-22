@@ -1,0 +1,992 @@
+{
+  "id": "qaIYgElpetIFVwDb",
+  "name": "robo etiqueta IA",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+      },
+      "id": "7f533b27-a27e-4015-81cf-4d04381bdd87",
+      "name": "Gerar Paginas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 200,
+        "options": {}
+      },
+      "id": "f7bcd12f-8b37-42b6-b5ba-a088bc77d3d6",
+      "name": "Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        48,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9b01175d-8bcd-47f7-af1e-a6acb57d756e",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        288,
+        224
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me2",
+      "typeVersion": 1,
+      "position": [
+        720,
+        224
+      ],
+      "id": "b0f92af7-4249-4307-bf91-ba9682c48d79"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"labels\": {{ JSON.stringify([...($json.labels || []), \"ia\"].filter((v, i, a) => a.indexOf(v) === i)) }}\n}",
+        "options": {}
+      },
+      "id": "8787cc5b-abb7-4e78-a196-3c4451b9442f",
+      "name": "Manter Etiquetas + IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        48,
+        16
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "jsCode": "const idsPermitidos = new Set([22, 31, 29, 28, 19, 33, 30].map(String));\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n\n  const listaDeConversas = Array.isArray(corpo?.data?.payload)\n    ? corpo.data.payload\n    : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv?.meta?.assignee?.id;\n\n    if (!assigneeId) continue;\n\n    if (idsPermitidos.has(String(assigneeId))) {\n      resultados.push({ json: conv });\n    }\n  }\n}\n\nreturn resultados;"
+      },
+      "id": "16081549-643c-4d02-89f1-2f4093b5c9a6",
+      "name": "Filtrar Lista de IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+      },
+      "id": "edd1f746-e31b-420d-b237-6fe70aae90d8",
+      "name": "Gerar Paginas1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 200,
+        "options": {}
+      },
+      "id": "65144887-07bd-4b8a-903c-4da1772d7974",
+      "name": "Loop1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        32,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2b1a6b74-a908-4682-bc9c-4ce8c6a051ca",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        272,
+        848
+      ],
+      "retryOnFail": true,
+      "maxTries": 5,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        704,
+        848
+      ],
+      "id": "151fa92c-dd0e-45d7-815d-e43123555c5e"
+    },
+    {
+      "parameters": {
+        "jsCode": "const idsPermitidos = new Set([22, 31, 29, 28, 19, 33, 30].map(String));\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n\n  const listaDeConversas = Array.isArray(corpo?.data?.payload)\n    ? corpo.data.payload\n    : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv?.meta?.assignee?.id;\n\n    if (!assigneeId) continue;\n\n    if (idsPermitidos.has(String(assigneeId))) {\n      resultados.push({ json: conv });\n    }\n  }\n}\n\nreturn resultados;"
+      },
+      "id": "5f3ab5ee-9103-4a0e-891f-7c653b944569",
+      "name": "Filtrar Lista de IDs1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        848
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"labels\": {{ \n    JSON.stringify(\n      ($json.labels || [])\n      .map(l => typeof l === 'object' ? l.name : l)\n      .filter(l => l.toLowerCase().trim() !== \"ia\")\n    ) \n  }}\n}",
+        "options": {}
+      },
+      "id": "ae88f33d-24fd-465a-95d4-b6cb3b8ff2b4",
+      "name": "Remover Etiqueta IA (Forçado)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        32,
+        640
+      ],
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 18,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "id": "52774fd5-56b1-484d-b020-f1061d137a78",
+      "name": "Schedule Trigger1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "6623a239-65ba-408e-baf5-5702ca054564",
+      "name": "Schedule Trigger2",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        832
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "RETIRA AS ESTIQUETAS",
+        "height": 560,
+        "width": 1472
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -496,
+        576
+      ],
+      "typeVersion": 1,
+      "id": "c41538f0-7722-4f7d-bb10-b933e895eca1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "COLOCA AS ESTIQUETAS",
+        "height": 464,
+        "width": 1504
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -496,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "7eefd4a4-a88f-442c-a18d-af762f9080ee",
+      "name": "Sticky Note1"
+    }
+  ],
+  "connections": {
+    "Gerar Paginas": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop": {
+      "main": [
+        [
+          {
+            "node": "Manter Etiquetas + IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Lista de IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me2": {
+      "main": [
+        [
+          {
+            "node": "Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Lista de IDs": {
+      "main": [
+        [
+          {
+            "node": "Replace Me2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Paginas1": {
+      "main": [
+        [
+          {
+            "node": "Loop1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop1": {
+      "main": [
+        [
+          {
+            "node": "Remover Etiqueta IA (Forçado)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Lista de IDs1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Lista de IDs1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Gerar Paginas1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Gerar Paginas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger2": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "activeVersionId": "89b973f1-e5f7-4de6-9a15-636eb977f0a9",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2026-04-22T18:14:28.428Z",
+      "createdAt": "2026-04-22T18:14:28.428Z",
+      "role": "workflow:owner",
+      "workflowId": "qaIYgElpetIFVwDb",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-18T14:25:08.000Z",
+    "createdAt": "2026-05-18T14:24:58.527Z",
+    "versionId": "89b973f1-e5f7-4de6-9a15-636eb977f0a9",
+    "workflowId": "qaIYgElpetIFVwDb",
+    "nodes": [
+      {
+        "parameters": {
+          "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+        },
+        "id": "7f533b27-a27e-4015-81cf-4d04381bdd87",
+        "name": "Gerar Paginas",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -144,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "batchSize": 200,
+          "options": {}
+        },
+        "id": "f7bcd12f-8b37-42b6-b5ba-a088bc77d3d6",
+        "name": "Loop",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          48,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              },
+              {
+                "name": "per_page",
+                "value": "100"
+              },
+              {
+                "name": "page",
+                "value": "={{ $json.page }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "9b01175d-8bcd-47f7-af1e-a6acb57d756e",
+        "name": "HTTP Request",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          288,
+          224
+        ],
+        "retryOnFail": true,
+        "maxTries": 5,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me2",
+        "typeVersion": 1,
+        "position": [
+          720,
+          224
+        ],
+        "id": "b0f92af7-4249-4307-bf91-ba9682c48d79"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"labels\": {{ JSON.stringify([...($json.labels || []), \"ia\"].filter((v, i, a) => a.indexOf(v) === i)) }}\n}",
+          "options": {}
+        },
+        "id": "8787cc5b-abb7-4e78-a196-3c4451b9442f",
+        "name": "Manter Etiquetas + IA",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          48,
+          16
+        ],
+        "retryOnFail": true,
+        "maxTries": 5
+      },
+      {
+        "parameters": {
+          "jsCode": "const idsPermitidos = new Set([22, 31, 29, 28, 19, 33, 30].map(String));\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n\n  const listaDeConversas = Array.isArray(corpo?.data?.payload)\n    ? corpo.data.payload\n    : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv?.meta?.assignee?.id;\n\n    if (!assigneeId) continue;\n\n    if (idsPermitidos.has(String(assigneeId))) {\n      resultados.push({ json: conv });\n    }\n  }\n}\n\nreturn resultados;"
+        },
+        "id": "16081549-643c-4d02-89f1-2f4093b5c9a6",
+        "name": "Filtrar Lista de IDs",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          528,
+          224
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "return Array.from({ length: 200 }, (_, i) => ({ \n  json: { page: i + 1 } \n}));"
+        },
+        "id": "edd1f746-e31b-420d-b237-6fe70aae90d8",
+        "name": "Gerar Paginas1",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -160,
+          832
+        ]
+      },
+      {
+        "parameters": {
+          "batchSize": 200,
+          "options": {}
+        },
+        "id": "65144887-07bd-4b8a-903c-4da1772d7974",
+        "name": "Loop1",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          32,
+          832
+        ]
+      },
+      {
+        "parameters": {
+          "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/conversations",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              },
+              {
+                "name": "per_page",
+                "value": "100"
+              },
+              {
+                "name": "page",
+                "value": "={{ $json.page }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "2b1a6b74-a908-4682-bc9c-4ce8c6a051ca",
+        "name": "HTTP Request1",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          272,
+          848
+        ],
+        "retryOnFail": true,
+        "maxTries": 5,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "name": "Replace Me",
+        "typeVersion": 1,
+        "position": [
+          704,
+          848
+        ],
+        "id": "151fa92c-dd0e-45d7-815d-e43123555c5e"
+      },
+      {
+        "parameters": {
+          "jsCode": "const idsPermitidos = new Set([22, 31, 29, 28, 19, 33, 30].map(String));\nconst resultados = [];\n\nfor (const item of $input.all()) {\n  const corpo = item.json;\n\n  const listaDeConversas = Array.isArray(corpo?.data?.payload)\n    ? corpo.data.payload\n    : [];\n\n  for (const conv of listaDeConversas) {\n    const assigneeId = conv?.meta?.assignee?.id;\n\n    if (!assigneeId) continue;\n\n    if (idsPermitidos.has(String(assigneeId))) {\n      resultados.push({ json: conv });\n    }\n  }\n}\n\nreturn resultados;"
+        },
+        "id": "5f3ab5ee-9103-4a0e-891f-7c653b944569",
+        "name": "Filtrar Lista de IDs1",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          512,
+          848
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"labels\": {{ \n    JSON.stringify(\n      ($json.labels || [])\n      .map(l => typeof l === 'object' ? l.name : l)\n      .filter(l => l.toLowerCase().trim() !== \"ia\")\n    ) \n  }}\n}",
+          "options": {}
+        },
+        "id": "ae88f33d-24fd-465a-95d4-b6cb3b8ff2b4",
+        "name": "Remover Etiqueta IA (Forçado)",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          32,
+          640
+        ],
+        "retryOnFail": true,
+        "maxTries": 5
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 18,
+                "triggerAtMinute": 30
+              }
+            ]
+          }
+        },
+        "id": "52774fd5-56b1-484d-b020-f1061d137a78",
+        "name": "Schedule Trigger1",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -352,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              }
+            ]
+          }
+        },
+        "id": "6623a239-65ba-408e-baf5-5702ca054564",
+        "name": "Schedule Trigger2",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -352,
+          832
+        ]
+      },
+      {
+        "parameters": {
+          "content": "RETIRA AS ESTIQUETAS",
+          "height": 560,
+          "width": 1472
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -496,
+          576
+        ],
+        "typeVersion": 1,
+        "id": "c41538f0-7722-4f7d-bb10-b933e895eca1",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "COLOCA AS ESTIQUETAS",
+          "height": 464,
+          "width": 1504
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -496,
+          -32
+        ],
+        "typeVersion": 1,
+        "id": "7eefd4a4-a88f-442c-a18d-af762f9080ee",
+        "name": "Sticky Note1"
+      }
+    ],
+    "connections": {
+      "Gerar Paginas": {
+        "main": [
+          [
+            {
+              "node": "Loop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop": {
+        "main": [
+          [
+            {
+              "node": "Manter Etiquetas + IA",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Filtrar Lista de IDs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me2": {
+        "main": [
+          [
+            {
+              "node": "Loop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrar Lista de IDs": {
+        "main": [
+          [
+            {
+              "node": "Replace Me2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gerar Paginas1": {
+        "main": [
+          [
+            {
+              "node": "Loop1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop1": {
+        "main": [
+          [
+            {
+              "node": "Remover Etiqueta IA (Forçado)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "Filtrar Lista de IDs1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Replace Me": {
+        "main": [
+          [
+            {
+              "node": "Loop1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrar Lista de IDs1": {
+        "main": [
+          [
+            {
+              "node": "Replace Me",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger2": {
+        "main": [
+          [
+            {
+              "node": "Gerar Paginas1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger1": {
+        "main": [
+          [
+            {
+              "node": "Gerar Paginas",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 89b973f1",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
