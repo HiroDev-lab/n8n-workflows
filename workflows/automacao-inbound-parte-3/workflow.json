@@ -1,0 +1,688 @@
+{
+  "id": "9CtHwjKNFhgZlNVp",
+  "name": "Automação inbound parte 3",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+          "mode": "list",
+          "cachedResultName": "Leads Maxx chatwoot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 323812150,
+          "mode": "list",
+          "cachedResultName": "Página2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        64,
+        112
+      ],
+      "id": "da8ba0d8-ff56-4504-b68e-35ca9b711c5d",
+      "name": "Google Sheets Trigger2",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json.Viabilidade.toLowerCase().replace('ã', 'a') }}",
+              "rightValue": "=sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json.CHATWOOT.toLowerCase() }}",
+              "rightValue": "sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        112
+      ],
+      "id": "0ba31cc3-a0b0-4654-a59f-970bb45ba0ad",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Informações inbound 2.0",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+            },
+            {
+              "keyName": "Telefone",
+              "condition": "eq",
+              "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        96
+      ],
+      "id": "1cb44dda-88d1-43bf-bca6-bf5d1b2897a5",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "open"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        688,
+        96
+      ],
+      "id": "31796be1-cbb2-42a4-a8cf-081d7b43ec7d",
+      "name": "Busca a conversa",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f34d41c-28a0-4ed0-8f35-e363d472a26c",
+              "leftValue": "={{ $json.meta.assignee.id }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        96
+      ],
+      "id": "19c54c02-7e28-4b99-af4f-5008b5992b14",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "assignee_id",
+              "value": "={{ $('Google Sheets Trigger2').item.json.Operadores.match(/\\d+/)[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1440,
+        64
+      ],
+      "id": "0cbc9ad3-d962-4218-a51a-db6fabea1bd7",
+      "name": "Reatribui a conversa1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "66c33158-fdb3-48c0-a56b-0bf03d404f9d",
+              "leftValue": "={{ $('Google Sheets Trigger2').item.json.Operadores }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1168,
+        80
+      ],
+      "id": "787011cf-0c1a-4c82-a632-d349b00db6d3",
+      "name": "If4"
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger2": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Reatribui a conversa1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Google Sheets Trigger2": {
+      "documentId": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+      "sheetId": 323812150,
+      "lastRevision": 167277,
+      "lastRevisionLink": "https://docs.google.com/spreadsheets/export?id=1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I&revision=167277&exportFormat=xlsx"
+    }
+  },
+  "meta": null,
+  "activeVersionId": "21185af8-83a3-46e3-99e1-3933049fc248",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-06T12:45:05.323Z",
+      "createdAt": "2026-03-06T12:45:05.323Z",
+      "role": "workflow:owner",
+      "workflowId": "9CtHwjKNFhgZlNVp",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-18T17:12:02.000Z",
+    "createdAt": "2026-03-18T17:11:46.218Z",
+    "versionId": "21185af8-83a3-46e3-99e1-3933049fc248",
+    "workflowId": "9CtHwjKNFhgZlNVp",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "documentId": {
+            "__rl": true,
+            "value": "1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I",
+            "mode": "list",
+            "cachedResultName": "Leads Maxx chatwoot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 323812150,
+            "mode": "list",
+            "cachedResultName": "Página2",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1NhypFCstl1CWwdO883JO3OVRMgKM6BQyYY3RgIeNv5I/edit#gid=323812150"
+          },
+          "event": "rowUpdate",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheetsTrigger",
+        "typeVersion": 1,
+        "position": [
+          64,
+          112
+        ],
+        "id": "da8ba0d8-ff56-4504-b68e-35ca9b711c5d",
+        "name": "Google Sheets Trigger2",
+        "credentials": {
+          "googleSheetsTriggerOAuth2Api": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d65c1ca4-4542-4d68-a8da-3be7b765cb4b",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json.Viabilidade.toLowerCase().replace('ã', 'a') }}",
+                "rightValue": "=sim",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "7e2e295a-8a05-4652-91aa-bd62cafb4cb8",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json.CHATWOOT.toLowerCase() }}",
+                "rightValue": "sim",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          256,
+          112
+        ],
+        "id": "0ba31cc3-a0b0-4654-a59f-970bb45ba0ad",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "Informações inbound 2.0",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l : '9' + l); })() }}"
+              },
+              {
+                "keyName": "Telefone",
+                "condition": "eq",
+                "keyValue": "={{ (() => { const n = String($json.Telefone).replace(/\\D/g,''); const p = n.startsWith('55') ? '55' : ''; const b = p ? n.slice(2) : n; const d = b.slice(0,2); const l = b.slice(2); return p + d + (l.startsWith('9') ? l.slice(1) : l); })() }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          480,
+          96
+        ],
+        "id": "1cb44dda-88d1-43bf-bca6-bf5d1b2897a5",
+        "name": "Get many rows1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json['Id conversa'] }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "status",
+                "value": "open"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          688,
+          96
+        ],
+        "id": "31796be1-cbb2-42a4-a8cf-081d7b43ec7d",
+        "name": "Busca a conversa",
+        "alwaysOutputData": false,
+        "executeOnce": false,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9f34d41c-28a0-4ed0-8f35-e363d472a26c",
+                "leftValue": "={{ $json.meta.assignee.id }}",
+                "rightValue": 1,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          896,
+          96
+        ],
+        "id": "19c54c02-7e28-4b99-af4f-5008b5992b14",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.id }}/assignments",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "assignee_id",
+                "value": "={{ $('Google Sheets Trigger2').item.json.Operadores.match(/\\d+/)[0] }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1440,
+          64
+        ],
+        "id": "0cbc9ad3-d962-4218-a51a-db6fabea1bd7",
+        "name": "Reatribui a conversa1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "66c33158-fdb3-48c0-a56b-0bf03d404f9d",
+                "leftValue": "={{ $('Google Sheets Trigger2').item.json.Operadores }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1168,
+          80
+        ],
+        "id": "787011cf-0c1a-4c82-a632-d349b00db6d3",
+        "name": "If4"
+      }
+    ],
+    "connections": {
+      "Google Sheets Trigger2": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Get many rows1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many rows1": {
+        "main": [
+          [
+            {
+              "node": "Busca a conversa",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Busca a conversa": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "If4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [
+            {
+              "node": "Reatribui a conversa1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 21185af8",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
