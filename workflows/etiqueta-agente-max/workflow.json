@@ -1,0 +1,205 @@
+{
+  "id": "jWidlsSTbE1vuzOu",
+  "name": "Etiqueta agente Max",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "977224d7-993c-4e98-887a-5241ee60725d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        -208
+      ],
+      "id": "84959f18-d213-4e40-b809-24f995d586c7",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.body.id }}/labels",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"labels\": {{ JSON.stringify([...new Set([...($json.body.labels || []), \"ia\"])]) }}\n}",
+        "options": {}
+      },
+      "id": "af52ec9b-2b5f-46c4-badb-c31172a8af46",
+      "name": "Manter Etiquetas + IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        176,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filtro: só segue se o assignee_id atual for 34\nconst body = $input.first().json.body;\n\nconst changedAttributes = body.changed_attributes || [];\n\nconst assigneeChange = changedAttributes.find(attr => attr.assignee_id !== undefined);\n\nif (!assigneeChange) {\n  return []; // Nenhuma mudança de assignee, ignora\n}\n\nconst currentAssigneeId = assigneeChange.assignee_id.current_value;\n\nif (currentAssigneeId !== 34) {\n  return []; // Atribuído para outro agente, ignora\n}\n\n// Atribuído para o agente 34, segue adiante\nreturn $input.all();"
+      },
+      "id": "32054d1c-d97d-483a-9a76-95d613face4c",
+      "name": "Filtrar Lista de IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -208
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Lista de IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Lista de IDs": {
+      "main": [
+        [
+          {
+            "node": "Manter Etiquetas + IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": null,
+  "activeVersionId": "26174875-139b-40f7-b753-79e4e26aed81",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-04-27T16:18:59.183Z",
+      "createdAt": "2026-04-27T16:18:59.183Z",
+      "role": "workflow:owner",
+      "workflowId": "jWidlsSTbE1vuzOu",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-06T16:24:15.000Z",
+    "createdAt": "2026-05-06T16:24:12.088Z",
+    "versionId": "26174875-139b-40f7-b753-79e4e26aed81",
+    "workflowId": "jWidlsSTbE1vuzOu",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "977224d7-993c-4e98-887a-5241ee60725d",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -304,
+          -208
+        ],
+        "id": "84959f18-d213-4e40-b809-24f995d586c7",
+        "name": "Webhook",
+        "webhookId": "977224d7-993c-4e98-887a-5241ee60725d"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.body.id }}/labels",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"labels\": {{ JSON.stringify([...new Set([...($json.body.labels || []), \"ia\"])]) }}\n}",
+          "options": {}
+        },
+        "id": "af52ec9b-2b5f-46c4-badb-c31172a8af46",
+        "name": "Manter Etiquetas + IA",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          176,
+          -208
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Filtro: só segue se o assignee_id atual for 34\nconst body = $input.first().json.body;\n\nconst changedAttributes = body.changed_attributes || [];\n\nconst assigneeChange = changedAttributes.find(attr => attr.assignee_id !== undefined);\n\nif (!assigneeChange) {\n  return []; // Nenhuma mudança de assignee, ignora\n}\n\nconst currentAssigneeId = assigneeChange.assignee_id.current_value;\n\nif (currentAssigneeId !== 34) {\n  return []; // Atribuído para outro agente, ignora\n}\n\n// Atribuído para o agente 34, segue adiante\nreturn $input.all();"
+        },
+        "id": "32054d1c-d97d-483a-9a76-95d613face4c",
+        "name": "Filtrar Lista de IDs",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -80,
+          -208
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Filtrar Lista de IDs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrar Lista de IDs": {
+        "main": [
+          [
+            {
+              "node": "Manter Etiquetas + IA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 26174875",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
