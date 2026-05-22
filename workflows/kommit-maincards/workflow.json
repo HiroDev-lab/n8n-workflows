@@ -1,0 +1,2738 @@
+{
+  "id": "T2dHCNUTk6S4hJyF",
+  "name": "Kommit - Main.Cards",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "flow",
+              "value": "card_bitrix"
+            },
+            {
+              "key": "status",
+              "value": "={{ $json.status.status }}"
+            },
+            {
+              "key": "enviar_mensagem",
+              "value": "={{ $json.status.enviar_mensagem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -3104,
+        1824
+      ],
+      "id": "2d0722fd-bd1d-4a0e-9786-c61ea292ea91",
+      "name": "Execution Data"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "leads",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "sucesso - aguardando card"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -4928,
+        1296
+      ],
+      "id": "c2d740d1-7ba7-4d23-8627-f9af7508c7ba",
+      "name": "Get - Leads Sucesso",
+      "retryOnFail": true,
+      "executeOnce": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataToSave": {
+          "values": [
+            {
+              "key": "flow",
+              "value": "card_bitrix"
+            },
+            {
+              "key": "status",
+              "value": "ligado"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executionData",
+      "typeVersion": 1.1,
+      "position": [
+        -5216,
+        1136
+      ],
+      "id": "598ba3b6-c455-4b62-b8e0-a9c57ce6e04e",
+      "name": "Execution Data5"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -3648,
+        1824
+      ],
+      "id": "14131cfb-7dd3-4094-87a0-dd3cfd1a2b20",
+      "name": "Schedule Trigger - 1m"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2336,
+        1824
+      ],
+      "id": "4aa442c2-f6d8-46a7-82dc-febe5f3444b9",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.list",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"filter\": {\n    \"PHONE\": \"{{ $json.telefone }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1872,
+        1360
+      ],
+      "id": "98cfaa95-8432-437a-91e0-20b47f8c457e",
+      "name": "Procurar Contato",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c2ee86b-3565-4cc9-b857-2fb44d52ce16",
+              "leftValue": "={{ $json.total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1680,
+        1360
+      ],
+      "id": "f1e68b47-b07f-4fb8-bdad-1966454429c8",
+      "name": "If - Validar Existência"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fields\": {\n    \"NAME\": \"{{ $('If3').item.json.razao }} - {{ $('If3').item.json.cnpj }}\",\n    \"PHONE\": [\n      {\n        \"VALUE\": \"{{ $('If3').item.json.telefone }}\",\n        \"VALUE_TYPE\": \"MOBILE\"\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1568,
+        1520
+      ],
+      "id": "c9d11a89-027c-4a62-b18b-3d32888b8af9",
+      "name": "Criar Contato",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "25e0c53a-e5a2-4c1f-8800-3d0ee1714a5f",
+              "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            },
+            {
+              "id": "d076b0aa-083f-4797-ba55-078f60a91f0c",
+              "leftValue": "={{ $json.result[0].DATE_CREATE.toDateTime().plus({ days: 15 }) }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1568,
+        1184
+      ],
+      "id": "eb34dbeb-f2cf-4d1e-8851-aa1556655f40",
+      "name": "If - Validar tempo de vida do lead"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.deal.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"FIELDS\": {\n\t\"TITLE\": \"{{ $('If3').item.json.razao }}\",\n    \"UF_CRM_1728656134\": \"{{ $('If3').item.json.cnpj }}\",\n    \"CATEGORY_ID\": 0,\n    \"CONTACT_IDS\": [\"{{ $json.result?.[0]?.ID || $json.result }}\"],\n    \"SOURCE_ID\": \"UC_KX2LJ5\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1456,
+        1360
+      ],
+      "id": "1af63c87-a932-492d-992f-d0d492e8fcab",
+      "name": "Criar Lead",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('If3').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $('If3').item.json.trigger_manual ? 'Sucesso - Card Criado Via Gatilho' : 'Sucesso - Card Criado' }}"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "false"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        1360
+      ],
+      "id": "a2a8d905-9363-4a64-b4cc-c9451b600fba",
+      "name": "Update - Status Sucesso",
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('If3').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Sucesso - Lead com menos de 15d encontrado bitrix"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "False"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        1168
+      ],
+      "id": "d84f2fad-fa22-44df-922b-3390a3663fe8",
+      "name": "Update - Status Sucesso Lead Já Fila",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        2016
+      ],
+      "id": "ef91b1ec-8d7a-479e-995c-e3b0efae6a46",
+      "name": "Delay 1s"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/{{ $('Get - Configurações').first().json?.bm?.id_numero}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.telefone ?? $json.TELEFONE}}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"{{ $('Get - Configurações').first().json?.bm?.template_padrao || \"VALOR_NAO_ENCONTRADO\" }}\",\n    \"language\": {\n      \"code\": \"pt_BR\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Socio ?? \"Prezado\" }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.razao}}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.cnpj}}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1840,
+        1840
+      ],
+      "id": "ceae9eb0-7ce8-4459-b462-d37fa2b4e5df",
+      "name": "Facebook - Send Template",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "GATILHO - CRIAR CARD",
+              "lookupValue": "true"
+            },
+            {
+              "lookupColumn": "GATILHO - ENVIAR MENSAGEM",
+              "lookupValue": "true"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3152,
+        2912
+      ],
+      "id": "b3e861f2-c240-4106-872b-1a8f0c0ebd2e",
+      "name": "Get row(s) in sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2624,
+        2720
+      ],
+      "id": "d8be819f-8302-4db0-817b-1984ca24fb0a",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.list",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"filter\": {\n    \"PHONE\": \"{{ $json.TELEFONE }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2496,
+        3088
+      ],
+      "id": "ec7bc418-3764-48a7-a63a-8a868d90113d",
+      "name": "Procurar Contato1"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -2544,
+        1824
+      ],
+      "id": "21f54404-77b5-4826-b2f8-d9943a69a59b",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.contact.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"fields\": {\n    \"NAME\": \"{{ $('Loop Over Items1').item.json.NOME }} - {{ $('Loop Over Items1').item.json.CNPJ }}\",\n    \"PHONE\": [\n      {\n        \"VALUE\": \"{{ $('Loop Over Items1').item.json.TELEFONE }}\",\n        \"VALUE_TYPE\": \"MOBILE\"\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2112,
+        3184
+      ],
+      "id": "447f4682-ebe8-42af-9cce-ab84397c5dac",
+      "name": "Criar Contato1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://maxxinvest.bitrix24.com.br/rest/1236/rbuja0bnzsf7vta7/crm.deal.add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"FIELDS\": {\n\t\"TITLE\": \"{{ $('Loop Over Items1').item.json.NOME }}\",\n    \"UF_CRM_1728656134\": \"{{ $('Loop Over Items1').item.json.CNPJ }}\",\n    \"CATEGORY_ID\": 0,\n    \"CONTACT_IDS\": [\"{{ $json.result?.[0]?.ID || $json.result }}\"],\n    \"SOURCE_ID\": \"UC_KX2LJ5\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1904,
+        3072
+      ],
+      "id": "c6a38285-2156-4387-bcc7-386bffb01b35",
+      "name": "Criar Lead1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5334c423-aa79-434c-ba45-5c4589c331b4",
+              "leftValue": "={{ $json[\"GATILHO - CRIAR CARD\"] || false }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bfcf4193-8486-4e13-aa84-b4b10330c37d",
+              "leftValue": "={{ $json[\"GATILHO - CRIAR CARD\"] === true && $json[\"GATILHO - ENVIAR MENSAGEM\"] === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2784,
+        2912
+      ],
+      "id": "23451247-2cb7-4e77-a161-93c94e64b0fd",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c2ee86b-3565-4cc9-b857-2fb44d52ce16",
+              "leftValue": "={{ $json.total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2320,
+        3088
+      ],
+      "id": "61ce38f6-22b7-4f28-95fb-2c07f5c29c67",
+      "name": "If - Validar Existência1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1504,
+        3072
+      ],
+      "id": "9743cb5c-2468-421f-b59a-476f86b50576",
+      "name": "Delay 1s1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "80cd3cb0-e3ae-429f-9bca-785fb3a788f5",
+              "name": "row_number",
+              "value": "={{ $('Loop Over Items1').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "f538c610-6daf-4dc6-b742-78fcbdaec519",
+              "name": "GATILHO - ENVIAR MENSAGEM",
+              "value": "={{ $('Loop Over Items1').item.json['GATILHO - ENVIAR MENSAGEM'] }}",
+              "type": "boolean"
+            },
+            {
+              "id": "3fdf25e4-ad82-419f-a926-54823fde5ec3",
+              "name": "nome",
+              "value": "={{ $('Loop Over Items1').item.json.NOME }}",
+              "type": "string"
+            },
+            {
+              "id": "e66f5122-ec69-49d0-ae0d-d30b5fe59aef",
+              "name": "razao",
+              "value": "={{ $('Loop Over Items1').item.json.NOME }}",
+              "type": "string"
+            },
+            {
+              "id": "715921b9-f094-4e3f-927c-900e9e1ac349",
+              "name": "cnpj",
+              "value": "={{ $('Loop Over Items1').item.json.CNPJ }}",
+              "type": "string"
+            },
+            {
+              "id": "1bb6c3a2-efc8-48f2-b53f-b1c2f661543f",
+              "name": "telefone",
+              "value": "={{ $('Loop Over Items1').item.json.TELEFONE }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1696,
+        3072
+      ],
+      "id": "7647c91a-75bd-43ef-a9db-acdb10973670",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/{{ $('Execute a SQL query').first().json?.bm?.id_numero}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.telefone ?? $json.TELEFONE }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"{{ $('Execute a SQL query').first().json?.bm?.template_padrao || \"VALOR_NAO_ENCONTRADO\" }}\",\n    \"language\": {\n      \"code\": \"pt_BR\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.SOCIO }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.razao ?? $json.NOME}}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.cnpj ?? $json.CNPJ}}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2352,
+        2928
+      ],
+      "id": "7b523e14-daa7-4b4d-b99f-c0fe5a692266",
+      "name": "Facebook - Send Template1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f155cbd1-d235-4c00-bc51-26bc587172cd",
+              "leftValue": "={{ $json['GATILHO - ENVIAR MENSAGEM'] }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2464,
+        2448
+      ],
+      "id": "faf9eea5-eec1-492f-b2fb-99cab3ea0df1",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH config AS (\n    -- Pegamos o valor da coluna 'bm' que será usado como filtro\n    SELECT \"bm\" as filtro_telefone \n    FROM \"status_automacao\" \n    WHERE \"id\" = 1\n)\nSELECT \n    -- Traz os dados da automação\n    (SELECT row_to_json(s) FROM (SELECT * FROM \"status_automacao\" WHERE \"id\" = 1) s) as status,\n    \n    -- Traz os dados da BM ou um objeto de erro se não encontrar nada\n    COALESCE(\n        (SELECT row_to_json(b) \n         FROM \"BMs\" b \n         WHERE b.\"phone\" = (SELECT filtro_telefone FROM config) \n         LIMIT 1),\n        json_build_object('error', 'BM não localizada', 'phone_tentado', (SELECT filtro_telefone FROM config))\n    ) as bm;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3360,
+        2912
+      ],
+      "id": "a45c95ea-4f62-4d90-9c41-a64f7d7a21c4",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "GATILHO - CRIAR CARD": "False",
+            "ATUALIZADO": "={{ $now.format('dd/MM/yyyy HH:mm:ss') }}",
+            "STATUS": "Erro de envio de mensagem"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "NOME",
+              "displayName": "NOME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SOCIO",
+              "displayName": "SOCIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATA E HORA",
+              "displayName": "DATA E HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ATUALIZADO",
+              "displayName": "ATUALIZADO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "HORARIO - ULTIMA MENSAGEM",
+              "displayName": "HORARIO - ULTIMA MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "GATILHO - CRIAR CARD",
+              "displayName": "GATILHO - CRIAR CARD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GATILHO - ENVIAR MENSAGEM",
+              "displayName": "GATILHO - ENVIAR MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CAMPANHA_ID",
+              "displayName": "CAMPANHA_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data criação BD",
+              "displayName": "Data criação BD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID Banco de Dados",
+              "displayName": "ID Banco de Dados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1984,
+        2944
+      ],
+      "id": "6b4f7666-0737-40a6-9238-319de76a3b0d",
+      "name": "Update - Erro",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number ?? $('If1').item.json.row_number}}",
+            "GATILHO - CRIAR CARD": "False",
+            "GATILHO - ENVIAR MENSAGEM": "False",
+            "HORARIO - ULTIMA MENSAGEM": "={{ $now.format('dd/MM/yyyy HH:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "NOME",
+              "displayName": "NOME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CNPJ",
+              "displayName": "CNPJ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "TELEFONE",
+              "displayName": "TELEFONE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SOCIO",
+              "displayName": "SOCIO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "DATA E HORA",
+              "displayName": "DATA E HORA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "STATUS",
+              "displayName": "STATUS",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ATUALIZADO",
+              "displayName": "ATUALIZADO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HORARIO - ULTIMA MENSAGEM",
+              "displayName": "HORARIO - ULTIMA MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "GATILHO - CRIAR CARD",
+              "displayName": "GATILHO - CRIAR CARD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GATILHO - ENVIAR MENSAGEM",
+              "displayName": "GATILHO - ENVIAR MENSAGEM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CAMPANHA_ID",
+              "displayName": "CAMPANHA_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Data criação BD",
+              "displayName": "Data criação BD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID Banco de Dados",
+              "displayName": "ID Banco de Dados",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2016,
+        2432
+      ],
+      "id": "e9653a90-66d5-433a-bf68-3471ccb78b14",
+      "name": "Update - Botoes False",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1856,
+        2432
+      ],
+      "id": "cc678a2f-bda1-4bcb-8e65-e3eb4ce96267",
+      "name": "Fim1"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -2960,
+        2912
+      ],
+      "id": "4c3daaa8-61f5-4037-824a-4f4c0acaf5e5",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('Loop Over Items').item.json.nome }}\",\n    \"cnpj\": \"{{ $('Loop Over Items').item.json.cnpj }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -976,
+        1824
+      ],
+      "id": "100f6ff0-9bf6-4d25-b4d4-ae1d9cf35956",
+      "name": "Chatwoot - Update Cliente",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br//api/v1/accounts/1/contacts/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=+{{ $('Loop Over Items').item.json.telefone }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1440,
+        1840
+      ],
+      "id": "00cf75b0-8f1c-4585-ac92-3c73fe10cbb9",
+      "name": "Chatwoot - Get Cliente",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.payload[0].id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('If1').item.json.NOME }}\",\n    \"cnpj\": \"{{ $('If1').item.json.CNPJ }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2128,
+        2624
+      ],
+      "id": "44ac6a81-46fb-4e6f-85c1-366135ff7749",
+      "name": "Chatwoot - Update Cliente1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br//api/v1/accounts/1/contacts/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=+{{ $json.contacts[0].wa_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -2240,
+        2784
+      ],
+      "id": "58d22c9b-410d-4ca3-8fcc-8eac71daa3d4",
+      "name": "Chatwoot - Get Cliente1",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "25d8407e-8b4b-4c55-8852-1b35fd1b2f67",
+              "leftValue": "={{ $('Get - Configurações').first().json.status.status }}",
+              "rightValue": "Ligado",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1984,
+        1616
+      ],
+      "id": "18b7a243-a11a-47aa-ba02-4918dcb72085",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Campanha }}",
+                    "rightValue": "aasdasda3r34r",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "aa7d55cb-e0ae-4e54-a309-cc4b00c11e0d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Criar Card"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "49ab7148-1024-4583-921f-17b74198d82f",
+                    "leftValue": "={{ $json.Campanha }}",
+                    "rightValue": "CAMPANHA_ORIGINAL",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Enviar Mensagem"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2096,
+        1824
+      ],
+      "id": "29492f87-2d7b-49d5-8dfc-a81b2c1ee69a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6f1a9066-8b1d-4da8-922e-42311dac2fba",
+              "leftValue": "={{ $json.Campanha }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -4640,
+        1184
+      ],
+      "id": "ea2555e7-c388-4430-86a7-4e1d8f21eee8",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b2e9b9c5-3905-4c53-b9cc-32c3868b3f64",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 8,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "00cf96be-2d98-4051-9208-31a3a8fc49d9",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -3456,
+        1824
+      ],
+      "id": "faeba4a5-fd9e-4d44-8506-e23d3bd90999",
+      "name": "Horário Comercial"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH config AS (\n    -- Pegamos o valor da coluna 'bm' que será usado como filtro\n    SELECT \"bm\" as filtro_telefone \n    FROM \"status_automacao\" \n    WHERE \"id\" = 1\n)\nSELECT \n    -- Traz os dados da automação\n    (SELECT row_to_json(s) FROM (SELECT * FROM \"status_automacao\" WHERE \"id\" = 1) s) as status,\n    \n    -- Traz os dados da BM ou um objeto de erro se não encontrar nada\n    COALESCE(\n        (SELECT row_to_json(b) \n         FROM \"BMs\" b \n         WHERE b.\"phone\" = (SELECT filtro_telefone FROM config) \n         LIMIT 1),\n        json_build_object('error', 'BM não localizada', 'phone_tentado', (SELECT filtro_telefone FROM config))\n    ) as bm;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3280,
+        1824
+      ],
+      "id": "a8b7addf-1877-495b-9d5d-c4907347a69c",
+      "name": "Get - Configurações",
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7c12a784-0c8a-420d-a80a-d389815df26a",
+              "leftValue": "={{ $json.status.status }}",
+              "rightValue": "Ligado",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "2e8816a2-231e-4f08-a171-b7c301d70d2f",
+              "leftValue": "={{ $json.status.enviar_mensagem }}",
+              "rightValue": "Sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5472,
+        1120
+      ],
+      "id": "baa8df5a-0777-43a1-bc10-49e56a91764e",
+      "name": "If - Validar Configurações"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3ea4fe35-be5d-4502-8e00-cddd9501a1db",
+              "leftValue": "={{ $json.status.status }}",
+              "rightValue": "Ligado",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "6b41cec0-cfc9-4183-b54c-bf8eeea98c5f",
+              "leftValue": "={{ $json.status.enviar_mensagem }}",
+              "rightValue": "Sim",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -2912,
+        1824
+      ],
+      "id": "8ed262cb-925b-456f-8842-bda505ab5056",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "leads",
+          "mode": "list",
+          "cachedResultName": "leads"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "created_at",
+              "condition": ">=",
+              "value": "={{ $now.minus({days: 1}).format('yyyy-MM-dd') }}"
+            },
+            {
+              "column": "status",
+              "value": "sucesso - aguardando card"
+            },
+            {
+              "column": "Campanha",
+              "value": "CAMPANHA_ORIGINAL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2736,
+        1824
+      ],
+      "id": "64309749-8164-4a73-aa27-f83ec366fd74",
+      "name": "Get - Leads",
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "769fa416-f197-4d96-ace1-09709a2c7499",
+              "leftValue": "={{ $json.meta.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1232,
+        1840
+      ],
+      "id": "268543f8-ca7e-42ec-ac78-14a1e2beadb2",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        1632
+      ],
+      "id": "60059f3d-4711-4ae0-841c-5e078b514c1f",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ultima_mensagem",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "False"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "sucesso - sem mensagem"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1984,
+        2016
+      ],
+      "id": "ae412a3e-6a44-4810-ab0d-cc030969d02d",
+      "name": "Update - Status Sem Mensagem",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "ultima_mensagem",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo') }}"
+            },
+            {
+              "fieldId": "transferido",
+              "fieldValue": "False"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        1840
+      ],
+      "id": "358574e2-4b01-4e06-865f-eb75a1045ea2",
+      "name": "Update - Status Mensagem",
+      "retryOnFail": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -3712,
+        2912
+      ],
+      "id": "ed3337b8-c7c3-4d09-b152-423f26129cdf",
+      "name": "Schedule Trigger - 1m1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b2e9b9c5-3905-4c53-b9cc-32c3868b3f64",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 8,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "00cf96be-2d98-4051-9208-31a3a8fc49d9",
+              "leftValue": "={{ $json.Hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -3536,
+        2912
+      ],
+      "id": "a5a26ac7-127f-4a06-b0c0-f9a22ec5c89f",
+      "name": "Horário Comercial1"
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "limit": 1,
+        "filters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "T2dHCNUTk6S4hJyF",
+            "mode": "list",
+            "cachedResultName": "Kommit - Main.Cards (#T2dHCNUTk6S4hJyF)"
+          }
+        },
+        "options": {
+          "activeWorkflows": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -4288,
+        1184
+      ],
+      "id": "8b4b745e-24b7-4cfe-9f05-d7ccfc6e2ddb",
+      "name": "Get many executions",
+      "credentials": {
+        "n8nApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inbox_id\": {{ $json.id }},\n  \"name\": \"{{ $('Loop Over Items').item.json.nome }}\",\n  \"email\": \"email@email.com\",\n  \"blocked\": false,\n  \"phone_number\": \"+123456789\",\n  \"identifier\": \"1234567890\",\n  },\n  \"custom_attributes\": {\n    \"nome_cliente\": \"{{ $('Loop Over Items').item.json.nome }}\",\n    \"cnpj\": \"{{ $('Loop Over Items').item.json.cnpj }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -528,
+        1968
+      ],
+      "id": "2a67d641-6980-4256-814d-ce5392aa2119",
+      "name": "Chatwoot - Update Cliente2",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://chat.maxxitele.com.br/api/v1/accounts/1/inboxes",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1184,
+        1984
+      ],
+      "id": "28f71a6d-4d59-4272-8991-ad3163bc01e8",
+      "name": "Chatwoot - Get Inboxs",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "payload",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        1984
+      ],
+      "id": "c01d4de9-ea9c-44af-8012-ddf8c8667c2c",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b64a7000-0a82-4563-8f14-3157a55fbea5",
+              "leftValue": "={{ $json.phone_number.replace(/\\D/g, '') }}",
+              "rightValue": "={{ $('Get - Configurações1').item.json.status.bm.toString().replace(/\\D/g, '') }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -768,
+        1984
+      ],
+      "id": "ec7f21c1-2060-42ba-bf13-370704e09bc9",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH config AS (\n    -- Pegamos o valor da coluna 'bm' que será usado como filtro\n    SELECT \"bm\" as filtro_telefone \n    FROM \"status_automacao\" \n    WHERE \"id\" = 1\n)\nSELECT \n    -- Traz os dados da automação\n    (SELECT row_to_json(s) FROM (SELECT * FROM \"status_automacao\" WHERE \"id\" = 1) s) as status,\n    \n    -- Traz os dados da BM ou um objeto de erro se não encontrar nada\n    COALESCE(\n        (SELECT row_to_json(b) \n         FROM \"BMs\" b \n         WHERE b.\"phone\" = (SELECT filtro_telefone FROM config) \n         LIMIT 1),\n        json_build_object('error', 'BM não localizada', 'phone_tentado', (SELECT filtro_telefone FROM config))\n    ) as bm;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1456,
+        2096
+      ],
+      "id": "9c4f99b8-6a4d-44aa-b769-c431673a2cf0",
+      "name": "Get - Configurações1",
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk",
+          "mode": "list",
+          "cachedResultName": "LEADS_ACEITE_AGV_MAXXiNVEST",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rMqJdXzPu5wWykuX9P3G7yIyym0ZXrh1aUgS9d9lZMk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "STATUS",
+              "lookupValue": "Pendente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -480,
+        2368
+      ],
+      "id": "79441a1f-9ddb-42a9-a86e-68d5ee0917f3",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "cnpj",
+              "condition": "eq",
+              "keyValue": "={{ $json.CNPJ }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now.setZone('America/Sao_Paulo')}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        2368
+      ],
+      "id": "1a519c94-e7f5-4ee4-855b-02f0e163b71f",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Execution Data": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Data5": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger - 1m": {
+      "main": [
+        [
+          {
+            "node": "Horário Comercial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procurar Contato": {
+      "main": [
+        [
+          {
+            "node": "If - Validar Existência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar Existência": {
+      "main": [
+        [
+          {
+            "node": "If - Validar tempo de vida do lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Contato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Leads Sucesso": {
+      "main": [
+        []
+      ]
+    },
+    "Criar Lead": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Contato": {
+      "main": [
+        [
+          {
+            "node": "Criar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar tempo de vida do lead": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Sucesso Lead Já Fila",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Sucesso Lead Já Fila": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Sucesso": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delay 1s": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook - Send Template": {
+      "main": [
+        [
+          {
+            "node": "Update - Status Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Procurar Contato1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procurar Contato1": {
+      "main": [
+        [
+          {
+            "node": "If - Validar Existência1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Contato1": {
+      "main": [
+        [
+          {
+            "node": "Criar Lead1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Facebook - Send Template1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar Existência1": {
+      "main": [
+        [
+          {
+            "node": "Criar Lead1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Contato1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Lead1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delay 1s1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update - Botoes False",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Facebook - Send Template1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook - Send Template1": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Cliente1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Botoes False": {
+      "main": [
+        [
+          {
+            "node": "Fim1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Erro": {
+      "main": [
+        [
+          {
+            "node": "Fim1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Cliente": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Cliente1": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Update Cliente1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Update Cliente1": {
+      "main": [
+        [
+          {
+            "node": "Update - Botoes False",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Procurar Contato",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Facebook - Send Template",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update - Status Sem Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Update Cliente": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        []
+      ]
+    },
+    "Horário Comercial": {
+      "main": [
+        [
+          {
+            "node": "Get - Configurações",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Configurações": {
+      "main": [
+        [
+          {
+            "node": "Execution Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Validar Configurações": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Get - Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Leads": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Update Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Sem Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update - Status Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger - 1m1": {
+      "main": [
+        [
+          {
+            "node": "Horário Comercial1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Horário Comercial1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Get Inboxs": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get - Configurações1": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Get Inboxs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Chatwoot - Update Cliente2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatwoot - Update Cliente2": {
+      "main": [
+        [
+          {
+            "node": "Delay 1s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger - 1m": {
+      "recurrenceRules": []
+    },
+    "node:Schedule Trigger - 1m1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2026-03-09T00:59:31.543Z",
+      "createdAt": "2026-03-09T00:59:31.543Z",
+      "role": "workflow:owner",
+      "workflowId": "T2dHCNUTk6S4hJyF",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-02-27T23:02:28.948Z",
+      "createdAt": "2026-02-27T23:02:28.948Z",
+      "id": "56EoFAhiaiEn6lvw",
+      "name": "kommit"
+    },
+    {
+      "updatedAt": "2026-02-27T20:55:58.229Z",
+      "createdAt": "2026-02-27T20:55:58.229Z",
+      "id": "FarI6qPflu4jQ43E",
+      "name": "maxx"
+    },
+    {
+      "updatedAt": "2026-03-09T01:20:21.050Z",
+      "createdAt": "2026-03-09T01:20:21.050Z",
+      "id": "TzkxU4nA7lW0ZbeZ",
+      "name": "bitrix"
+    }
+  ]
+}
