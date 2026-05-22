@@ -1,0 +1,594 @@
+{
+  "id": "ntoy15vXayhUfbE4",
+  "name": "Roleta inbound",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "662431ae-93d2-424b-8f52-5baa2223907b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        -592
+      ],
+      "id": "ebb6fde6-2c99-4701-afce-df0cecb679e0",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const listaAgentes = $items(\"Get many rows\", 0).map(row => row.json);\n\nlet idx = $items(\"Indice\", 0)[0].json.current_index;\nidx = (idx === null || idx === undefined) ? 0 : parseInt(idx, 10);\n\nconst agenteAtual = listaAgentes[idx % listaAgentes.length];\nconst proximoIdx = (idx + 1) % listaAgentes.length;\n\nconst webhookData = $items(\"Webhook1\", 0)[0].json;\n\nreturn [{\n  json: {\n    agent_id: agenteAtual.agent_id,\n    conversation_id: webhookData.body.id,\n    agent_name: agenteAtual.agent_name,\n    proximoIdx: proximoIdx\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        -608
+      ],
+      "id": "4b4df3bc-f2cb-4f37-a9e7-12dee051ae3a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"assignee_id\": {{ $json.agent_id }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        -496
+      ],
+      "id": "3ae9919a-8f7a-4c13-a29f-c8f47b0e26a8",
+      "name": "CodeAssignment"
+    },
+    {
+      "parameters": {
+        "content": "Não mexer!!",
+        "height": 336,
+        "width": 1808,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -752,
+        -688
+      ],
+      "typeVersion": 1,
+      "id": "3a5bdb6b-89fe-4938-967b-c8b5c715e1ff",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Executar esse node para limpar a rotação (sempre executar esse antes de alterar pro próximo.",
+        "height": 208,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -336,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "e54134e3-8436-4e51-8100-d31bbb0ff0d3",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Usar esse node para definir a rotação, não esquecer ponto-vírgula ao final e vírgula entre valores.",
+        "height": 208,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "fbf0d210-f854-42b9-94a3-f565e0988c8d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c9be4020-f07b-40b4-bef1-147db77f2ebc",
+              "leftValue": "={{ $items(\"Webhook1\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 95,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "9ff64109-5691-4f64-99c4-479f206102e5",
+              "leftValue": "={{ $items(\"Webhook1\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "ec28437c-9d06-4b19-8d82-04f22c404452",
+              "leftValue": "={{ $items(\"Webhook1\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 128,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "52ccc297-9e43-42d4-993c-9e4d0c61aa4b",
+              "leftValue": "={{ $items(\"Webhook1\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 129,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        -608
+      ],
+      "id": "0d3c2dd2-5557-46dc-a13c-ae9ec98656c6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{$json.conversation_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"assignee_id\": 1\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        688,
+        -688
+      ],
+      "id": "eaea6aff-e0dd-4775-a260-426d2da8a6db",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Rotação Inbound",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -608
+      ],
+      "id": "e6be8ba1-fe90-482b-951e-ef63b84e3fba",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Rotação inbound 2",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -608
+      ],
+      "id": "a9dfba67-84a8-418d-a177-51b6a1956b60",
+      "name": "Indice",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Rotação inbound 2",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "current_index",
+              "fieldValue": "={{ $('Code').item.json.proximoIdx }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -496
+      ],
+      "id": "cc3f42e9-279a-4aca-9743-3d9f67a129b2",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "Rotação Inbound",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "agent_id",
+              "condition": "gt",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -176
+      ],
+      "id": "2e09940d-b231-488e-8572-4b46d2dd3c6e",
+      "name": "LIMPAR ROTAÇÃO",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "Rotação Inbound",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_id",
+              "fieldValue": "={{ $json.agent_id }}"
+            },
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "={{ $json.agent_name }}"
+            },
+            {
+              "fieldId": "position",
+              "fieldValue": "={{ $json.position }}"
+            },
+            {
+              "fieldId": "ativo",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        528,
+        -176
+      ],
+      "id": "e97bdd01-e041-4302-9fdd-1381e330c5d3",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -176
+      ],
+      "id": "71443c22-84c8-4e9e-b4d5-d571de0c2417",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sql = `\n--(3, 'Isabela Pereira', 1),\n--(8, 'Mariane oliveira', 1),\n--(10, 'Jose Antonio', 2),\n(19, 'Caio', 1),\n--(20, 'Steicy', 4),\n--(22, 'Ellen', 4),\n--(24, 'Carolina', 6),\n--(29, 'Ana', 1),\n--(28, 'PEDRO MARINHO', 1),\n--(30, 'Kaled', 2);\n`\n\nconst ativos = sql\n  .split(\"\\n\")\n  .map(l => l.trim())\n  .filter(l => l.startsWith(\"(\") && !l.startsWith(\"--\"));\n\nconst re = /\\(\\s*(-?\\d+)\\s*,\\s*'([^']*)'\\s*,\\s*(-?\\d+)\\s*\\)/;\n\nconst agentes = ativos.map(l => {\n  const m = l.match(re);\n  if (!m) return null;\n  return {\n    agent_id: Number(m[1]),\n    agent_name: m[2],\n    position: Number(m[3]),\n  };\n}).filter(Boolean);\n\n// retorna TODOS\nreturn agentes.map(a => ({\n  json: a\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -176
+      ],
+      "id": "7de5da94-616d-484d-8f14-f6a38b0819dc",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a34c3c7e-6a6b-480c-a973-dfc4162041ab",
+              "leftValue": "={{ $json.payload[0].status }}",
+              "rightValue": "snoozed",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -272,
+        -592
+      ],
+      "id": "c5ec6a92-076d-46df-a12d-b6271def1db3",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/contacts/{{ $json.body.meta.sender.id }}/conversations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "={{ $json.body.status }}",
+              "value": "open"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -480,
+        -592
+      ],
+      "id": "36c4ae67-fe94-46e6-b8ad-ec9fa8facf16",
+      "name": "Busca a conversa2",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Busca a conversa2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CodeAssignment": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CodeAssignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Indice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Indice": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca a conversa2": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "global": {
+      "proximoIndex": 0
+    }
+  },
+  "meta": null,
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-09T14:19:30.327Z",
+      "createdAt": "2026-03-09T14:19:30.327Z",
+      "role": "workflow:owner",
+      "workflowId": "ntoy15vXayhUfbE4",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
