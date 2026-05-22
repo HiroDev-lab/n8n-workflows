@@ -1,0 +1,4344 @@
+{
+  "id": "23t2c5RgHHjQBlBA",
+  "name": "Disparador",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "62d8b7b5-bf46-4ce3-a3b7-fea16f476000",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        32,
+        0
+      ],
+      "id": "9b34ad3a-c383-4c28-b4ee-fd3ca69424ae",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "agendado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0cc5ce22-4d50-4bc2-8f21-56af1e8723ef"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dba2d895-c5e6-423a-b530-9103a1792e91",
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "andamento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "andamento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ],
+      "id": "7e71aa38-4c73-405d-96f7-cfd764b44d00",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0943776e-4eee-4ce3-b1af-1151b1ca1be7",
+              "leftValue": "={{ $json.Agendamento.toDateTime() }}",
+              "rightValue": "={{ $now.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        -160
+      ],
+      "id": "633547c1-2874-4da2-885a-3d1d3f7b6960",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -160
+      ],
+      "id": "b074d23c-0310-43e3-8480-34077381247b",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -768,
+        2848
+      ],
+      "id": "3887cb59-8ad3-4973-a88f-91a3032be95a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://polymerplastic.uazapi.com/instance/all",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "admintoken",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -560,
+        2848
+      ],
+      "id": "6eb255fc-2716-4f7c-bda9-f713d66bb587",
+      "name": "Puxa todos os números do UAZAPI"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        2848
+      ],
+      "id": "f4bbdd35-3779-4bf6-9723-eb6ff5baa5e2",
+      "name": "Puxa todos os itens do banco de números para disparo",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "df23e958-b015-4310-ab6b-420c596b68d0",
+              "leftValue": "={{ $('Puxa todos os números do UAZAPI').item.json.owner }}",
+              "rightValue": "={{ $json.numero }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -112,
+        2848
+      ],
+      "id": "d565fc8e-451a-43a6-9593-f9937e28c472",
+      "name": "Verifica se está no banco"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "numero",
+              "condition": "eq",
+              "keyValue": "={{ $json.numero }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $('Puxa todos os números do UAZAPI').item.json.status }}"
+            },
+            {
+              "fieldId": "token",
+              "fieldValue": "={{ $('Puxa todos os números do UAZAPI').item.json.token }}"
+            },
+            {
+              "fieldId": "numero",
+              "fieldValue": "={{ $json.numero }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        2832
+      ],
+      "id": "86063bf7-44f3-486c-b410-8edbe892e13f",
+      "name": "Tava o banco e atualiza",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "números para disparo",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "numero",
+              "fieldValue": "={{ $('Puxa todos os números do UAZAPI').item.json.owner }}"
+            },
+            {
+              "fieldId": "token",
+              "fieldValue": "={{ $('Puxa todos os números do UAZAPI').item.json.token }}"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "={{ $('Puxa todos os números do UAZAPI').item.json.status }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        3088
+      ],
+      "id": "797f30fd-55f7-4ccf-9dcf-abcd9f2d80fd",
+      "name": "Não tava no banco e cria a linha",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        3392
+      ],
+      "id": "2e3544fd-f06c-4bf3-9d78-15d4dcb55cff",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "config_webhook",
+              "condition": "eq",
+              "keyValue": "false"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        3392
+      ],
+      "id": "e6731abc-fa71-4dcb-8860-2d6bf6d9ef4a",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://polymerplastic.uazapi.com/webhook",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -160,
+        3392
+      ],
+      "id": "07bcc03c-d662-426a-a6bf-d8ed1e4c8e50",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b094d07f-957a-48b8-b34d-42c74f9c97e4",
+              "name": "Webhook",
+              "value": "https://n8n.srv1015357.hstgr.cloud/webhook/p01/sdr/agent",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        3392
+      ],
+      "id": "f3116831-ad08-469e-b81d-4289f648ff12",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b92829de-f96f-47f4-a4ae-73805a134c1d",
+              "leftValue": "={{ $json.url }}",
+              "rightValue": "={{ $('Edit Fields').first().json.Webhook }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "0229e1b9-165f-475f-8519-f1ac2e25bf83",
+              "leftValue": "={{ $json.enabled }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        48,
+        3392
+      ],
+      "id": "541bdced-a941-40cc-872f-078d5687dbb3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "config_webhook",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        336,
+        3376
+      ],
+      "id": "6cfddda4-c75f-4f0c-b029-8059034b7657",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.enabled }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "equals"
+                    },
+                    "id": "d9e6ec4b-ee15-41c5-99ad-cbb00607e684"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Desativado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "59de45b4-cf71-48ae-a279-206dcd8d093f",
+                    "leftValue": "={{ $json.url }}",
+                    "rightValue": "={{ $('Edit Fields').item.json.Webhook }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Não existe"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        48,
+        3632
+      ],
+      "id": "a28e702d-4407-403f-b782-c706f0aa74a2",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/webhook",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"enabled\": true,\n  \"url\": \"{{ $('HTTP Request').item.json.url }}\",\n  \"events\": [\n    \"messages\",\n    \"connection\"\n  ],\n  \"excludeMessages\": [\n    \"wasSentByApi\"\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        336,
+        3616
+      ],
+      "id": "cbd14434-40d6-4c36-9dc4-551c8b4f6821",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/webhook",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Token",
+              "value": "YOUR_API_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "URL",
+              "value": "={{ $('Edit Fields').item.json.Webhook }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        3888
+      ],
+      "id": "836dd0be-f56d-40a3-9aca-f1c220acf033",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/webhook",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"enabled\": true,\n  \"url\": \"{{ $json.url }}\",\n  \"events\": [\n    \"messages\",\n    \"connection\"\n  ],\n  \"excludeMessages\": [\n    \"wasSentByApi\"\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        320,
+        3888
+      ],
+      "id": "387f24e3-f3d6-4164-be94-a32fd187ee9e",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "config_webhook",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        576,
+        3616
+      ],
+      "id": "de0752d3-2d93-4307-8275-2d22f2bc8d61",
+      "name": "Update a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "config_webhook",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        560,
+        3888
+      ],
+      "id": "f56a239b-20a4-40ee-ad13-729a5a4a0df1",
+      "name": "Update a row3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        864,
+        -288
+      ],
+      "id": "86f97bb8-becd-42d9-83aa-e354675ed50f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        2544,
+        -256
+      ],
+      "id": "1a308275-cd3d-4d05-a56f-48b137fd0596"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2352,
+        -256
+      ],
+      "id": "6ddc019f-00bb-41b2-812d-adb6c89e9240",
+      "name": "Wait"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tabela de números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "numero",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items').item.json.numero }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        -256
+      ],
+      "id": "dcfcfeb2-905d-4dfe-a0c1-b42266e7d5b7",
+      "name": "Update a row4",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.numero }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json[\"mensagem de texto\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1168,
+        -272
+      ],
+      "id": "b093f44c-859f-4981-87c1-0b3fb482dc26",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items').item.json.numero }}"
+            },
+            {
+              "name": "text",
+              "value": "=..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1552,
+        -464
+      ],
+      "id": "e56e13b4-fbbd-4a07-a667-ca368c834e66",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/message/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1760,
+        -464
+      ],
+      "id": "bc44955a-8a2b-4852-bda5-f1baec3b4586",
+      "name": "HTTP Request6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d6c4b5fa-4e4f-46e6-93b2-2d8cee32c5e6",
+              "leftValue": "={{ $('Loop Over Items').item.json.curiosidade }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1344,
+        -272
+      ],
+      "id": "5c8c8855-68a4-4d6d-89da-7b86b6510de7",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        0
+      ],
+      "id": "410e3fbf-b974-41e1-91a9-2742ab3d0cc5",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me1",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        16
+      ],
+      "id": "1b9e34ab-01e4-485d-80fa-5a648648bd4e"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "Tabela de números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "campanha",
+              "keyValue": "={{ $json.Nome }}"
+            },
+            {
+              "keyName": "status",
+              "keyValue": "Pendente"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        656,
+        16
+      ],
+      "id": "81ab3703-d454-40f2-a659-8db4969488b0",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Get many rows').item.json.Mensagem }}",
+                    "rightValue": "Texto",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d32df261-0c93-4608-9226-23bd40376d2d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "43e02541-90ed-467b-8e87-7582ad02693d",
+                    "leftValue": "={{ $('Get many rows').item.json.Mensagem }}",
+                    "rightValue": "Texto e imagem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto e imagem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1641eb01-e8aa-4b15-9501-15386b3c6adb",
+                    "leftValue": "={{ $('Get many rows').item.json.Mensagem }}",
+                    "rightValue": "=Audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7b444784-9035-4503-a697-2818f9c6bb13",
+                    "leftValue": "={{ $('Get many rows').item.json.Mensagem }}",
+                    "rightValue": "Imagem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagem"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        16
+      ],
+      "id": "abba4bdc-39dc-464e-9bee-64480cde7fc5",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4bfb2b99-f04c-4dc1-8d1a-4bf01942b1b0",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b30e2530-796a-41d3-9eb7-5555f5435e3a",
+              "name": "numero",
+              "value": "={{ $('Switch2').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "b5d40120-fdb4-4e67-ad63-d78f8400d456",
+              "name": "Mensagem",
+              "value": "={{ $('Get many rows').item.json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "1426b085-6994-4162-b6a9-bd97930f7064",
+              "name": "mensagem de texto",
+              "value": "={{ $('Get many rows').item.json[\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "af1efcb3-cba2-47dc-945f-45a64e07b43c",
+              "name": "token",
+              "value": "={{ $json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "a26080d9-f327-4392-a845-9fb35dc8e38d",
+              "name": "curiosidade",
+              "value": "={{ $('Get many rows').item.json.curiosidade }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1696,
+        16
+      ],
+      "id": "6d82158c-3194-4bfa-ac6b-805d1d89f2e6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2864,
+        160
+      ],
+      "id": "11b2eaff-d083-466a-8f6d-cb659fc97e84",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        896,
+        672
+      ],
+      "id": "46c43cc4-bbc1-472c-94c8-14ae421fc96c",
+      "name": "Get many rows2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "agendado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0cc5ce22-4d50-4bc2-8f21-56af1e8723ef"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dba2d895-c5e6-423a-b530-9103a1792e91",
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "andamento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "andamento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        672
+      ],
+      "id": "d540b8e9-6b90-4693-a8e1-7f3787ce1eb8",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0943776e-4eee-4ce3-b1af-1151b1ca1be7",
+              "leftValue": "={{ $json.Agendamento.toDateTime() }}",
+              "rightValue": "={{ $now.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1136,
+        496
+      ],
+      "id": "4503d039-85fd-4884-a411-90771f2fa9f4",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        496
+      ],
+      "id": "d9853e5c-d11a-425e-9825-faff63f60fdc",
+      "name": "Update a row5",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9c4bf808-13b7-4cfc-9abe-bd225754dc3b",
+              "leftValue": "={{ $json.File }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1728,
+        688
+      ],
+      "id": "fd6f104e-b78d-4929-9bff-b2260acb96a7",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  let file = item.json.File;\n\n  if (typeof file !== 'string') {\n    return {\n      json: {\n        ...item.json,\n        File: null\n      }\n    };\n  }\n\n  // remove prefixo data URI se existir\n  file = file.replace(/^data:.*;base64,/, '');\n\n  // remove espaços, quebras de linha e tabs\n  file = file.replace(/\\s+/g, '');\n\n  // remove \"=\" extras no começo\n  file = file.replace(/^=+/, '');\n\n  return {\n    json: {\n      ...item.json,\n      File: file\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        688
+      ],
+      "id": "2b1038ef-73c7-45e2-9e30-f3e6adaead59",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items3').item.json.data[1].numero }}"
+            },
+            {
+              "name": "type",
+              "value": "image"
+            },
+            {
+              "name": "file",
+              "value": "={{ $json.File }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('Loop Over Items3').item.json.data[1][\"mensagem de texto\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2640,
+        704
+      ],
+      "id": "bb7ef935-69b7-4b8f-961d-efa68dc2328d",
+      "name": "HTTP Request7"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        880,
+        256
+      ],
+      "id": "baf1f38c-3d7d-43b6-aacb-ffa654401d9e",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me3",
+      "typeVersion": 1,
+      "position": [
+        1968,
+        272
+      ],
+      "id": "83a2b82d-e854-4bcc-a84a-4e7367257011"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d217691d-ed56-419e-810f-83dcd7ce8f2f",
+              "name": "data[0].token",
+              "value": "={{ $('Loop Over Items3').item.json.data[0].token }}",
+              "type": "string"
+            },
+            {
+              "id": "078b8046-a99a-473f-a579-0209ada88d8d",
+              "name": "data[1].numero",
+              "value": "={{ $('Loop Over Items3').item.json.data[1].numero }}",
+              "type": "string"
+            },
+            {
+              "id": "996b2ab4-a93b-4b60-a7d3-c505de08d0e6",
+              "name": "data[1][\"mensagem de texto\"]",
+              "value": "={{ $('Loop Over Items3').item.json.data[1][\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "8884b0fd-1bd8-45c1-ac23-b8285ef942e4",
+              "name": "data[1].curiosidade",
+              "value": "={{ $('Loop Over Items3').item.json.data[1].curiosidade }}",
+              "type": "boolean"
+            },
+            {
+              "id": "54d139cb-9dd4-4592-862b-787f17aaf94d",
+              "name": "File",
+              "value": "={{ $json.File }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2208,
+        688
+      ],
+      "id": "078f56af-2d05-4078-aa1c-565eaa761004",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2416,
+        688
+      ],
+      "id": "d05f00ee-a5ad-4376-837e-755f48b30e06",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me2",
+      "typeVersion": 1,
+      "position": [
+        4016,
+        720
+      ],
+      "id": "41a8f33b-eecd-451c-b4c3-98377edcfe01"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3824,
+        720
+      ],
+      "id": "078f5896-5c42-430e-a7cb-241b39bf8cbe",
+      "name": "Wait1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tabela de números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "numero",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items2').item.json.data[1].numero }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        720
+      ],
+      "id": "9c850225-ac61-45d3-8109-fd24a88722a7",
+      "name": "Update a row6",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items2').item.json.data[1].numero }}"
+            },
+            {
+              "name": "text",
+              "value": "=..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3024,
+        512
+      ],
+      "id": "67909a1b-1787-4b08-990d-440014214aef",
+      "name": "HTTP Request8"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/message/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3232,
+        512
+      ],
+      "id": "a522417e-9a4d-491c-b888-67bd48f40da1",
+      "name": "HTTP Request9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d6c4b5fa-4e4f-46e6-93b2-2d8cee32c5e6",
+              "leftValue": "={{ $('Loop Over Items2').item.json.data[1].curiosidade }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2816,
+        704
+      ],
+      "id": "4e6ad031-ea70-47b3-9a58-8979ad712fda",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        1024
+      ],
+      "id": "ff4a6c96-6074-48c7-a412-30b7ab6f4ffa",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me4",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        1040
+      ],
+      "id": "14e3c80a-e072-491c-8f4c-56ffc8732a2b"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        896,
+        1648
+      ],
+      "id": "198fde32-3ade-4cf2-a429-f33fac9a4071",
+      "name": "Get many rows4",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "agendado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0cc5ce22-4d50-4bc2-8f21-56af1e8723ef"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dba2d895-c5e6-423a-b530-9103a1792e91",
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "andamento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "andamento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1136,
+        1648
+      ],
+      "id": "4b562441-03d3-4ccd-82be-e30e98f91320",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0943776e-4eee-4ce3-b1af-1151b1ca1be7",
+              "leftValue": "={{ $json.Agendamento.toDateTime() }}",
+              "rightValue": "={{ $now.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1136,
+        1472
+      ],
+      "id": "2297057e-e944-4809-8274-5827f0a6654c",
+      "name": "Filter3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        1472
+      ],
+      "id": "303bc513-726a-49d6-92ea-571918c3633b",
+      "name": "Update a row7",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9c4bf808-13b7-4cfc-9abe-bd225754dc3b",
+              "leftValue": "={{ $json.Mensagem }}",
+              "rightValue": "Audio",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1728,
+        1664
+      ],
+      "id": "a52397ac-e21e-49c3-bbb6-be1107f78069",
+      "name": "Filter4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  let file = item.json.File;\n\n  if (typeof file !== 'string') {\n    return {\n      json: {\n        ...item.json,\n        File: null,\n        erro: 'File não é string'\n      }\n    };\n  }\n\n  file = file.trim();\n\n  // remove prefixo data URI\n  file = file.replace(/^data:.*;base64,/, '');\n\n  // remove espaços e quebras\n  file = file.replace(/\\s+/g, '');\n\n  // remove \"=\" indevido no começo\n  file = file.replace(/^=/, '');\n\n  let tipoDetectado = 'desconhecido';\n\n  if (file.startsWith('/9j/')) {\n    tipoDetectado = 'jpeg';\n  } else if (file.startsWith('iVBOR')) {\n    tipoDetectado = 'png';\n  } else if (file.startsWith('SUQz')) {\n    tipoDetectado = 'mp3';\n  } else if (file.startsWith('T2dnUw')) {\n    tipoDetectado = 'ogg';\n  } else if (file.startsWith('UklGR')) {\n    tipoDetectado = 'wav';\n  }\n\n  return {\n    json: {\n      ...item.json,\n      File: file,\n      tipoDetectado\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        1664
+      ],
+      "id": "61845633-bdc8-42ad-aa4b-4532bb4ab6d2",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.data.numero }}"
+            },
+            {
+              "name": "type",
+              "value": "audio"
+            },
+            {
+              "name": "file",
+              "value": "={{ $json.File }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2640,
+        1680
+      ],
+      "id": "dec7db8b-0339-44f1-bc7d-6f1d640b9d66",
+      "name": "HTTP Request10"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d217691d-ed56-419e-810f-83dcd7ce8f2f",
+              "name": "data.token",
+              "value": "={{ $('Loop Over Items4').item.json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "078b8046-a99a-473f-a579-0209ada88d8d",
+              "name": "data.numero",
+              "value": "={{ $('Loop Over Items4').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "8884b0fd-1bd8-45c1-ac23-b8285ef942e4",
+              "name": "data[1].curiosidade",
+              "value": "={{ $('Loop Over Items4').item.json.curiosidade }}",
+              "type": "boolean"
+            },
+            {
+              "id": "54d139cb-9dd4-4592-862b-787f17aaf94d",
+              "name": "File",
+              "value": "={{ $json.File }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2208,
+        1664
+      ],
+      "id": "6ba13346-8131-4adc-a187-2905011835dc",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2416,
+        1664
+      ],
+      "id": "0f4ac768-3dc1-4c4e-8495-44c252879ebb",
+      "name": "Loop Over Items5"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me5",
+      "typeVersion": 1,
+      "position": [
+        4016,
+        1696
+      ],
+      "id": "2dea25be-8a9b-4f04-80bb-3f5cfc94476a"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3824,
+        1696
+      ],
+      "id": "5e83985e-3087-41b5-91f3-af09bf7a576b",
+      "name": "Wait2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tabela de números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "numero",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items5').item.json.data.numero }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        1696
+      ],
+      "id": "69a54b1d-e9fa-4151-a052-dd94d37abefc",
+      "name": "Update a row8",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items5').item.json.data.numero }}"
+            },
+            {
+              "name": "text",
+              "value": "=..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3024,
+        1488
+      ],
+      "id": "05a519a0-4d8d-4b3d-80d4-098063a1f15a",
+      "name": "HTTP Request11"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/message/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3232,
+        1488
+      ],
+      "id": "57d4372f-29ce-4bb5-8269-cd824f90e6df",
+      "name": "HTTP Request12"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d6c4b5fa-4e4f-46e6-93b2-2d8cee32c5e6",
+              "leftValue": "={{ $('Loop Over Items5').item.json.data[1].curiosidade }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2816,
+        1680
+      ],
+      "id": "57eddeb3-f3bd-4c54-b918-558c762fa4fe",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "agendado"
+            },
+            {
+              "keyName": "Status",
+              "condition": "eq",
+              "keyValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        912,
+        2432
+      ],
+      "id": "c6816fae-75ee-4d79-8560-9d4c46ccc9de",
+      "name": "Get many rows7",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "agendado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0cc5ce22-4d50-4bc2-8f21-56af1e8723ef"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendado"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dba2d895-c5e6-423a-b530-9103a1792e91",
+                    "leftValue": "={{ $json.Status }}",
+                    "rightValue": "andamento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "andamento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        2432
+      ],
+      "id": "f30d7a5b-4afe-4326-bf38-4b06709706f2",
+      "name": "Switch5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0943776e-4eee-4ce3-b1af-1151b1ca1be7",
+              "leftValue": "={{ $json.Agendamento.toDateTime() }}",
+              "rightValue": "={{ $now.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1152,
+        2256
+      ],
+      "id": "88ed95b5-c54f-4b18-887b-29893b4d0571",
+      "name": "Filter5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Campanhas de disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "andamento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        2256
+      ],
+      "id": "733e8044-cbd5-46b6-a85f-035eaca76559",
+      "name": "Update a row9",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9c4bf808-13b7-4cfc-9abe-bd225754dc3b",
+              "leftValue": "={{ $json.Mensagem }}",
+              "rightValue": "Imagem",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1744,
+        2448
+      ],
+      "id": "5f3757ce-b971-4f7f-bea0-317abd5f30d1",
+      "name": "Filter6"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  let file = item.json.File;\n\n  if (typeof file !== 'string') {\n    return {\n      json: {\n        ...item.json,\n        File: null\n      }\n    };\n  }\n\n  // remove prefixo data URI se existir\n  file = file.replace(/^data:.*;base64,/, '');\n\n  // remove espaços, quebras de linha e tabs\n  file = file.replace(/\\s+/g, '');\n\n  // remove \"=\" extras no começo\n  file = file.replace(/^=+/, '');\n\n  return {\n    json: {\n      ...item.json,\n      File: file\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        2448
+      ],
+      "id": "5d80912e-dac0-4703-890f-0a8526f34f17",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items6').item.json.data[1].numero }}"
+            },
+            {
+              "name": "type",
+              "value": "image"
+            },
+            {
+              "name": "file",
+              "value": "={{ $json.File }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2656,
+        2464
+      ],
+      "id": "8bb81703-b34a-422c-baf4-f81828174a0e",
+      "name": "HTTP Request13"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        2016
+      ],
+      "id": "58de491b-efe7-40a0-9ab5-1cc999771016",
+      "name": "Loop Over Items6"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me6",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        2032
+      ],
+      "id": "26be1101-60d9-43e9-906e-37f18072d191"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d217691d-ed56-419e-810f-83dcd7ce8f2f",
+              "name": "data[0].token",
+              "value": "={{ $('Loop Over Items6').item.json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "078b8046-a99a-473f-a579-0209ada88d8d",
+              "name": "data[1].numero",
+              "value": "={{ $('Loop Over Items6').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "996b2ab4-a93b-4b60-a7d3-c505de08d0e6",
+              "name": "data[1][\"mensagem de texto\"]",
+              "value": "={{ $('Loop Over Items6').item.json[\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "8884b0fd-1bd8-45c1-ac23-b8285ef942e4",
+              "name": "data[1].curiosidade",
+              "value": "={{ $('Loop Over Items6').item.json.curiosidade }}",
+              "type": "boolean"
+            },
+            {
+              "id": "54d139cb-9dd4-4592-862b-787f17aaf94d",
+              "name": "File",
+              "value": "={{ $json.File }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2224,
+        2448
+      ],
+      "id": "9a3b8a94-d976-45ff-b33c-4f9de2af61ed",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2432,
+        2448
+      ],
+      "id": "f1615595-e956-4ed6-b3a1-83a0cf9ed6dc",
+      "name": "Loop Over Items7"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me7",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        2480
+      ],
+      "id": "b8bcf0b3-8f40-4ad8-bd93-98a1fd3a4419"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3840,
+        2480
+      ],
+      "id": "2cbbd0a0-b6c2-4724-9f30-f912e9ed3bba",
+      "name": "Wait3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "Tabela de números para disparo",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "numero",
+              "condition": "eq",
+              "keyValue": "={{ $('Loop Over Items7').item.json.data[1].numero }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Concluído"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3488,
+        2480
+      ],
+      "id": "34c13d95-893e-4382-a7f5-834d4932d413",
+      "name": "Update a row10",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/send/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Loop Over Items7').item.json.data[1].numero }}"
+            },
+            {
+              "name": "text",
+              "value": "=..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3040,
+        2272
+      ],
+      "id": "3073faff-7413-481b-8805-07d465c44980",
+      "name": "HTTP Request14"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://polymerplastic.uazapi.com/message/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3248,
+        2272
+      ],
+      "id": "0f041e04-c366-4877-ac8e-2fcd6cab473e",
+      "name": "HTTP Request15"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d6c4b5fa-4e4f-46e6-93b2-2d8cee32c5e6",
+              "leftValue": "={{ $('Loop Over Items7').item.json.data[1].curiosidade }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2832,
+        2464
+      ],
+      "id": "bce7c774-520b-4575-b8ce-0424a43c4f02",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "connected"
+            },
+            {
+              "keyName": "config_webhook",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        16
+      ],
+      "id": "c2d7822c-86f8-4c8d-91b4-159ce6712822",
+      "name": "Get many rows9",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $items(\"Edit Fields1\", 0);\n\nconst seen = new Set();\nconst resultado = [];\n\nfor (const item of items) {\n  const numero = item.json.numero;\n\n  // se já viu esse número, ignora\n  if (seen.has(numero)) continue;\n\n  // se não viu, adiciona\n  seen.add(numero);\n\n  resultado.push({\n    json: item.json\n  });\n}\n\nreturn resultado;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        16
+      ],
+      "id": "6f28e759-f3ef-46f6-b826-60b5ffc89128",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4bfb2b99-f04c-4dc1-8d1a-4bf01942b1b0",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b30e2530-796a-41d3-9eb7-5555f5435e3a",
+              "name": "numero",
+              "value": "={{ $('Switch2').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "b5d40120-fdb4-4e67-ad63-d78f8400d456",
+              "name": "Mensagem",
+              "value": "={{ $('Get many rows').item.json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "1426b085-6994-4162-b6a9-bd97930f7064",
+              "name": "mensagem de texto",
+              "value": "={{ $('Get many rows').item.json[\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "f0275932-e3bb-47ce-a2b1-7c7fb07ce99b",
+              "name": "numeroo",
+              "value": "={{ $('Loop Over Items1').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "af1efcb3-cba2-47dc-945f-45a64e07b43c",
+              "name": "token",
+              "value": "={{ $json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "a26080d9-f327-4392-a845-9fb35dc8e38d",
+              "name": "curiosidade",
+              "value": "={{ $('Get many rows').item.json.curiosidade }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1456,
+        272
+      ],
+      "id": "2c7ffacf-fb87-4a20-8727-f339ff06a305",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "connected"
+            },
+            {
+              "keyName": "config_webhook",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        272
+      ],
+      "id": "9a7fea9b-e76f-4f94-a6d6-aa8a4fef0522",
+      "name": "Get many rows10",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $items(\"Edit Fields3\", 0);\n\nconst seen = new Set();\nconst resultado = [];\n\nfor (const item of items) {\n  const numero = item.json.numero;\n\n  // se já viu esse número, ignora\n  if (seen.has(numero)) continue;\n\n  // se não viu, adiciona\n  seen.add(numero);\n\n  resultado.push({\n    json: item.json\n  });\n}\n\nreturn resultado;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        272
+      ],
+      "id": "47911519-cef7-4486-9b08-70cf371a0d3d",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4bfb2b99-f04c-4dc1-8d1a-4bf01942b1b0",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b30e2530-796a-41d3-9eb7-5555f5435e3a",
+              "name": "numero",
+              "value": "={{ $('Switch2').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "b5d40120-fdb4-4e67-ad63-d78f8400d456",
+              "name": "Mensagem",
+              "value": "={{ $('Get many rows').item.json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "1426b085-6994-4162-b6a9-bd97930f7064",
+              "name": "mensagem de texto",
+              "value": "={{ $('Get many rows').item.json[\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "af1efcb3-cba2-47dc-945f-45a64e07b43c",
+              "name": "token",
+              "value": "={{ $json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "a26080d9-f327-4392-a845-9fb35dc8e38d",
+              "name": "curiosidade",
+              "value": "={{ $('Get many rows').item.json.curiosidade }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        1040
+      ],
+      "id": "6b585165-3ca5-4555-82a0-00aa1f030af3",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "connected"
+            },
+            {
+              "keyName": "config_webhook",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        1040
+      ],
+      "id": "b00ff338-fd56-46d7-ac4b-3f345b898e20",
+      "name": "Get many rows11",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $items(\"Edit Fields8\", 0);\n\nconst seen = new Set();\nconst resultado = [];\n\nfor (const item of items) {\n  const numero = item.json.numero;\n\n  // se já viu esse número, ignora\n  if (seen.has(numero)) continue;\n\n  // se não viu, adiciona\n  seen.add(numero);\n\n  resultado.push({\n    json: item.json\n  });\n}\n\nreturn resultado;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        1040
+      ],
+      "id": "32352f52-98e9-4565-a003-1522fd3bfe7e",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4bfb2b99-f04c-4dc1-8d1a-4bf01942b1b0",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "b30e2530-796a-41d3-9eb7-5555f5435e3a",
+              "name": "numero",
+              "value": "={{ $('Switch2').item.json.numero }}",
+              "type": "string"
+            },
+            {
+              "id": "b5d40120-fdb4-4e67-ad63-d78f8400d456",
+              "name": "Mensagem",
+              "value": "={{ $('Get many rows').item.json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "1426b085-6994-4162-b6a9-bd97930f7064",
+              "name": "mensagem de texto",
+              "value": "={{ $('Get many rows').item.json[\"mensagem de texto\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "af1efcb3-cba2-47dc-945f-45a64e07b43c",
+              "name": "token",
+              "value": "={{ $json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "a26080d9-f327-4392-a845-9fb35dc8e38d",
+              "name": "curiosidade",
+              "value": "={{ $('Get many rows').item.json.curiosidade }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1456,
+        2032
+      ],
+      "id": "1ad0722f-b5c7-45d5-97e3-3be2beb125d7",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "números para disparo",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "connected"
+            },
+            {
+              "keyName": "config_webhook",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        2032
+      ],
+      "id": "0c0cd18d-897f-4149-94b3-7ac85c3e9044",
+      "name": "Get many rows12",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $items(\"Edit Fields4\", 0);\n\nconst seen = new Set();\nconst resultado = [];\n\nfor (const item of items) {\n  const numero = item.json.numero;\n\n  // se já viu esse número, ignora\n  if (seen.has(numero)) continue;\n\n  // se não viu, adiciona\n  seen.add(numero);\n\n  resultado.push({\n    json: item.json\n  });\n}\n\nreturn resultado;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        2032
+      ],
+      "id": "14ff6fb1-d134-4727-98e8-29c1cc03c398",
+      "name": "Code in JavaScript4"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Puxa todos os números do UAZAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puxa todos os números do UAZAPI": {
+      "main": [
+        [
+          {
+            "node": "Puxa todos os itens do banco de números para disparo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Puxa todos os itens do banco de números para disparo": {
+      "main": [
+        [
+          {
+            "node": "Verifica se está no banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se está no banco": {
+      "main": [
+        [
+          {
+            "node": "Tava o banco e atualiza",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Não tava no banco e cria a linha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Update a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Update a row3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row4": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Update a row4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many rows9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        []
+      ]
+    },
+    "Get many rows2": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Update a row5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row5": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [
+          {
+            "node": "Get many rows2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many rows10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row6": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request9": {
+      "main": [
+        [
+          {
+            "node": "Update a row6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Replace Me2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [
+          {
+            "node": "Get many rows4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many rows11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows4": {
+      "main": [
+        [
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filter4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Update a row7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row7": {
+      "main": [
+        [
+          {
+            "node": "Filter4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request10": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items5": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Replace Me5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row8": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request11": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request12": {
+      "main": [
+        [
+          {
+            "node": "Update a row8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows7": {
+      "main": [
+        [
+          {
+            "node": "Switch5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "node": "Filter5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filter6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter5": {
+      "main": [
+        [
+          {
+            "node": "Update a row9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row9": {
+      "main": [
+        [
+          {
+            "node": "Filter6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request13": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items6": {
+      "main": [
+        [
+          {
+            "node": "Get many rows7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many rows12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me6": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items7": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row10": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request14": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request15": {
+      "main": [
+        [
+          {
+            "node": "Update a row10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request14",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update a row10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows9": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Replace Me1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows11": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "Replace Me4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows12": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Replace Me6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-08T01:25:06.369Z",
+      "createdAt": "2026-03-08T01:25:06.369Z",
+      "role": "workflow:owner",
+      "workflowId": "23t2c5RgHHjQBlBA",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
