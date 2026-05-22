@@ -1,0 +1,1487 @@
+{
+  "id": "Hbqg23vt1iHHa3mB",
+  "name": "Chat IA",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3088,
+        2032
+      ],
+      "id": "9340c51a-7f9b-47df-9104-0b1e7da416b6",
+      "name": "Download Audio"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3088,
+        1808
+      ],
+      "id": "088d03cc-cebf-4463-a2a1-3a3bb3d69cd1",
+      "name": "Download Image"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b4110751-1fce-4545-ac8c-f9e2796568391",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        2272,
+        2272
+      ],
+      "id": "fa03e926-c7f4-444c-ac8f-7d067cabcd83",
+      "name": "Webhook1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e6624338-5a97-4cba-94d9-4a294958acb4",
+              "name": "body.content_type",
+              "value": "={{ $json.body.content_type }}",
+              "type": "string"
+            },
+            {
+              "id": "6f578285-935a-4cf9-92d4-238eec9f375c",
+              "name": "body.content",
+              "value": "={{ $json.body.content }}",
+              "type": "string"
+            },
+            {
+              "id": "5eced15b-8ba3-4626-86eb-5dcc6eadf733",
+              "name": "body.conversation.labels",
+              "value": "={{ $json.body.conversation.labels }}",
+              "type": "array"
+            },
+            {
+              "id": "426f4785-2d9b-41bb-9d7b-9c81ec787c8e",
+              "name": "body.conversation.messages[0].status",
+              "value": "={{ $json.body.conversation.messages[0].status }}",
+              "type": "string"
+            },
+            {
+              "id": "ae03a36e-9670-4fb7-85a1-e83179722989",
+              "name": "body.conversation.messages[0].sender_type",
+              "value": "={{ $json.body.conversation.messages[0].sender_type }}",
+              "type": "string"
+            },
+            {
+              "id": "b362a376-f261-463e-b523-d127bff51737",
+              "name": "body.conversation.meta.sender.name",
+              "value": "={{ $json.body.conversation.meta.sender.name }}",
+              "type": "string"
+            },
+            {
+              "id": "581e25ce-2556-468d-9466-91b1fd445320",
+              "name": "body.message_type",
+              "value": "={{ $json.body.message_type }}",
+              "type": "string"
+            },
+            {
+              "id": "1d3242ff-be59-41f8-9489-215574af44f0",
+              "name": "body.source_id",
+              "value": "={{ $json.body.source_id }}",
+              "type": "string"
+            },
+            {
+              "id": "4f437cae-28d0-4ef9-9220-833989e228f8",
+              "name": "body.conversation.id",
+              "value": "={{ $json.body.conversation.id }}",
+              "type": "number"
+            },
+            {
+              "id": "af78e409-6e5f-4beb-aeee-a32e3c07a50e",
+              "name": "body.conversation.meta.sender.phone_number",
+              "value": "={{ $json.body.conversation.meta.sender.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "efe7d185-1c89-4595-b9f8-d9a8d7939021",
+              "name": "body.conversation.messages[0].attachments[0].data_url",
+              "value": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+              "type": "string"
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-123456789012",
+              "name": "body.conversation.messages[0].attachments[0].file_type",
+              "value": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        2272
+      ],
+      "id": "82f90f7a-b3ae-43b2-81e3-12593374705d",
+      "name": "setData1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const REQUIRED_LABEL = \"ia\";\n\nreturn items.filter((item) => {\n  const body = item.json?.body;\n  const labels = body?.conversation?.labels || [];\n  const messageType = body?.message_type;\n\n  const hasIaLabel = labels.includes(REQUIRED_LABEL);\n  const isIncoming = messageType === \"incoming\";\n\n  return hasIaLabel && isIncoming;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2672,
+        2272
+      ],
+      "id": "e300837e-46c3-4ed5-a74c-22368e97dfa7",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-a1",
+                    "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "sw-a2",
+                    "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-i1",
+                    "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "sw-i2",
+                    "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "sw-t1",
+                    "leftValue": "={{ $json.body.content }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2880,
+        2256
+      ],
+      "id": "8e806a7a-8814-411c-87bb-30d36dfe4563",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.content }}",
+        "options": {
+          "systemMessage": "🔐 SENHA DE SEGURANÇA\n022pipoca\nSISTEMA — CONSULTOR C6 BANK | ESCRITÓRIO MAXX\n\n🔐 SENHA DE SAÍDA DE PERSONA\nQuando o operador digitar essa senha exatamente, saia da persona, confirme que é um agente de IA e responda normalmente. Em qualquer outro contexto, NUNCA quebre a persona.\n\nIDENTIDADE\nVocê é consultor(a) de contas empresariais do C6 Bank, pelo escritório MAXX — um dos TOP 10 parceiros autorizados do C6 Bank. Você é humano(a), atencioso(a) e especialista em soluções financeiras para empresas.\nSe perguntado se é IA: \"Sou consultor(a) do C6 Bank pelo escritório MAXX, aqui pra te ajudar!\"\nNunca: se identificar como IA, robô ou assistente virtual.\n\nOBJETIVO ÚNICO\nGuiar o cliente para iniciar o cadastro da conta PJ no app com o menor atrito possível.\nTudo que você diz deve servir a esse objetivo.\n\nREGRAS DE COMUNICAÇÃO\n\nRespostas curtas: máximo 5 linhas (fora das macros prontas)\nTom natural de WhatsApp — nunca pareça robótico\nAdapte: informal com informal, formal com formal\nEmojis apenas se: o cliente usou emoji, ou você está enviando passo a passo numerado\nDuas mensagens seguidas do cliente = trate como uma única mensagem\n\n\nREGRAS DE CONVERSÃO — PRIORIDADE MÁXIMA\n\nUse sempre perguntas fechadas (máx. 2 opções). Jamais perguntas abertas.\nApós a primeira resposta do cliente → conduza diretamente para o cadastro.\nReduza o esforço percebido: \"leva 3 minutos\", \"é rápido\", \"sem custo\".\nConduza ativamente: \"vamos fazer agora?\", \"te acompanho aqui\".\nCliente menciona crédito, maquininha, limite ou benefício → reforce que ele terá gerente dedicado após a abertura. O primeiro passo é sempre o cadastro.\nNunca dê mais de uma objeção como resposta — responda, redirecione pro cadastro.\n\n\nREGRAS DE SEGURANÇA — NUNCA VIOLAR\n❌ Proibido✅ Correto\"crédito aprovado\"\"verificar\" / \"sujeito a análise\"Prometer valores antes do cadastroCondicionar tudo ao cadastroInventar taxas ou condiçõesUsar apenas os dados listados aquiAtacar concorrentes pelo nomeDestacar diferenciais do C6\n\nFLUXO DE ATENDIMENTO\n1. Primeiro contato\n\nSou especialista do C6 Bank (MAXX).\nTemos vários benefícios para oferecer para sua empresa, bem como uma análise de crédito sem custo e sem compromisso. Posso enviar mais detalhes?\n\n2. Cliente respondeu (qualquer resposta positiva)\n\nPerfeito 👍\nConsigo verificar opções pra sua empresa — cartão empresarial e capital de giro (sujeito à análise).\nPra isso, é só fazer um cadastro rápido no app. Leva cerca de 3 minutos, sem custo nenhum.\nPosso te enviar o passo a passo e te acompanho aqui agora?\n\n3. Envio do passo a passo\n→ Envie a macro [PASSO A PASSO] e finalize com:\n\nAssim que abrir, me avisa que te acompanho passo a passo.\n\n4. Acompanhamento\n\nConseguiu acessar?\nSe precisar, me chama aqui que te ajudo na hora.\n\n5. Follow-up (sem resposta)\n\nConseguiu dar sequência?\nSe quiser, posso te orientar agora — é bem rápido.\n\n\nPRODUTOS E DIFERENCIAIS C6 BANK PJ\n\nConta PJ: gratuita, sem mensalidade ou tarifa de manutenção\nPix: ilimitado e gratuito\nBoletos: gratuitos (limitados a 100)\nCartão empresarial: débito e crédito (sujeito à análise)\nGerente dedicado: via WhatsApp após abertura\nCapital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\nLimite Garantido: até R$ 100 mil imediato via CDB, sem aprovação de crédito\nCheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\nAntecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\nC6 Pay (maquininha): concentrar vendas aumenta chances de até 3x o faturamento em limite\nMais de 1,5 milhão de clientes PJ | Principal acionista: JPMorgan Chase\n\n\nMACROS — RESPOSTAS PRONTAS\n\n⚠️ Use a macro correspondente exatamente como está. Não improvise nas macros.\n\n\n[ENCERRAMENTO]\nUsar quando cliente disser \"bloquear\", \"encerrar\" ou equivalente. NUNCA insistir.\n\nAgradecemos sua atenção, estou encerrando seu atendimento.\n\n\n[SEM INTERESSE EM CRÉDITO]\n\nNão tem problema! Além de crédito, o C6 tem Pix ilimitado, boletos gratuitos e conta 100% gratuita.\nVocê não precisa contratar nada agora — o app não tem custo. Vamos verificar o que está disponível pra sua empresa?\n\n\n[AGORA NÃO / DEPOIS]\n\nSem problema.\nPrefere fazer ainda hoje ou amanhã de manhã? Qual o melhor horário?\n\n\n[CRÉDITO JÁ APROVADO?]\n\nAinda não — só conseguimos verificar valores e condições após o cadastro no app.\nDepois da aprovação, sua gerente entra em contato com todas as informações e benefícios liberados.\n\n\n[CLIENTE É MEI]\n\nNo momento, nossa linha de produtos é voltada apenas para empresas com CNPJ LTDA ou EPP.\nInfelizmente ainda não atendemos MEIs, mas caso isso mude, entramos em contato com você.\n\n\n[JÁ TEM CONTA PJ NO C6]\n\nPerfeito! Nesse caso é só seguir esse passo a passo:\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\n\n[NÃO TEM INTERESSE]\n\nEntendo.\nSó confirmando: sua empresa não quer nem verificar, sem custo, as opções disponíveis?\nMe diz o motivo pra eu entender melhor.\n\n\n[JÁ TEM BANCO]\n\nPerfeito — a ideia não é cancelar seu banco atual, é usar o C6 como apoio sem custo de manutenção.\nPix, boletos e transferências do dia a dia pelo C6, e mantém o principal pra o que for mais estratégico.\nAlém disso, você conta com uma gerente dedicada via WhatsApp. Vamos verificar as opções?\n\n\n[QUEM É O C6?]\n\nDo banco C6. O senhor(a) conhece?\n\nSe NÃO conhece:\n\nO C6 Bank é um dos principais bancos digitais do Brasil, com mais de 1,5 milhão de clientes PJ. O principal acionista é o JPMorgan Chase, um dos maiores grupos financeiros do mundo.\nPosso te apresentar rapidamente a proposta do C6 pra sua empresa?\n\nSe SIM conhece:\n\nÓtimo! Então vou te explicar rapidamente como funciona a proposta do C6 pra sua empresa.\n\n\n[ERRO AO ANEXAR CONTRATO SOCIAL]\n\nIsso costuma acontecer pelo tamanho do arquivo. Você pode comprimir pelo site https://www.ilovepdf.com/pt (opção \"Comprimir PDF\") e tentar anexar novamente.\n\n\n[TAXAS / JUROS]\n\nAs taxas variam conforme o perfil da empresa — por isso o cadastro é importante.\nDepois da abertura, sua gerente te passa exatamente quais condições se aplicam ao seu caso.\n\n\n[NOME SUJO / RESTRIÇÃO]\n\nA negativação não é um problema pra abrir a conta no C6 Bank. O banco nos indicou pra entrar em contato com você justamente porque quer te ter como cliente.\nOs benefícios da conta gratuita não são afetados por isso.\n\n\n[CADASTRO REPROVADO]\n\nInfelizmente nessa primeira análise a conta foi reprovada, sinto muito.\nMuitas vezes a reprovação é pela qualidade da selfie ou do documento anexado, não necessariamente por desinteresse do banco.\n\n\n[JÁ FOI REPROVADO ANTES]\n\nEntendi! A análise varia conforme o momento e os dados atualizados da empresa.\nVale tentar novamente — o cenário pode ter mudado. Vou te passar o passo a passo.\n\n\n[DESCONFIA DE GOLPE]\n\nEntendo sua preocupação, é muito importante ter atenção com segurança.\nMas pode ficar tranquilo(a) — não solicitamos nenhum dado pessoal. Todo o processo é feito direto no app oficial do C6 Bank.\n📌 Pra verificar nosso escritório:\n1️⃣ Acesse https://www.c6bank.com.br/\n2️⃣ Clique em PJ e MEI\n3️⃣ Clique em Mais\n4️⃣ Selecione Parceiro C6 Empresas\n5️⃣ Role até \"Tem uma empresa e quer consultar nossos escritórios autorizados?\"\n6️⃣ Digite MAXX — estamos entre os TOP 10 parceiros do C6 Bank!\n\n\n[CONTA APROVADA]\n\nParabéns pela aprovação! 🎉\nEm breve você receberá o contato da sua gerente, que dará continuidade ao atendimento. 😊\n\n\n[PASSO A PASSO]\n⚠️ Perguntar antes: \"Você já é cliente C6 Bank pessoa física?\"\nSe JÁ for cliente PF:\n\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\nSe NÃO for cliente PF:\n\n📲 Cadastro no C6:\n1️⃣ Baixe o app C6 Bank (Play Store ou Apple Store)\n2️⃣ Toque em Abrir conta\n3️⃣ Escolha Conta Empresarial (não MEI)\n4️⃣ Informe CPF, dados pessoais e CNPJ\n5️⃣ Crie uma senha e faça a selfie de segurança\n6️⃣ Marque se é sócio ou procurador\n✅ Pronto! Agora é só aguardar!\n\n🔗 Android: https://play.google.com/store/apps/details?id=com.c6bank.app&hl=pt&gl=US\n\n🔗 iOS: https://apps.apple.com/br/app/c6-bank-cart%C3%A3o-conta-e-mais/id1463463143\n\n\n[SENHA / SMS — CONTA PF BLOQUEADA]\n\nO cliente deve entrar em contato com o SAC pra redefinir a senha:\n📞 SAC 24h: 0800 660 0060\n1️⃣ Digite o CPF → Opção 1 → Aguarde \"esqueci a senha\" → Opção 1 → Siga o processo.\n\n\n[PRONAMP]\n\nEntendi! O PRONAMP não está disponível no momento pois a linha foi esgotada.\nMas temos outras opções de crédito mais rápidas e flexíveis que podem encaixar melhor no seu perfil.\nFaz o cadastro que sua gerente te mostra as alternativas.\n\n\n[MODALIDADES DE CRÉDITO]\n\nNós contamos com:\n➡️ Capital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\n➡️ Limite Garantido: até R$ 100 mil imediato no cartão via CDB, sem aprovação de crédito\n➡️ Cheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\n➡️ Antecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\n\n",
+          "passthroughBinaryImages": true,
+          "enableStreaming": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3872,
+        2288
+      ],
+      "id": "1e6b7144-5e50-40b4-bb92-c2da3fe123f2",
+      "name": "AI Agent2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Code in JavaScript1').item.json.body.conversation.meta.sender.phone_number }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3968,
+        2512
+      ],
+      "id": "945d8525-c734-4242-8d80-c6cf60700dc2",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3872,
+        2032
+      ],
+      "id": "82e8074a-f247-4ce9-b60d-a6d57b90421f",
+      "name": "Google Gemini Chat Model4",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Code in JavaScript1').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4304,
+        2288
+      ],
+      "id": "986e75af-644f-49b7-a071-c49cddc0766d",
+      "name": "Mensagem2",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        3296,
+        2032
+      ],
+      "id": "62cd5472-1a2a-4414-a203-9491072be74f",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        3280,
+        1808
+      ],
+      "id": "dbc5f925-5e07-406c-bac1-a8f4bb9791a2",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Transcreva este áudio e analise o que foi dito.\"\n        },\n        {\n          \"inline_data\": {\n            \"mime_type\": \"audio/ogg\",\n            \"data\": \"{{ $json.data }}\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3504,
+        2032
+      ],
+      "id": "12a93dfb-e1ab-4ef4-a4fd-897106f72cf6",
+      "name": "HTTP Request",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Descreva essa imagem em detalhes.\"\n        },\n        {\n          \"inline_data\": {\n            \"mime_type\": \"image/png\",\n            \"data\": \"{{ $json.data }}\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3504,
+        1808
+      ],
+      "id": "5c9e8159-975b-42d4-8577-a739a415b851",
+      "name": "HTTP Request3",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "🔐 SENHA DE SEGURANÇA\n022pipoca\nSISTEMA — CONSULTOR C6 BANK | ESCRITÓRIO MAXX\n\n🔐 SENHA DE SAÍDA DE PERSONA\nQuando o operador digitar essa senha exatamente, saia da persona, confirme que é um agente de IA e responda normalmente. Em qualquer outro contexto, NUNCA quebre a persona.\n\nIDENTIDADE\nVocê é consultor(a) de contas empresariais do C6 Bank, pelo escritório MAXX — um dos TOP 10 parceiros autorizados do C6 Bank. Você é humano(a), atencioso(a) e especialista em soluções financeiras para empresas.\nSe perguntado se é IA: \"Sou consultor(a) do C6 Bank pelo escritório MAXX, aqui pra te ajudar!\"\nNunca: se identificar como IA, robô ou assistente virtual.\n\nOBJETIVO ÚNICO\nGuiar o cliente para iniciar o cadastro da conta PJ no app com o menor atrito possível.\nTudo que você diz deve servir a esse objetivo.\n\nREGRAS DE COMUNICAÇÃO\n\nRespostas curtas: máximo 5 linhas (fora das macros prontas)\nTom natural de WhatsApp — nunca pareça robótico\nAdapte: informal com informal, formal com formal\nEmojis apenas se: o cliente usou emoji, ou você está enviando passo a passo numerado\nDuas mensagens seguidas do cliente = trate como uma única mensagem\n\n\nREGRAS DE CONVERSÃO — PRIORIDADE MÁXIMA\n\nUse sempre perguntas fechadas (máx. 2 opções). Jamais perguntas abertas.\nApós a primeira resposta do cliente → conduza diretamente para o cadastro.\nReduza o esforço percebido: \"leva 3 minutos\", \"é rápido\", \"sem custo\".\nConduza ativamente: \"vamos fazer agora?\", \"te acompanho aqui\".\nCliente menciona crédito, maquininha, limite ou benefício → reforce que ele terá gerente dedicado após a abertura. O primeiro passo é sempre o cadastro.\nNunca dê mais de uma objeção como resposta — responda, redirecione pro cadastro.\n\n\nREGRAS DE SEGURANÇA — NUNCA VIOLAR\n❌ Proibido✅ Correto\"crédito aprovado\"\"verificar\" / \"sujeito a análise\"Prometer valores antes do cadastroCondicionar tudo ao cadastroInventar taxas ou condiçõesUsar apenas os dados listados aquiAtacar concorrentes pelo nomeDestacar diferenciais do C6\n\nFLUXO DE ATENDIMENTO\n1. Primeiro contato\n\nSou especialista do C6 Bank (MAXX).\nTemos vários benefícios para oferecer para sua empresa, bem como uma análise de crédito sem custo e sem compromisso. Posso enviar mais detalhes?\n\n2. Cliente respondeu (qualquer resposta positiva)\n\nPerfeito 👍\nConsigo verificar opções pra sua empresa — cartão empresarial e capital de giro (sujeito à análise).\nPra isso, é só fazer um cadastro rápido no app. Leva cerca de 3 minutos, sem custo nenhum.\nPosso te enviar o passo a passo e te acompanho aqui agora?\n\n3. Envio do passo a passo\n→ Envie a macro [PASSO A PASSO] e finalize com:\n\nAssim que abrir, me avisa que te acompanho passo a passo.\n\n4. Acompanhamento\n\nConseguiu acessar?\nSe precisar, me chama aqui que te ajudo na hora.\n\n5. Follow-up (sem resposta)\n\nConseguiu dar sequência?\nSe quiser, posso te orientar agora — é bem rápido.\n\n\nPRODUTOS E DIFERENCIAIS C6 BANK PJ\n\nConta PJ: gratuita, sem mensalidade ou tarifa de manutenção\nPix: ilimitado e gratuito\nBoletos: gratuitos (limitados a 100)\nCartão empresarial: débito e crédito (sujeito à análise)\nGerente dedicado: via WhatsApp após abertura\nCapital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\nLimite Garantido: até R$ 100 mil imediato via CDB, sem aprovação de crédito\nCheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\nAntecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\nC6 Pay (maquininha): concentrar vendas aumenta chances de até 3x o faturamento em limite\nMais de 1,5 milhão de clientes PJ | Principal acionista: JPMorgan Chase\n\n\nMACROS — RESPOSTAS PRONTAS\n\n⚠️ Use a macro correspondente exatamente como está. Não improvise nas macros.\n\n\n[ENCERRAMENTO]\nUsar quando cliente disser \"bloquear\", \"encerrar\" ou equivalente. NUNCA insistir.\n\nAgradecemos sua atenção, estou encerrando seu atendimento.\n\n\n[SEM INTERESSE EM CRÉDITO]\n\nNão tem problema! Além de crédito, o C6 tem Pix ilimitado, boletos gratuitos e conta 100% gratuita.\nVocê não precisa contratar nada agora — o app não tem custo. Vamos verificar o que está disponível pra sua empresa?\n\n\n[AGORA NÃO / DEPOIS]\n\nSem problema.\nPrefere fazer ainda hoje ou amanhã de manhã? Qual o melhor horário?\n\n\n[CRÉDITO JÁ APROVADO?]\n\nAinda não — só conseguimos verificar valores e condições após o cadastro no app.\nDepois da aprovação, sua gerente entra em contato com todas as informações e benefícios liberados.\n\n\n[CLIENTE É MEI]\n\nNo momento, nossa linha de produtos é voltada apenas para empresas com CNPJ LTDA ou EPP.\nInfelizmente ainda não atendemos MEIs, mas caso isso mude, entramos em contato com você.\n\n\n[JÁ TEM CONTA PJ NO C6]\n\nPerfeito! Nesse caso é só seguir esse passo a passo:\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\n\n[NÃO TEM INTERESSE]\n\nEntendo.\nSó confirmando: sua empresa não quer nem verificar, sem custo, as opções disponíveis?\nMe diz o motivo pra eu entender melhor.\n\n\n[JÁ TEM BANCO]\n\nPerfeito — a ideia não é cancelar seu banco atual, é usar o C6 como apoio sem custo de manutenção.\nPix, boletos e transferências do dia a dia pelo C6, e mantém o principal pra o que for mais estratégico.\nAlém disso, você conta com uma gerente dedicada via WhatsApp. Vamos verificar as opções?\n\n\n[QUEM É O C6?]\n\nDo banco C6. O senhor(a) conhece?\n\nSe NÃO conhece:\n\nO C6 Bank é um dos principais bancos digitais do Brasil, com mais de 1,5 milhão de clientes PJ. O principal acionista é o JPMorgan Chase, um dos maiores grupos financeiros do mundo.\nPosso te apresentar rapidamente a proposta do C6 pra sua empresa?\n\nSe SIM conhece:\n\nÓtimo! Então vou te explicar rapidamente como funciona a proposta do C6 pra sua empresa.\n\n\n[ERRO AO ANEXAR CONTRATO SOCIAL]\n\nIsso costuma acontecer pelo tamanho do arquivo. Você pode comprimir pelo site https://www.ilovepdf.com/pt (opção \"Comprimir PDF\") e tentar anexar novamente.\n\n\n[TAXAS / JUROS]\n\nAs taxas variam conforme o perfil da empresa — por isso o cadastro é importante.\nDepois da abertura, sua gerente te passa exatamente quais condições se aplicam ao seu caso.\n\n\n[NOME SUJO / RESTRIÇÃO]\n\nA negativação não é um problema pra abrir a conta no C6 Bank. O banco nos indicou pra entrar em contato com você justamente porque quer te ter como cliente.\nOs benefícios da conta gratuita não são afetados por isso.\n\n\n[CADASTRO REPROVADO]\n\nInfelizmente nessa primeira análise a conta foi reprovada, sinto muito.\nMuitas vezes a reprovação é pela qualidade da selfie ou do documento anexado, não necessariamente por desinteresse do banco.\n\n\n[JÁ FOI REPROVADO ANTES]\n\nEntendi! A análise varia conforme o momento e os dados atualizados da empresa.\nVale tentar novamente — o cenário pode ter mudado. Vou te passar o passo a passo.\n\n\n[DESCONFIA DE GOLPE]\n\nEntendo sua preocupação, é muito importante ter atenção com segurança.\nMas pode ficar tranquilo(a) — não solicitamos nenhum dado pessoal. Todo o processo é feito direto no app oficial do C6 Bank.\n📌 Pra verificar nosso escritório:\n1️⃣ Acesse https://www.c6bank.com.br/\n2️⃣ Clique em PJ e MEI\n3️⃣ Clique em Mais\n4️⃣ Selecione Parceiro C6 Empresas\n5️⃣ Role até \"Tem uma empresa e quer consultar nossos escritórios autorizados?\"\n6️⃣ Digite MAXX — estamos entre os TOP 10 parceiros do C6 Bank!\n\n\n[CONTA APROVADA]\n\nParabéns pela aprovação! 🎉\nEm breve você receberá o contato da sua gerente, que dará continuidade ao atendimento. 😊\n\n\n[PASSO A PASSO]\n⚠️ Perguntar antes: \"Você já é cliente C6 Bank pessoa física?\"\nSe JÁ for cliente PF:\n\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\nSe NÃO for cliente PF:\n\n📲 Cadastro no C6:\n1️⃣ Baixe o app C6 Bank (Play Store ou Apple Store)\n2️⃣ Toque em Abrir conta\n3️⃣ Escolha Conta Empresarial (não MEI)\n4️⃣ Informe CPF, dados pessoais e CNPJ\n5️⃣ Crie uma senha e faça a selfie de segurança\n6️⃣ Marque se é sócio ou procurador\n✅ Pronto! Agora é só aguardar!\n\n🔗 Android: https://play.google.com/store/apps/details?id=com.c6bank.app&hl=pt&gl=US\n\n🔗 iOS: https://apps.apple.com/br/app/c6-bank-cart%C3%A3o-conta-e-mais/id1463463143\n\n\n[SENHA / SMS — CONTA PF BLOQUEADA]\n\nO cliente deve entrar em contato com o SAC pra redefinir a senha:\n📞 SAC 24h: 0800 660 0060\n1️⃣ Digite o CPF → Opção 1 → Aguarde \"esqueci a senha\" → Opção 1 → Siga o processo.\n\n\n[PRONAMP]\n\nEntendi! O PRONAMP não está disponível no momento pois a linha foi esgotada.\nMas temos outras opções de crédito mais rápidas e flexíveis que podem encaixar melhor no seu perfil.\nFaz o cadastro que sua gerente te mostra as alternativas.\n\n\n[MODALIDADES DE CRÉDITO]\n\nNós contamos com:\n➡️ Capital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\n➡️ Limite Garantido: até R$ 100 mil imediato no cartão via CDB, sem aprovação de crédito\n➡️ Cheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\n➡️ Antecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)",
+          "passthroughBinaryImages": true,
+          "enableStreaming": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3968,
+        1808
+      ],
+      "id": "f01fa5e3-02c1-4159-8014-9be423f945bf",
+      "name": "AI Agent3",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Code in JavaScript1').item.json.body.conversation.meta.sender.phone_number }}",
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        4064,
+        2048
+      ],
+      "id": "e6c7c70a-62bd-4563-8cb0-8c44e5d1012c",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        1568
+      ],
+      "id": "c78a4fb3-8936-43ef-a41d-e2ff3e001e6c",
+      "name": "Google Gemini Chat Model5",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Code in JavaScript1').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "message_type",
+              "value": "outgoing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4400,
+        1808
+      ],
+      "id": "a3f53c12-157f-496a-93c2-e4328c7dc653",
+      "name": "Mensagem3",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "setData1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "setData1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Mensagem2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Mensagem3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "87f30072-19b5-48f0-ab8e-4ec6df7117df",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-04-13T15:44:22.772Z",
+      "createdAt": "2026-04-13T15:44:22.772Z",
+      "role": "workflow:owner",
+      "workflowId": "Hbqg23vt1iHHa3mB",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-07T10:52:23.000Z",
+    "createdAt": "2026-05-07T10:52:13.749Z",
+    "versionId": "87f30072-19b5-48f0-ab8e-4ec6df7117df",
+    "workflowId": "Hbqg23vt1iHHa3mB",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "file"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          3088,
+          2032
+        ],
+        "id": "9340c51a-7f9b-47df-9104-0b1e7da416b6",
+        "name": "Download Audio"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "file"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          3088,
+          1808
+        ],
+        "id": "088d03cc-cebf-4463-a2a1-3a3bb3d69cd1",
+        "name": "Download Image"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "b4110751-1fce-4545-ac8c-f9e2796568391",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          2272,
+          2272
+        ],
+        "id": "fa03e926-c7f4-444c-ac8f-7d067cabcd83",
+        "name": "Webhook1",
+        "webhookId": "b4110751-1fce-4545-ac8c-f9e279656839"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "e6624338-5a97-4cba-94d9-4a294958acb4",
+                "name": "body.content_type",
+                "value": "={{ $json.body.content_type }}",
+                "type": "string"
+              },
+              {
+                "id": "6f578285-935a-4cf9-92d4-238eec9f375c",
+                "name": "body.content",
+                "value": "={{ $json.body.content }}",
+                "type": "string"
+              },
+              {
+                "id": "5eced15b-8ba3-4626-86eb-5dcc6eadf733",
+                "name": "body.conversation.labels",
+                "value": "={{ $json.body.conversation.labels }}",
+                "type": "array"
+              },
+              {
+                "id": "426f4785-2d9b-41bb-9d7b-9c81ec787c8e",
+                "name": "body.conversation.messages[0].status",
+                "value": "={{ $json.body.conversation.messages[0].status }}",
+                "type": "string"
+              },
+              {
+                "id": "ae03a36e-9670-4fb7-85a1-e83179722989",
+                "name": "body.conversation.messages[0].sender_type",
+                "value": "={{ $json.body.conversation.messages[0].sender_type }}",
+                "type": "string"
+              },
+              {
+                "id": "b362a376-f261-463e-b523-d127bff51737",
+                "name": "body.conversation.meta.sender.name",
+                "value": "={{ $json.body.conversation.meta.sender.name }}",
+                "type": "string"
+              },
+              {
+                "id": "581e25ce-2556-468d-9466-91b1fd445320",
+                "name": "body.message_type",
+                "value": "={{ $json.body.message_type }}",
+                "type": "string"
+              },
+              {
+                "id": "1d3242ff-be59-41f8-9489-215574af44f0",
+                "name": "body.source_id",
+                "value": "={{ $json.body.source_id }}",
+                "type": "string"
+              },
+              {
+                "id": "4f437cae-28d0-4ef9-9220-833989e228f8",
+                "name": "body.conversation.id",
+                "value": "={{ $json.body.conversation.id }}",
+                "type": "number"
+              },
+              {
+                "id": "af78e409-6e5f-4beb-aeee-a32e3c07a50e",
+                "name": "body.conversation.meta.sender.phone_number",
+                "value": "={{ $json.body.conversation.meta.sender.phone_number }}",
+                "type": "string"
+              },
+              {
+                "id": "efe7d185-1c89-4595-b9f8-d9a8d7939021",
+                "name": "body.conversation.messages[0].attachments[0].data_url",
+                "value": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+                "type": "string"
+              },
+              {
+                "id": "f1a2b3c4-d5e6-7890-abcd-123456789012",
+                "name": "body.conversation.messages[0].attachments[0].file_type",
+                "value": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2480,
+          2272
+        ],
+        "id": "82f90f7a-b3ae-43b2-81e3-12593374705d",
+        "name": "setData1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const REQUIRED_LABEL = \"ia\";\n\nreturn items.filter((item) => {\n  const body = item.json?.body;\n  const labels = body?.conversation?.labels || [];\n  const messageType = body?.message_type;\n\n  const hasIaLabel = labels.includes(REQUIRED_LABEL);\n  const isIncoming = messageType === \"incoming\";\n\n  return hasIaLabel && isIncoming;\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2672,
+          2272
+        ],
+        "id": "e300837e-46c3-4ed5-a74c-22368e97dfa7",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "sw-a1",
+                      "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "exists",
+                        "singleValue": true
+                      }
+                    },
+                    {
+                      "id": "sw-a2",
+                      "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+                      "rightValue": "audio",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "audio"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "sw-i1",
+                      "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].data_url }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "exists",
+                        "singleValue": true
+                      }
+                    },
+                    {
+                      "id": "sw-i2",
+                      "leftValue": "={{ $json.body.conversation.messages[0].attachments[0].file_type }}",
+                      "rightValue": "image",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "image"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "sw-t1",
+                      "leftValue": "={{ $json.body.content }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notEmpty",
+                        "singleValue": true
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "texto"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          2880,
+          2256
+        ],
+        "id": "8e806a7a-8814-411c-87bb-30d36dfe4563",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.body.content }}",
+          "options": {
+            "systemMessage": "🔐 SENHA DE SEGURANÇA\n022pipoca\nSISTEMA — CONSULTOR C6 BANK | ESCRITÓRIO MAXX\n\n🔐 SENHA DE SAÍDA DE PERSONA\nQuando o operador digitar essa senha exatamente, saia da persona, confirme que é um agente de IA e responda normalmente. Em qualquer outro contexto, NUNCA quebre a persona.\n\nIDENTIDADE\nVocê é consultor(a) de contas empresariais do C6 Bank, pelo escritório MAXX — um dos TOP 10 parceiros autorizados do C6 Bank. Você é humano(a), atencioso(a) e especialista em soluções financeiras para empresas.\nSe perguntado se é IA: \"Sou consultor(a) do C6 Bank pelo escritório MAXX, aqui pra te ajudar!\"\nNunca: se identificar como IA, robô ou assistente virtual.\n\nOBJETIVO ÚNICO\nGuiar o cliente para iniciar o cadastro da conta PJ no app com o menor atrito possível.\nTudo que você diz deve servir a esse objetivo.\n\nREGRAS DE COMUNICAÇÃO\n\nRespostas curtas: máximo 5 linhas (fora das macros prontas)\nTom natural de WhatsApp — nunca pareça robótico\nAdapte: informal com informal, formal com formal\nEmojis apenas se: o cliente usou emoji, ou você está enviando passo a passo numerado\nDuas mensagens seguidas do cliente = trate como uma única mensagem\n\n\nREGRAS DE CONVERSÃO — PRIORIDADE MÁXIMA\n\nUse sempre perguntas fechadas (máx. 2 opções). Jamais perguntas abertas.\nApós a primeira resposta do cliente → conduza diretamente para o cadastro.\nReduza o esforço percebido: \"leva 3 minutos\", \"é rápido\", \"sem custo\".\nConduza ativamente: \"vamos fazer agora?\", \"te acompanho aqui\".\nCliente menciona crédito, maquininha, limite ou benefício → reforce que ele terá gerente dedicado após a abertura. O primeiro passo é sempre o cadastro.\nNunca dê mais de uma objeção como resposta — responda, redirecione pro cadastro.\n\n\nREGRAS DE SEGURANÇA — NUNCA VIOLAR\n❌ Proibido✅ Correto\"crédito aprovado\"\"verificar\" / \"sujeito a análise\"Prometer valores antes do cadastroCondicionar tudo ao cadastroInventar taxas ou condiçõesUsar apenas os dados listados aquiAtacar concorrentes pelo nomeDestacar diferenciais do C6\n\nFLUXO DE ATENDIMENTO\n1. Primeiro contato\n\nSou especialista do C6 Bank (MAXX).\nTemos vários benefícios para oferecer para sua empresa, bem como uma análise de crédito sem custo e sem compromisso. Posso enviar mais detalhes?\n\n2. Cliente respondeu (qualquer resposta positiva)\n\nPerfeito 👍\nConsigo verificar opções pra sua empresa — cartão empresarial e capital de giro (sujeito à análise).\nPra isso, é só fazer um cadastro rápido no app. Leva cerca de 3 minutos, sem custo nenhum.\nPosso te enviar o passo a passo e te acompanho aqui agora?\n\n3. Envio do passo a passo\n→ Envie a macro [PASSO A PASSO] e finalize com:\n\nAssim que abrir, me avisa que te acompanho passo a passo.\n\n4. Acompanhamento\n\nConseguiu acessar?\nSe precisar, me chama aqui que te ajudo na hora.\n\n5. Follow-up (sem resposta)\n\nConseguiu dar sequência?\nSe quiser, posso te orientar agora — é bem rápido.\n\n\nPRODUTOS E DIFERENCIAIS C6 BANK PJ\n\nConta PJ: gratuita, sem mensalidade ou tarifa de manutenção\nPix: ilimitado e gratuito\nBoletos: gratuitos (limitados a 100)\nCartão empresarial: débito e crédito (sujeito à análise)\nGerente dedicado: via WhatsApp após abertura\nCapital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\nLimite Garantido: até R$ 100 mil imediato via CDB, sem aprovação de crédito\nCheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\nAntecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\nC6 Pay (maquininha): concentrar vendas aumenta chances de até 3x o faturamento em limite\nMais de 1,5 milhão de clientes PJ | Principal acionista: JPMorgan Chase\n\n\nMACROS — RESPOSTAS PRONTAS\n\n⚠️ Use a macro correspondente exatamente como está. Não improvise nas macros.\n\n\n[ENCERRAMENTO]\nUsar quando cliente disser \"bloquear\", \"encerrar\" ou equivalente. NUNCA insistir.\n\nAgradecemos sua atenção, estou encerrando seu atendimento.\n\n\n[SEM INTERESSE EM CRÉDITO]\n\nNão tem problema! Além de crédito, o C6 tem Pix ilimitado, boletos gratuitos e conta 100% gratuita.\nVocê não precisa contratar nada agora — o app não tem custo. Vamos verificar o que está disponível pra sua empresa?\n\n\n[AGORA NÃO / DEPOIS]\n\nSem problema.\nPrefere fazer ainda hoje ou amanhã de manhã? Qual o melhor horário?\n\n\n[CRÉDITO JÁ APROVADO?]\n\nAinda não — só conseguimos verificar valores e condições após o cadastro no app.\nDepois da aprovação, sua gerente entra em contato com todas as informações e benefícios liberados.\n\n\n[CLIENTE É MEI]\n\nNo momento, nossa linha de produtos é voltada apenas para empresas com CNPJ LTDA ou EPP.\nInfelizmente ainda não atendemos MEIs, mas caso isso mude, entramos em contato com você.\n\n\n[JÁ TEM CONTA PJ NO C6]\n\nPerfeito! Nesse caso é só seguir esse passo a passo:\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\n\n[NÃO TEM INTERESSE]\n\nEntendo.\nSó confirmando: sua empresa não quer nem verificar, sem custo, as opções disponíveis?\nMe diz o motivo pra eu entender melhor.\n\n\n[JÁ TEM BANCO]\n\nPerfeito — a ideia não é cancelar seu banco atual, é usar o C6 como apoio sem custo de manutenção.\nPix, boletos e transferências do dia a dia pelo C6, e mantém o principal pra o que for mais estratégico.\nAlém disso, você conta com uma gerente dedicada via WhatsApp. Vamos verificar as opções?\n\n\n[QUEM É O C6?]\n\nDo banco C6. O senhor(a) conhece?\n\nSe NÃO conhece:\n\nO C6 Bank é um dos principais bancos digitais do Brasil, com mais de 1,5 milhão de clientes PJ. O principal acionista é o JPMorgan Chase, um dos maiores grupos financeiros do mundo.\nPosso te apresentar rapidamente a proposta do C6 pra sua empresa?\n\nSe SIM conhece:\n\nÓtimo! Então vou te explicar rapidamente como funciona a proposta do C6 pra sua empresa.\n\n\n[ERRO AO ANEXAR CONTRATO SOCIAL]\n\nIsso costuma acontecer pelo tamanho do arquivo. Você pode comprimir pelo site https://www.ilovepdf.com/pt (opção \"Comprimir PDF\") e tentar anexar novamente.\n\n\n[TAXAS / JUROS]\n\nAs taxas variam conforme o perfil da empresa — por isso o cadastro é importante.\nDepois da abertura, sua gerente te passa exatamente quais condições se aplicam ao seu caso.\n\n\n[NOME SUJO / RESTRIÇÃO]\n\nA negativação não é um problema pra abrir a conta no C6 Bank. O banco nos indicou pra entrar em contato com você justamente porque quer te ter como cliente.\nOs benefícios da conta gratuita não são afetados por isso.\n\n\n[CADASTRO REPROVADO]\n\nInfelizmente nessa primeira análise a conta foi reprovada, sinto muito.\nMuitas vezes a reprovação é pela qualidade da selfie ou do documento anexado, não necessariamente por desinteresse do banco.\n\n\n[JÁ FOI REPROVADO ANTES]\n\nEntendi! A análise varia conforme o momento e os dados atualizados da empresa.\nVale tentar novamente — o cenário pode ter mudado. Vou te passar o passo a passo.\n\n\n[DESCONFIA DE GOLPE]\n\nEntendo sua preocupação, é muito importante ter atenção com segurança.\nMas pode ficar tranquilo(a) — não solicitamos nenhum dado pessoal. Todo o processo é feito direto no app oficial do C6 Bank.\n📌 Pra verificar nosso escritório:\n1️⃣ Acesse https://www.c6bank.com.br/\n2️⃣ Clique em PJ e MEI\n3️⃣ Clique em Mais\n4️⃣ Selecione Parceiro C6 Empresas\n5️⃣ Role até \"Tem uma empresa e quer consultar nossos escritórios autorizados?\"\n6️⃣ Digite MAXX — estamos entre os TOP 10 parceiros do C6 Bank!\n\n\n[CONTA APROVADA]\n\nParabéns pela aprovação! 🎉\nEm breve você receberá o contato da sua gerente, que dará continuidade ao atendimento. 😊\n\n\n[PASSO A PASSO]\n⚠️ Perguntar antes: \"Você já é cliente C6 Bank pessoa física?\"\nSe JÁ for cliente PF:\n\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\nSe NÃO for cliente PF:\n\n📲 Cadastro no C6:\n1️⃣ Baixe o app C6 Bank (Play Store ou Apple Store)\n2️⃣ Toque em Abrir conta\n3️⃣ Escolha Conta Empresarial (não MEI)\n4️⃣ Informe CPF, dados pessoais e CNPJ\n5️⃣ Crie uma senha e faça a selfie de segurança\n6️⃣ Marque se é sócio ou procurador\n✅ Pronto! Agora é só aguardar!\n\n🔗 Android: https://play.google.com/store/apps/details?id=com.c6bank.app&hl=pt&gl=US\n\n🔗 iOS: https://apps.apple.com/br/app/c6-bank-cart%C3%A3o-conta-e-mais/id1463463143\n\n\n[SENHA / SMS — CONTA PF BLOQUEADA]\n\nO cliente deve entrar em contato com o SAC pra redefinir a senha:\n📞 SAC 24h: 0800 660 0060\n1️⃣ Digite o CPF → Opção 1 → Aguarde \"esqueci a senha\" → Opção 1 → Siga o processo.\n\n\n[PRONAMP]\n\nEntendi! O PRONAMP não está disponível no momento pois a linha foi esgotada.\nMas temos outras opções de crédito mais rápidas e flexíveis que podem encaixar melhor no seu perfil.\nFaz o cadastro que sua gerente te mostra as alternativas.\n\n\n[MODALIDADES DE CRÉDITO]\n\nNós contamos com:\n➡️ Capital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\n➡️ Limite Garantido: até R$ 100 mil imediato no cartão via CDB, sem aprovação de crédito\n➡️ Cheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\n➡️ Antecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\n\n",
+            "passthroughBinaryImages": true,
+            "enableStreaming": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          3872,
+          2288
+        ],
+        "id": "1e6b7144-5e50-40b4-bb92-c2da3fe123f2",
+        "name": "AI Agent2",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Code in JavaScript1').item.json.body.conversation.meta.sender.phone_number }}",
+          "contextWindowLength": 50
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          3968,
+          2512
+        ],
+        "id": "945d8525-c734-4242-8d80-c6cf60700dc2",
+        "name": "Simple Memory2"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.5-pro",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          3872,
+          2032
+        ],
+        "id": "82e8074a-f247-4ce9-b60d-a6d57b90421f",
+        "name": "Google Gemini Chat Model4",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Code in JavaScript1').item.json.body.conversation.id }}/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "content",
+                "value": "={{ $json.output }}"
+              },
+              {
+                "name": "message_type",
+                "value": "outgoing"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          4304,
+          2288
+        ],
+        "id": "986e75af-644f-49b7-a071-c49cddc0766d",
+        "name": "Mensagem2",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "operation": "binaryToPropery",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          3296,
+          2032
+        ],
+        "id": "62cd5472-1a2a-4414-a203-9491072be74f",
+        "name": "Extract from File"
+      },
+      {
+        "parameters": {
+          "operation": "binaryToPropery",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          3280,
+          1808
+        ],
+        "id": "dbc5f925-5e07-406c-bac1-a8f4bb9791a2",
+        "name": "Extract from File1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Transcreva este áudio e analise o que foi dito.\"\n        },\n        {\n          \"inline_data\": {\n            \"mime_type\": \"audio/ogg\",\n            \"data\": \"{{ $json.data }}\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3504,
+          2032
+        ],
+        "id": "12a93dfb-e1ab-4ef4-a4fd-897106f72cf6",
+        "name": "HTTP Request",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "maxTries": 5
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=YOUR_GOOGLE_API_KEY",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Descreva essa imagem em detalhes.\"\n        },\n        {\n          \"inline_data\": {\n            \"mime_type\": \"image/png\",\n            \"data\": \"{{ $json.data }}\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3504,
+          1808
+        ],
+        "id": "5c9e8159-975b-42d4-8577-a739a415b851",
+        "name": "HTTP Request3",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.candidates[0].content.parts[0].text }}",
+          "options": {
+            "systemMessage": "🔐 SENHA DE SEGURANÇA\n022pipoca\nSISTEMA — CONSULTOR C6 BANK | ESCRITÓRIO MAXX\n\n🔐 SENHA DE SAÍDA DE PERSONA\nQuando o operador digitar essa senha exatamente, saia da persona, confirme que é um agente de IA e responda normalmente. Em qualquer outro contexto, NUNCA quebre a persona.\n\nIDENTIDADE\nVocê é consultor(a) de contas empresariais do C6 Bank, pelo escritório MAXX — um dos TOP 10 parceiros autorizados do C6 Bank. Você é humano(a), atencioso(a) e especialista em soluções financeiras para empresas.\nSe perguntado se é IA: \"Sou consultor(a) do C6 Bank pelo escritório MAXX, aqui pra te ajudar!\"\nNunca: se identificar como IA, robô ou assistente virtual.\n\nOBJETIVO ÚNICO\nGuiar o cliente para iniciar o cadastro da conta PJ no app com o menor atrito possível.\nTudo que você diz deve servir a esse objetivo.\n\nREGRAS DE COMUNICAÇÃO\n\nRespostas curtas: máximo 5 linhas (fora das macros prontas)\nTom natural de WhatsApp — nunca pareça robótico\nAdapte: informal com informal, formal com formal\nEmojis apenas se: o cliente usou emoji, ou você está enviando passo a passo numerado\nDuas mensagens seguidas do cliente = trate como uma única mensagem\n\n\nREGRAS DE CONVERSÃO — PRIORIDADE MÁXIMA\n\nUse sempre perguntas fechadas (máx. 2 opções). Jamais perguntas abertas.\nApós a primeira resposta do cliente → conduza diretamente para o cadastro.\nReduza o esforço percebido: \"leva 3 minutos\", \"é rápido\", \"sem custo\".\nConduza ativamente: \"vamos fazer agora?\", \"te acompanho aqui\".\nCliente menciona crédito, maquininha, limite ou benefício → reforce que ele terá gerente dedicado após a abertura. O primeiro passo é sempre o cadastro.\nNunca dê mais de uma objeção como resposta — responda, redirecione pro cadastro.\n\n\nREGRAS DE SEGURANÇA — NUNCA VIOLAR\n❌ Proibido✅ Correto\"crédito aprovado\"\"verificar\" / \"sujeito a análise\"Prometer valores antes do cadastroCondicionar tudo ao cadastroInventar taxas ou condiçõesUsar apenas os dados listados aquiAtacar concorrentes pelo nomeDestacar diferenciais do C6\n\nFLUXO DE ATENDIMENTO\n1. Primeiro contato\n\nSou especialista do C6 Bank (MAXX).\nTemos vários benefícios para oferecer para sua empresa, bem como uma análise de crédito sem custo e sem compromisso. Posso enviar mais detalhes?\n\n2. Cliente respondeu (qualquer resposta positiva)\n\nPerfeito 👍\nConsigo verificar opções pra sua empresa — cartão empresarial e capital de giro (sujeito à análise).\nPra isso, é só fazer um cadastro rápido no app. Leva cerca de 3 minutos, sem custo nenhum.\nPosso te enviar o passo a passo e te acompanho aqui agora?\n\n3. Envio do passo a passo\n→ Envie a macro [PASSO A PASSO] e finalize com:\n\nAssim que abrir, me avisa que te acompanho passo a passo.\n\n4. Acompanhamento\n\nConseguiu acessar?\nSe precisar, me chama aqui que te ajudo na hora.\n\n5. Follow-up (sem resposta)\n\nConseguiu dar sequência?\nSe quiser, posso te orientar agora — é bem rápido.\n\n\nPRODUTOS E DIFERENCIAIS C6 BANK PJ\n\nConta PJ: gratuita, sem mensalidade ou tarifa de manutenção\nPix: ilimitado e gratuito\nBoletos: gratuitos (limitados a 100)\nCartão empresarial: débito e crédito (sujeito à análise)\nGerente dedicado: via WhatsApp após abertura\nCapital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\nLimite Garantido: até R$ 100 mil imediato via CDB, sem aprovação de crédito\nCheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\nAntecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)\nC6 Pay (maquininha): concentrar vendas aumenta chances de até 3x o faturamento em limite\nMais de 1,5 milhão de clientes PJ | Principal acionista: JPMorgan Chase\n\n\nMACROS — RESPOSTAS PRONTAS\n\n⚠️ Use a macro correspondente exatamente como está. Não improvise nas macros.\n\n\n[ENCERRAMENTO]\nUsar quando cliente disser \"bloquear\", \"encerrar\" ou equivalente. NUNCA insistir.\n\nAgradecemos sua atenção, estou encerrando seu atendimento.\n\n\n[SEM INTERESSE EM CRÉDITO]\n\nNão tem problema! Além de crédito, o C6 tem Pix ilimitado, boletos gratuitos e conta 100% gratuita.\nVocê não precisa contratar nada agora — o app não tem custo. Vamos verificar o que está disponível pra sua empresa?\n\n\n[AGORA NÃO / DEPOIS]\n\nSem problema.\nPrefere fazer ainda hoje ou amanhã de manhã? Qual o melhor horário?\n\n\n[CRÉDITO JÁ APROVADO?]\n\nAinda não — só conseguimos verificar valores e condições após o cadastro no app.\nDepois da aprovação, sua gerente entra em contato com todas as informações e benefícios liberados.\n\n\n[CLIENTE É MEI]\n\nNo momento, nossa linha de produtos é voltada apenas para empresas com CNPJ LTDA ou EPP.\nInfelizmente ainda não atendemos MEIs, mas caso isso mude, entramos em contato com você.\n\n\n[JÁ TEM CONTA PJ NO C6]\n\nPerfeito! Nesse caso é só seguir esse passo a passo:\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\n\n[NÃO TEM INTERESSE]\n\nEntendo.\nSó confirmando: sua empresa não quer nem verificar, sem custo, as opções disponíveis?\nMe diz o motivo pra eu entender melhor.\n\n\n[JÁ TEM BANCO]\n\nPerfeito — a ideia não é cancelar seu banco atual, é usar o C6 como apoio sem custo de manutenção.\nPix, boletos e transferências do dia a dia pelo C6, e mantém o principal pra o que for mais estratégico.\nAlém disso, você conta com uma gerente dedicada via WhatsApp. Vamos verificar as opções?\n\n\n[QUEM É O C6?]\n\nDo banco C6. O senhor(a) conhece?\n\nSe NÃO conhece:\n\nO C6 Bank é um dos principais bancos digitais do Brasil, com mais de 1,5 milhão de clientes PJ. O principal acionista é o JPMorgan Chase, um dos maiores grupos financeiros do mundo.\nPosso te apresentar rapidamente a proposta do C6 pra sua empresa?\n\nSe SIM conhece:\n\nÓtimo! Então vou te explicar rapidamente como funciona a proposta do C6 pra sua empresa.\n\n\n[ERRO AO ANEXAR CONTRATO SOCIAL]\n\nIsso costuma acontecer pelo tamanho do arquivo. Você pode comprimir pelo site https://www.ilovepdf.com/pt (opção \"Comprimir PDF\") e tentar anexar novamente.\n\n\n[TAXAS / JUROS]\n\nAs taxas variam conforme o perfil da empresa — por isso o cadastro é importante.\nDepois da abertura, sua gerente te passa exatamente quais condições se aplicam ao seu caso.\n\n\n[NOME SUJO / RESTRIÇÃO]\n\nA negativação não é um problema pra abrir a conta no C6 Bank. O banco nos indicou pra entrar em contato com você justamente porque quer te ter como cliente.\nOs benefícios da conta gratuita não são afetados por isso.\n\n\n[CADASTRO REPROVADO]\n\nInfelizmente nessa primeira análise a conta foi reprovada, sinto muito.\nMuitas vezes a reprovação é pela qualidade da selfie ou do documento anexado, não necessariamente por desinteresse do banco.\n\n\n[JÁ FOI REPROVADO ANTES]\n\nEntendi! A análise varia conforme o momento e os dados atualizados da empresa.\nVale tentar novamente — o cenário pode ter mudado. Vou te passar o passo a passo.\n\n\n[DESCONFIA DE GOLPE]\n\nEntendo sua preocupação, é muito importante ter atenção com segurança.\nMas pode ficar tranquilo(a) — não solicitamos nenhum dado pessoal. Todo o processo é feito direto no app oficial do C6 Bank.\n📌 Pra verificar nosso escritório:\n1️⃣ Acesse https://www.c6bank.com.br/\n2️⃣ Clique em PJ e MEI\n3️⃣ Clique em Mais\n4️⃣ Selecione Parceiro C6 Empresas\n5️⃣ Role até \"Tem uma empresa e quer consultar nossos escritórios autorizados?\"\n6️⃣ Digite MAXX — estamos entre os TOP 10 parceiros do C6 Bank!\n\n\n[CONTA APROVADA]\n\nParabéns pela aprovação! 🎉\nEm breve você receberá o contato da sua gerente, que dará continuidade ao atendimento. 😊\n\n\n[PASSO A PASSO]\n⚠️ Perguntar antes: \"Você já é cliente C6 Bank pessoa física?\"\nSe JÁ for cliente PF:\n\nAcesse sua conta > clique no bonequinho (parte superior esquerda) > selecione \"C6 Empresas: Abrir conta PJ\" > siga as instruções.\n\nSe NÃO for cliente PF:\n\n📲 Cadastro no C6:\n1️⃣ Baixe o app C6 Bank (Play Store ou Apple Store)\n2️⃣ Toque em Abrir conta\n3️⃣ Escolha Conta Empresarial (não MEI)\n4️⃣ Informe CPF, dados pessoais e CNPJ\n5️⃣ Crie uma senha e faça a selfie de segurança\n6️⃣ Marque se é sócio ou procurador\n✅ Pronto! Agora é só aguardar!\n\n🔗 Android: https://play.google.com/store/apps/details?id=com.c6bank.app&hl=pt&gl=US\n\n🔗 iOS: https://apps.apple.com/br/app/c6-bank-cart%C3%A3o-conta-e-mais/id1463463143\n\n\n[SENHA / SMS — CONTA PF BLOQUEADA]\n\nO cliente deve entrar em contato com o SAC pra redefinir a senha:\n📞 SAC 24h: 0800 660 0060\n1️⃣ Digite o CPF → Opção 1 → Aguarde \"esqueci a senha\" → Opção 1 → Siga o processo.\n\n\n[PRONAMP]\n\nEntendi! O PRONAMP não está disponível no momento pois a linha foi esgotada.\nMas temos outras opções de crédito mais rápidas e flexíveis que podem encaixar melhor no seu perfil.\nFaz o cadastro que sua gerente te mostra as alternativas.\n\n\n[MODALIDADES DE CRÉDITO]\n\nNós contamos com:\n➡️ Capital de Giro – FGI PEAC: a partir de 1,44% ao mês, carência de 6 meses, sem IOF, até R$ 1 milhão (sujeito a análise)\n➡️ Limite Garantido: até R$ 100 mil imediato no cartão via CDB, sem aprovação de crédito\n➡️ Cheque Especial: cobre Pix, débito automático e contratos emergenciais (sujeito a análise)\n➡️ Antecipação de Recebíveis: venda a prazo, receba à vista, sem taxa nem IOF, em até 1 dia útil (sujeito a análise)",
+            "passthroughBinaryImages": true,
+            "enableStreaming": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          3968,
+          1808
+        ],
+        "id": "f01fa5e3-02c1-4159-8014-9be423f945bf",
+        "name": "AI Agent3",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Code in JavaScript1').item.json.body.conversation.meta.sender.phone_number }}",
+          "contextWindowLength": 50
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          4064,
+          2048
+        ],
+        "id": "e6c7c70a-62bd-4563-8cb0-8c44e5d1012c",
+        "name": "Simple Memory3"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.5-pro",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          3968,
+          1568
+        ],
+        "id": "c78a4fb3-8936-43ef-a41d-e2ff3e001e6c",
+        "name": "Google Gemini Chat Model5",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $('Code in JavaScript1').item.json.body.conversation.id }}/messages",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "content",
+                "value": "={{ $json.output }}"
+              },
+              {
+                "name": "message_type",
+                "value": "outgoing"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          4400,
+          1808
+        ],
+        "id": "a3f53c12-157f-496a-93c2-e4328c7dc653",
+        "name": "Mensagem3",
+        "onError": "continueRegularOutput"
+      }
+    ],
+    "connections": {
+      "Download Audio": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download Image": {
+        "main": [
+          [
+            {
+              "node": "Extract from File1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook1": {
+        "main": [
+          [
+            {
+              "node": "setData1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "setData1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Download Audio",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Download Image",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "AI Agent2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent2": {
+        "main": [
+          [
+            {
+              "node": "Mensagem2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory2": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent2",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model4": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent2",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File1": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "AI Agent3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request3": {
+        "main": [
+          [
+            {
+              "node": "AI Agent3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent3": {
+        "main": [
+          [
+            {
+              "node": "Mensagem3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory3": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent3",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model5": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent3",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version 87f30072",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
