@@ -1,0 +1,1104 @@
+{
+  "id": "xgW1zefzojMqqZf1",
+  "name": "Rotação",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const listaAgentes = $items(\"Get many rows\", 0).map(row => row.json);\n\nlet idx = $items(\"Indice\", 0)[0].json.current_index;\nidx = (idx === null || idx === undefined) ? 0 : parseInt(idx, 10);\n\nconst agenteAtual = listaAgentes[idx % listaAgentes.length];\nconst proximoIdx = (idx + 1) % listaAgentes.length;\n\nconst webhookData = $items(\"Webhook\", 0)[0].json;\n\nreturn [{\n  json: {\n    agent_id: agenteAtual.agent_id,\n    conversation_id: webhookData.body.id,\n    agent_name: agenteAtual.agent_name,\n    proximoIdx: proximoIdx\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        96
+      ],
+      "id": "721f0b3a-7ea2-40bd-94b8-50af18a465d0",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/assignments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"assignee_id\": {{ $json.agent_id }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        208
+      ],
+      "id": "8aa56a79-8bf8-4395-9bce-dcdb41f3b1e2",
+      "name": "CodeAssignment"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "roundrobin-chat",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        96
+      ],
+      "id": "e9d78b39-7484-4ab7-bb55-d5cb7cc4842a",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "content": "Não mexer!!",
+        "height": 352,
+        "width": 1376,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -256,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "de261951-bb0c-4497-8eb6-6565c59804d0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Executar esse node para limpar a rotação (sempre executar esse antes de alterar pro próximo.",
+        "height": 208,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "76152a7b-170f-4b6e-bb74-08f03747e7ee",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Usar esse node para definir a rotação, não esquecer ponto-vírgula ao final e vírgula entre valores.",
+        "height": 208,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "3230d272-502b-4e02-8695-608a18072649",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a6f2e79d-22bf-4eae-8e9a-d4a2e951835d",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 151,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "75baef6b-28ee-4081-9467-bf0b768ea698",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 154,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "bd6c36c3-9309-4c9d-b7ee-94642b0a4091",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 156,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "1519db04-70df-4bf4-a97b-1930d9b9ede1",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 153,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "51c86023-92c4-4e07-bc2d-c9e5770ab155",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 158,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "4618fcf8-1e4f-471b-b51b-f102b5f9ba36",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 161,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "0f169738-7fbe-40ff-968b-8f9ff35d8ff9",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 162,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "e07977dd-1b66-48e7-972b-2de9f0a3f64d",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 164,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "d846face-8bfa-428d-87f8-02ea4bb4b3b0",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 167,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "e2c97a0c-b8ef-4c56-9242-8f6e0aa66d82",
+              "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+              "rightValue": 168,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        96
+      ],
+      "id": "a2a1e091-b3e8-4ee5-bfd6-8dbbc1ff4ce3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{$json.conversation_id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "YOUR_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"assignee_id\": 1\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        736,
+        48
+      ],
+      "id": "b2795f6c-eabd-4ccc-b979-907201aa11a1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "round_robin_account_9",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ativo",
+              "condition": "eq",
+              "keyValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        96
+      ],
+      "id": "29af5674-b117-40f2-b24c-5f206ae045e0",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "round_robin_index_account_9",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        96
+      ],
+      "id": "fe11fa3d-4d96-42a3-8eda-8858d299d84d",
+      "name": "Indice",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "round_robin_index_account_9",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "current_index",
+              "fieldValue": "={{ $('Code').item.json.proximoIdx }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        912,
+        208
+      ],
+      "id": "eb6c5324-a868-40b9-b065-fd242bfbbdd2",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "round_robin_account_9",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "agent_id",
+              "condition": "gt",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        528
+      ],
+      "id": "b3a3718a-fee1-40ae-9cc2-de8b6bcb05c6",
+      "name": "LIMPAR ROTAÇÃO",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "round_robin_account_9",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_id",
+              "fieldValue": "={{ $json.agent_id }}"
+            },
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "={{ $json.agent_name }}"
+            },
+            {
+              "fieldId": "position",
+              "fieldValue": "={{ $json.position }}"
+            },
+            {
+              "fieldId": "ativo",
+              "fieldValue": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        576,
+        528
+      ],
+      "id": "80595cc8-89fb-482a-8e96-2143fdd26fb7",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "YOUR_CREDENTIAL_NAME"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        144,
+        528
+      ],
+      "id": "756088a3-0964-4a02-8fee-ad013baa395e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sql = `\n--(3, 'Isabela Pereira', 1),\n--(8, 'Mariane oliveira', 1),\n--(10, 'Jose Antonio', 2),\n--(19, 'Caio', 1),\n--(20, 'Steicy', 2),\n--(22, 'Ellen', 2),\n--(24, 'Carolina', 6),\n--(29, 'Ana', 2),\n--(28, 'PEDRO MARINHO', 2),\n(30, 'Kaled', 1),\n(33, 'Yan', 2),\n--(34, 'Max', 1);\n--(29, 'Clara', 4);\n--(31, 'Ingrid', 4);\n--(35, 'Ruby', 5),\n--(36, 'Nathieli', 8),\n`\n\nconst ativos = sql\n  .split(\"\\n\")\n  .map(l => l.trim())\n  .filter(l => l.startsWith(\"(\") && !l.startsWith(\"--\"));\n\nconst re = /\\(\\s*(-?\\d+)\\s*,\\s*'([^']*)'\\s*,\\s*(-?\\d+)\\s*\\)/;\n\nconst agentes = ativos.map(l => {\n  const m = l.match(re);\n  if (!m) return null;\n  return {\n    agent_id: Number(m[1]),\n    agent_name: m[2],\n    position: Number(m[3]),\n  };\n}).filter(Boolean);\n\n// retorna TODOS\nreturn agentes.map(a => ({\n  json: a\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        528
+      ],
+      "id": "77a841ad-4f55-4510-8985-80cb1c1054f5",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CodeAssignment": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CodeAssignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Indice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Indice": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "activeVersionId": "ecc90c42-6314-40ed-bbf1-c96f9610c622",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-18T13:25:15.937Z",
+      "createdAt": "2026-02-18T13:25:15.937Z",
+      "role": "workflow:owner",
+      "workflowId": "xgW1zefzojMqqZf1",
+      "projectId": "CUkD0eKTkNMIl99o"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-05-22T12:01:17.000Z",
+    "createdAt": "2026-05-22T12:00:22.307Z",
+    "versionId": "ecc90c42-6314-40ed-bbf1-c96f9610c622",
+    "workflowId": "xgW1zefzojMqqZf1",
+    "nodes": [
+      {
+        "parameters": {
+          "jsCode": "const listaAgentes = $items(\"Get many rows\", 0).map(row => row.json);\n\nlet idx = $items(\"Indice\", 0)[0].json.current_index;\nidx = (idx === null || idx === undefined) ? 0 : parseInt(idx, 10);\n\nconst agenteAtual = listaAgentes[idx % listaAgentes.length];\nconst proximoIdx = (idx + 1) % listaAgentes.length;\n\nconst webhookData = $items(\"Webhook\", 0)[0].json;\n\nreturn [{\n  json: {\n    agent_id: agenteAtual.agent_id,\n    conversation_id: webhookData.body.id,\n    agent_name: agenteAtual.agent_name,\n    proximoIdx: proximoIdx\n  }\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          400,
+          96
+        ],
+        "id": "721f0b3a-7ea2-40bd-94b8-50af18a465d0",
+        "name": "Code"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{ $json.conversation_id }}/assignments",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"assignee_id\": {{ $json.agent_id }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          720,
+          208
+        ],
+        "id": "8aa56a79-8bf8-4395-9bce-dcdb41f3b1e2",
+        "name": "CodeAssignment"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "roundrobin-chat",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -224,
+          96
+        ],
+        "id": "e9d78b39-7484-4ab7-bb55-d5cb7cc4842a",
+        "name": "Webhook",
+        "webhookId": "f67674ab-a210-45ab-8d5a-975a4b30b045"
+      },
+      {
+        "parameters": {
+          "content": "Não mexer!!",
+          "height": 352,
+          "width": 1376,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -256,
+          16
+        ],
+        "typeVersion": 1,
+        "id": "de261951-bb0c-4497-8eb6-6565c59804d0",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "Executar esse node para limpar a rotação (sempre executar esse antes de alterar pro próximo.",
+          "height": 208,
+          "width": 288
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -288,
+          448
+        ],
+        "typeVersion": 1,
+        "id": "76152a7b-170f-4b6e-bb74-08f03747e7ee",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "Usar esse node para definir a rotação, não esquecer ponto-vírgula ao final e vírgula entre valores.",
+          "height": 208,
+          "width": 272
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          64,
+          448
+        ],
+        "typeVersion": 1,
+        "id": "3230d272-502b-4e02-8695-608a18072649",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "a6f2e79d-22bf-4eae-8e9a-d4a2e951835d",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 151,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "75baef6b-28ee-4081-9467-bf0b768ea698",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 154,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "bd6c36c3-9309-4c9d-b7ee-94642b0a4091",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 156,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "1519db04-70df-4bf4-a97b-1930d9b9ede1",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 153,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "51c86023-92c4-4e07-bc2d-c9e5770ab155",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 158,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "4618fcf8-1e4f-471b-b51b-f102b5f9ba36",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 161,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "0f169738-7fbe-40ff-968b-8f9ff35d8ff9",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 162,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "e07977dd-1b66-48e7-972b-2de9f0a3f64d",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 164,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "d846face-8bfa-428d-87f8-02ea4bb4b3b0",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 167,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "e2c97a0c-b8ef-4c56-9242-8f6e0aa66d82",
+                "leftValue": "={{ $items(\"Webhook\")[0].json.body.contact_inbox.inbox_id }}",
+                "rightValue": 168,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          560,
+          96
+        ],
+        "id": "a2a1e091-b3e8-4ee5-bfd6-8dbbc1ff4ce3",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://chat.maxxitele.com.br/api/v1/accounts/1/conversations/{{$json.conversation_id}}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "api_access_token",
+                "value": "b2E9nG1XtDJYrJaZg9j984mQ"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"assignee_id\": 1\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          736,
+          48
+        ],
+        "id": "b2795f6c-eabd-4ccc-b979-907201aa11a1",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "round_robin_account_9",
+          "returnAll": true,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "ativo",
+                "condition": "eq",
+                "keyValue": "true"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -16,
+          96
+        ],
+        "id": "29af5674-b117-40f2-b24c-5f206ae045e0",
+        "name": "Get many rows",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "tableId": "round_robin_index_account_9",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "keyValue": "1"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          192,
+          96
+        ],
+        "id": "fe11fa3d-4d96-42a3-8eda-8858d299d84d",
+        "name": "Indice",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "tableId": "round_robin_index_account_9",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "id",
+                "condition": "eq",
+                "keyValue": "1"
+              }
+            ]
+          },
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "current_index",
+                "fieldValue": "={{ $('Code').item.json.proximoIdx }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          912,
+          208
+        ],
+        "id": "eb6c5324-a868-40b9-b065-fd242bfbbdd2",
+        "name": "Update a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "tableId": "round_robin_account_9",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "agent_id",
+                "condition": "gt",
+                "keyValue": "0"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          -192,
+          528
+        ],
+        "id": "b3a3718a-fee1-40ae-9cc2-de8b6bcb05c6",
+        "name": "LIMPAR ROTAÇÃO",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableId": "round_robin_account_9",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": "agent_id",
+                "fieldValue": "={{ $json.agent_id }}"
+              },
+              {
+                "fieldId": "agent_name",
+                "fieldValue": "={{ $json.agent_name }}"
+              },
+              {
+                "fieldId": "position",
+                "fieldValue": "={{ $json.position }}"
+              },
+              {
+                "fieldId": "ativo",
+                "fieldValue": "true"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          576,
+          528
+        ],
+        "id": "80595cc8-89fb-482a-8e96-2143fdd26fb7",
+        "name": "Create a row",
+        "credentials": {
+          "supabaseApi": {
+            "id": "YOUR_CREDENTIAL_ID",
+            "name": "YOUR_CREDENTIAL_NAME"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          144,
+          528
+        ],
+        "id": "756088a3-0964-4a02-8fee-ad013baa395e",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "jsCode": "const sql = `\n--(3, 'Isabela Pereira', 1),\n--(8, 'Mariane oliveira', 1),\n--(10, 'Jose Antonio', 2),\n--(19, 'Caio', 1),\n--(20, 'Steicy', 2),\n--(22, 'Ellen', 2),\n--(24, 'Carolina', 6),\n--(29, 'Ana', 2),\n--(28, 'PEDRO MARINHO', 2),\n(30, 'Kaled', 1),\n(33, 'Yan', 2),\n--(34, 'Max', 1);\n--(29, 'Clara', 4);\n--(31, 'Ingrid', 4);\n--(35, 'Ruby', 5),\n--(36, 'Nathieli', 8),\n`\n\nconst ativos = sql\n  .split(\"\\n\")\n  .map(l => l.trim())\n  .filter(l => l.startsWith(\"(\") && !l.startsWith(\"--\"));\n\nconst re = /\\(\\s*(-?\\d+)\\s*,\\s*'([^']*)'\\s*,\\s*(-?\\d+)\\s*\\)/;\n\nconst agentes = ativos.map(l => {\n  const m = l.match(re);\n  if (!m) return null;\n  return {\n    agent_id: Number(m[1]),\n    agent_name: m[2],\n    position: Number(m[3]),\n  };\n}).filter(Boolean);\n\n// retorna TODOS\nreturn agentes.map(a => ({\n  json: a\n}));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          368,
+          528
+        ],
+        "id": "77a841ad-4f55-4510-8985-80cb1c1054f5",
+        "name": "Code in JavaScript"
+      }
+    ],
+    "connections": {
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CodeAssignment": {
+        "main": [
+          [
+            {
+              "node": "Update a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get many rows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CodeAssignment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          []
+        ]
+      },
+      "Get many rows": {
+        "main": [
+          [
+            {
+              "node": "Indice",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Indice": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Create a row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jean  Victor",
+    "name": "Version ecc90c42",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
